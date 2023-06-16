@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
+
+        <variable
+            name="billContact"
+            type="com.theideal.data.model.BillContact" />
+        <variable
+            name="theSupplierBillViewModel"
+            type="com.theideal.notary.main.supplier.theSupplier.TheSupplierBillViewModel" />
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".main.supplier.theSupplier.TheSupplierBillFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_supplier_bill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:title="@{contact.name}" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_supplier_bill_example"
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_supplier_bill">
+
+            <androidx.cardview.widget.CardView
+                style="@style/cardStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="4"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:text="@string/weight"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="4"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:text="@string/price"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="4"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:text="@string/amount"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="5"
+                        android:gravity="center"
+                        android:lines="2"
+                        android:text="@string/total"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_all_bill"
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view_supplier_bill_example">
+
+            <androidx.cardview.widget.CardView
+                style="@style/cardStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                </ScrollView>
+
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_other_fees"
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view_all_bill">
+
+            <androidx.cardview.widget.CardView
+                style="@style/cardStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:set_empty_card_visibility="@{`` + billContact.theBillOtherFees}">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="8"
+                        android:text="@string/other_fee"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/borader_text_view"
+                        android:ems="8"
+                        android:text="@string/_200"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/tv_fragment_client_bill"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_total_bill"
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_view_other_fees">
+            >
+
+            <androidx.cardview.widget.CardView
+                style="@style/cardStyle"
+                android:layout_width="match_parent"
+                app:set_empty_card_visibility="@{`` + billContact.grossMoney}"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/borader_text_view"
+                            android:ems="8"
+                            android:text="@string/amount"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/tv_fragment_client_bill"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/borader_text_view"
+                            android:ems="8"
+                            android:text="@string/total_money"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/tv_fragment_client_bill"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/borader_text_view"
+                            android:ems="8"
+                            android:text="@string/_5"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/tv_fragment_client_bill"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/borader_text_view"
+                            android:ems="8"
+                            android:text="@string/_2000"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/tv_fragment_client_bill"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/li_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+
+            <Button
+                android:id="@+id/btn_close_bill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/ride_red"
+                android:textAllCaps="false"
+                android:text="@string/close_bill" />
+            <Button
+                android:id="@+id/btn_add_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:onClick="@{()->theSupplierBillViewModel.addDialog()}"
+                android:backgroundTint="@color/dark_ocean_blue"
+                android:textAllCaps="false"
+                android:text="@string/add_item" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

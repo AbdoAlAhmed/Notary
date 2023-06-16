@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/the_supplier"
+    app:startDestination="@id/createSupplierFragment2">
+
+    <fragment
+        android:id="@+id/createSupplierFragment2"
+        android:name="com.theideal.notary.main.supplier.theSupplier.CreateSupplierFragment"
+        android:label="fragment_create_supplier"
+        tools:layout="@layout/fragment_create_supplier" >
+        <action
+            android:id="@+id/action_createSupplierFragment2_to_theSupplierFragment"
+            app:destination="@id/theSupplierFragment"
+            app:popUpTo="@id/createSupplierFragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/theSupplierFragment"
+        android:name="com.theideal.notary.main.supplier.theSupplier.TheSupplierFragment"
+        android:label="fragment_the_supplier"
+        tools:layout="@layout/fragment_the_supplier" >
+        <action
+            android:id="@+id/action_theSupplierFragment_to_theSupplierBillFragment"
+            app:destination="@id/theSupplierBillFragment" />
+        <argument
+            android:name="contact"
+            app:argType="com.theideal.data.model.Contact" />
+    </fragment>
+    <fragment
+        android:id="@+id/theSupplierBillFragment"
+        android:name="com.theideal.notary.main.supplier.theSupplier.TheSupplierBillFragment"
+        android:label="fragment_the_supplier_bill"
+        tools:layout="@layout/fragment_the_supplier_bill" >
+        <argument android:name="billContact"
+            app:argType="com.theideal.data.model.BillContact" />
+    </fragment>
+</navigation>

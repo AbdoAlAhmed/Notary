@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="transactionFeesViewModel"
+            type="com.theideal.notary.main.company.TransactionFeesViewModel" />
+
+        <variable
+            name="additionalTransactionFees"
+            type="com.theideal.data.model.AdditionalTransactionsFees" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".main.company.ClientTransactionsFeesFragment">
+
+        <TextView
+            android:id="@+id/tv_client_transactions_fees"
+            style="@style/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tv_contact_transactions_fees_margin_top"
+            android:text="@string/client_transactions_fees" />
+
+        <ImageView
+            android:id="@+id/iv_client_transactions_fees"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/iv_contact_transactions_fees_height"
+            android:layout_marginTop="@dimen/iv_contact_transactions_fees_margin_top"
+            android:layout_marginBottom="@dimen/iv_contact_transactions_fees_margin_bottom"
+            android:src="@drawable/ic_information" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_client_commission_fee"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/til_contact_transactions_fees_all_text_margin"
+                    android:hint="@string/commission">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={additionalTransactionFees.commission}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_client_lift_cost_fee"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/til_contact_transactions_fees_all_text_margin"
+                    android:hint="@string/lift_coast">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={additionalTransactionFees.liftCoast}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_client_warranty_fee"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/til_contact_transactions_fees_all_text_margin"
+                    android:hint="@string/warranty_fee">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={additionalTransactionFees.warranty}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_client_transport_fee"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/til_contact_transactions_fees_all_text_margin"
+                    android:hint="@string/transport_fees">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={additionalTransactionFees.transportFees}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_client_other_fee"
+                    style="?attr/textInputOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/til_contact_transactions_fees_all_text_margin"
+                    android:hint="@string/other_fee">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={additionalTransactionFees.otherFees}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_client_transactions_fees_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/btn_contact_transactions_fees_margin_top"
+            android:onClick="@{() -> transactionFeesViewModel.uploadClientTransactionFees(additionalTransactionFees)}"
+            android:text="@string/_continue" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/transaction_fee_instructions_0" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/transaction_fee_instructions" />
+    </LinearLayout>
+</layout>

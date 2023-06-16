@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_client"
+    app:startDestination="@id/createClientFragment">
+
+    <fragment
+        android:id="@+id/createClientFragment"
+        android:name="com.theideal.notary.main.client.createclient.CreateClientFragment"
+        android:label="fragment_create_client"
+        tools:layout="@layout/fragment_create_client" >
+        <action
+            android:id="@+id/action_createClientFragment_to_theClientFragment"
+            app:destination="@id/theClientFragment"
+            app:popUpTo="@id/createClientFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/theClientFragment"
+        android:name="com.theideal.notary.main.client.createclient.TheClientFragment"
+        android:label="fragment_the_client"
+        tools:layout="@layout/fragment_the_client" >
+        <action
+            android:id="@+id/action_theClientFragment_to_clientBillFragment"
+            app:destination="@id/clientBillFragment" />
+        <argument
+            android:name="contact"
+            app:argType="com.theideal.data.model.Contact" />
+    </fragment>
+    <fragment
+        android:id="@+id/clientBillFragment"
+        android:name="com.theideal.notary.main.client.createclient.bill.TheClientBillFragment"
+        android:label="fragment_client_bill"
+        tools:layout="@layout/fragment_client_bill" >
+        <argument
+            android:name="billContact"
+            app:argType="com.theideal.data.model.BillContact" />
+    </fragment>
+</navigation>

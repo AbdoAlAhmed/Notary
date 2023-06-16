@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/company"
+    app:startDestination="@id/companyFragment">
+
+    <fragment
+        android:id="@+id/companyFragment"
+        android:name="com.theideal.notary.main.company.CreateCompanyFragment"
+        android:label="fragment_company"
+        tools:layout="@layout/fragment_company" >
+        <action
+            android:id="@+id/action_companyFragment_to_workWithCompanyFragment"
+            app:destination="@id/workWithCompanyFragment" />
+        <action
+            android:id="@+id/action_companyFragment_to_clientTransactionsFeesFragment2"
+            app:destination="@id/clientTransactionsFeesFragment"
+            app:popUpTo="@id/companyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/workWithCompanyFragment"
+        android:name="com.theideal.notary.main.company.WorkWithCompanyFragment"
+        android:label="fragment_work_with_company"
+        tools:layout="@layout/fragment_work_with_company" />
+    <fragment
+        android:id="@+id/clientTransactionsFeesFragment"
+        android:name="com.theideal.notary.main.company.ClientTransactionsFeesFragment"
+        android:label="fragment_client_transactions_fees"
+        tools:layout="@layout/fragment_client_transactions_fees" >
+        <action
+            android:id="@+id/action_clientTransactionsFeesFragment_to_supplierTransactionsFeesFragment"
+            app:destination="@id/supplierTransactionsFeesFragment"
+            app:popUpTo="@id/clientTransactionsFeesFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/supplierTransactionsFeesFragment"
+        android:name="com.theideal.notary.main.company.SupplierTransactionsFeesFragment"
+        android:label="fragment_supplier_transactions_fees"
+        tools:layout="@layout/fragment_supplier_transactions_fees" />
+</navigation>

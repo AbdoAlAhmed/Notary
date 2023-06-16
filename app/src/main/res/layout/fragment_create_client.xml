@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
+
+        <variable
+            name="createClientViewModel"
+            type="com.theideal.notary.main.client.createclient.CreateClientViewModel" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".main.client.createclient.CreateClientFragment">
+
+        <TextView
+            style="@style/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tv_text_title_margin"
+            android:text="@string/create_client" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/iv_create_contact_height"
+            android:layout_marginTop="@dimen/iv_create_contact_margin_top"
+            android:layout_marginBottom="@dimen/iv_create_contact_margin_bottom"
+            android:src="@drawable/ic_new_client" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_create_client_name"
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/til_create_contact_all_text_margin"
+            android:hint="@string/name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@={contact.name}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/til_create_contact_all_text_margin"
+            android:hint="@string/phone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@={contact.phone}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_create_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/btn_create_contact_margin"
+            android:onClick="@{() -> createClientViewModel.createClient(contact)}"
+            android:text="@string/create" />
+    </LinearLayout>
+</layout>

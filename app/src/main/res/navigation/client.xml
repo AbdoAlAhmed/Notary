@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/client"
+    app:startDestination="@id/saleTransactionsFragment">
+
+    <fragment
+        android:id="@+id/deferredSaleFragment"
+        android:name="com.theideal.notary.main.client.deferredsale.DeferredSaleFragment"
+        android:label="fragment_deferred_sale"
+        tools:layout="@layout/fragment_deferred_sale" />
+    <fragment
+        android:id="@+id/saleTransactionsFragment"
+        android:name="com.theideal.notary.main.client.saletransactions.SaleTransactionsFragment"
+        android:label="fragment_sale_transactions"
+        tools:layout="@layout/fragment_sale_transactions" />
+</navigation>

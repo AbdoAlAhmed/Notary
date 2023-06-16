@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="saleTransactionsViewModel"
+            type="com.theideal.notary.main.client.saletransactions.SaleTransactionsViewModel" />
+
+        <variable
+            name="billClient"
+            type="com.theideal.data.model.BillContact" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.client.saletransactions.SaleTransactionsFragment">
+
+
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_preference"
+                android:layout_width="@dimen/btn_preference_width"
+                android:layout_height="@dimen/btn_preference_height"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_preference" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            style="@style/CardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_add_client"
+            android:layout_below="@+id/ll_search">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sale_transactions"
+                app:bind_data="@{saleTransactionsViewModel.clients}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="20"
+                tools:listitem="@layout/item_contact_info" />
+        </androidx.cardview.widget.CardView>
+
+
+        <Button
+            android:id="@+id/btn_add_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:onClick="@{() -> saleTransactionsViewModel.checkUserInfo()}"
+            android:text="@string/add_client"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+</layout>

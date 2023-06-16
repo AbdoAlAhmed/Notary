@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/authentication"
+    app:startDestination="@id/signInPhoneFragment">
+
+    <fragment
+        android:id="@+id/signInPhoneFragment"
+        android:name="com.theideal.notary.auth.SignInPhoneFragment"
+        android:label="fragment_sign_in_phone"
+        tools:layout="@layout/fragment_sign_in_phone" >
+        <action
+            android:id="@+id/action_signInPhoneFragment_to_signInMailFragment"
+            app:destination="@id/signInMailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInMailFragment"
+        android:name="com.theideal.notary.auth.SignInEmailFragment"
+        android:label="SignInMailFragment" >
+        <action
+            android:id="@+id/action_signInMailFragment_to_signInInformationFragment"
+            app:destination="@id/signInInformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInInformationFragment"
+        android:name="com.theideal.notary.auth.SignInInformationFragment"
+        android:label="SignInInformationFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.theideal.data.model.User" />
+    </fragment>
+</navigation>

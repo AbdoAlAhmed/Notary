@@ -1,0 +1,21 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Notary" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/sunset_orange</item>
+        <item name="colorPrimaryVariant">@color/ocean_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/dark_sunset_orange</item>
+        <item name="colorSecondaryVariant">@color/dark_ocean_blue</item>
+        <item name="colorOnSecondary">@color/dark_ocean_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="CardViewBackground">@color/dark_ocean_blue</item>
+    </style>
+
+    <style name="Theme.Notary" parent="Base.Theme.Notary" />
+</resources>

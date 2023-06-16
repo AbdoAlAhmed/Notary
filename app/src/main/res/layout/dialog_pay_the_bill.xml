@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="billContact"
+            type="com.theideal.data.model.BillContact" />
+
+        <variable
+            name="billContactViewModel"
+            type="com.theideal.notary.main.client.createclient.bill.ClientBillViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dialog_text_field_deposit"
+            android:hint="@string/deserved_amount">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:inputType="none"
+                android:text="@{`` + billContact.deptCalculate}"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dialog_text_field_deposit"
+            android:hint="@string/paid">
+
+            <com.google.android.material.textfield.TextInputEditText
+                set_double_text_to_empty="@{`` + billContact.payMoney}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="auto"
+                android:inputType="numberDecimal"
+                app:set_pay_visibility="@{billContact.status}"
+                android:text="@={`` + billContact.payMoney}"
+                 />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dialog_text_field_deposit"
+            android:hint="@string/pay">
+
+            <com.google.android.material.textfield.TextInputEditText
+                set_double_text_to_empty="@{`` + billContact.paidMoney}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="auto"
+                android:inputType="numberDecimal"
+                android:text="@={`` + billContact.paidMoney}"
+                app:set_paid_enable="@{billContact.status}"
+                 />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dialog_text_field_deposit"
+            android:hint="@string/discount">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="numberDecimal"
+                android:text="@={`` + billContact.discount}"
+                android:textColor="@color/black"
+                app:set_pay_visibility="@{billContact.status}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/money_left_message"
+            android:textAlignment="center"
+            app:set_pay_visibility="@{billContact.status}" />
+
+        <Button
+            android:id="@+id/btn_pay_the_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/dark_ocean_blue"
+            android:text="@string/pay"
+            app:set_pay_visibility="@{billContact.status}" />
+    </LinearLayout>
+</layout>
