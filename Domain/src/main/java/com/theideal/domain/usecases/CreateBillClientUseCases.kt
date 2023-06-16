@@ -1,6 +1,5 @@
 package com.theideal.domain.usecases
 
-import android.util.Log
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
@@ -15,8 +14,19 @@ class CreateBillClientUseCases(
 ) {
 
 
-    suspend fun checkIfBillIsOpen(contactId: String) =
-        billRepository.checkIfBillIsOpen(contactId)
+    suspend fun checkIfBillIsOpen(contactId: String): Boolean {
+        val list = billRepository.checkIfBillIsOpen(contactId)
+        var isOpen = false
+        for (bill in list) {
+            if (bill.status == "open") {
+                isOpen = true
+                break
+            }
+        }
+        return isOpen
+    }
+
+
     suspend fun createBill(contactId: String): BillContact {
         return billRepository.createBillClient(contactId)
     }

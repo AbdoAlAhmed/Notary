@@ -54,6 +54,9 @@ data class BillContact(
     }
 
 
+
+
+
     constructor() : this(
         "",
         "",
@@ -72,6 +75,8 @@ data class BillContact(
         "",
 
         )
+
+
 
     constructor(billId: String, userId: String, contactId: String, status: String) : this(
         billId,

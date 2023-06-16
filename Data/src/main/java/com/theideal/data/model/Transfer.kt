@@ -11,6 +11,7 @@ data class Transfer(
     var contactId: String = "",
     val createAt: Timestamp = Timestamp.now(),
 ) {
+    constructor(transferId: String): this(transferId, "", 0.0, "", "", "", Timestamp.now())
     constructor() : this("","", 0.0, "", "", "", Timestamp.now())
 }
 

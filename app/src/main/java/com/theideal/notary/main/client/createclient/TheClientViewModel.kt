@@ -1,7 +1,6 @@
 package com.theideal.notary.main.client.createclient
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,6 +30,13 @@ class TheClientViewModel(
     val navToClientBill: LiveData<Boolean>
         get() = _navToClientBill
 
+    private val _navToClientBillWithBillContact = MutableLiveData<BillContact>()
+    val navToClientBillWithBillContact: LiveData<BillContact>
+        get() = _navToClientBillWithBillContact
+
+    private val _deleteBillConfirmDialog = MutableLiveData<BillContact>()
+    val deleteBillConfirmDialog: LiveData<BillContact>
+        get() = _deleteBillConfirmDialog
 
     private val _bills = MutableLiveData<List<BillContact>>()
     val bills: LiveData<List<BillContact>>
@@ -55,6 +61,14 @@ class TheClientViewModel(
 
     private val _typeOfFinancialTransfer = MutableLiveData<String>()
 
+    private val _dialogEditTransferItem = MutableLiveData<Transfer>()
+    val dialogEditTransferItem: LiveData<Transfer>
+        get() = _dialogEditTransferItem
+
+    private val _dialogDeleteTransferItem = MutableLiveData<Transfer>()
+    val dialogDeleteTransferItem: LiveData<Transfer>
+        get() = _dialogDeleteTransferItem
+
     fun getClient(contactId: String) {
         viewModelScope.launch {
             _contact.value = clientRepo.getClient(contactId)
@@ -65,20 +79,23 @@ class TheClientViewModel(
         _contact.value = contact
     }
 
-
-    fun createBill(contact: Contact) {
+    fun checkIfBillIsOpen(contactId: String) {
         viewModelScope.launch {
-            val status = createBillClientUseCases.checkIfBillIsOpen(contact.contactId).status
-            Log.i("status", status)
-            _billContact.value =
-                if (status != "open") {
-                    _navToClientBill.value = true
-                    createBillClientUseCases.createBill(contact.contactId)
+            if (!createBillClientUseCases.checkIfBillIsOpen(contactId)) {
+                createBill(contactId)
+            } else {
+                _snackBar.value = app.getString(R.string.open_transactions_message)
 
-                } else {
-                    _snackBar.value = app.getString(R.string.open_transactions_message)
-                    BillContact()
-                }
+            }
+        }
+    }
+
+
+    fun createBill(contactId: String) {
+        viewModelScope.launch {
+            _billContact.value =
+                createBillClientUseCases.createBill(contactId)
+            _navToClientBill.value = true
 
         }
     }
@@ -86,7 +103,7 @@ class TheClientViewModel(
     fun createBillWithLongClickIfThereIsBillOpened(contact: Contact): Boolean {
         viewModelScope.launch {
             createBillClientUseCases.createBill(contact.contactId)
-            _navToClientBill.postValue(true)
+            _navToClientBill.value = true
         }
         return true
     }
@@ -121,7 +138,48 @@ class TheClientViewModel(
                 transfer.typeOfFinancialTransfer = "WITHDRAW"
                 transferUseCase.addWithdraw(transfer)
             } else {
+                transfer.typeOfFinancialTransfer = "DEPOSIT"
                 transferUseCase.addDeposit(transfer)
+            }
+        }
+    }
+
+    private fun checkTransfer(transfer: Transfer): Boolean {
+        return transfer.typeOfFinancialTransfer == _typeOfFinancialTransfer.value
+    }
+
+    fun updateTransfer(transfer: Transfer) {
+        viewModelScope.launch {
+            if (checkTransfer(transfer)) {
+                if (_typeOfFinancialTransfer.value == "WITHDRAW") {
+                    transfer.typeOfFinancialTransfer = "WITHDRAW"
+                    transferUseCase.updateWithdraw(transfer)
+                } else {
+                    transfer.typeOfFinancialTransfer = "DEPOSIT"
+                    transferUseCase.updateDeposit(transfer)
+                }
+            } else {
+                if (_typeOfFinancialTransfer.value == "WITHDRAW") {
+                    transfer.typeOfFinancialTransfer = "WITHDRAW"
+                    transferUseCase.deleteDeposit(transfer)
+                    transferUseCase.updateWithdraw(transfer)
+                } else {
+                    transfer.typeOfFinancialTransfer = "DEPOSIT"
+                    transferUseCase.deleteWithdraw(transfer)
+                    transferUseCase.updateDeposit(transfer)
+                }
+            }
+        }
+    }
+
+    fun deleteTransfer(transfer: Transfer) {
+        viewModelScope.launch {
+            if (_typeOfFinancialTransfer.value == "WITHDRAW") {
+                transfer.typeOfFinancialTransfer = "WITHDRAW"
+                transferUseCase.deleteWithdraw(transfer)
+            } else {
+                transfer.typeOfFinancialTransfer = "DEPOSIT"
+                transferUseCase.deleteDeposit(transfer)
             }
         }
     }
@@ -135,4 +193,49 @@ class TheClientViewModel(
             _transfers.value = transferUseCase.getListOfTransfer(contactId)
         }
     }
+
+    fun editDialog(transfer: Transfer) {
+        _dialogEditTransferItem.value = transfer
+    }
+
+    fun editDialogComplete() {
+        _dialogEditTransferItem.value = Transfer("")
+    }
+
+    fun deleteDialog(transfer: Transfer) {
+        _dialogDeleteTransferItem.value = transfer
+    }
+
+    fun deleteDialogComplete() {
+        _dialogDeleteTransferItem.value = Transfer("")
+    }
+
+    fun navToClientBillWithBillContact(billContact: BillContact) {
+        _navToClientBillWithBillContact.value = billContact
+    }
+
+    fun navToClientBillWithBillContactComplete() {
+        _navToClientBillWithBillContact.value = BillContact("")
+    }
+
+    fun deleteBillConfirmDialog(billContact: BillContact) {
+        _deleteBillConfirmDialog.value = billContact
+    }
+
+    fun deleteBillConfirmDialogComplete() {
+        _deleteBillConfirmDialog.value = BillContact("")
+    }
+
+    fun deleteBill(billContact: BillContact) {
+        viewModelScope.launch {
+            createBillClientUseCases.deleteBill(billContact.billId)
+        }
+    }
+
+    fun deleteContact(contact: Contact) {
+        viewModelScope.launch {
+            clientRepo.deleteClient(contact)
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
@@ -71,7 +72,7 @@ class TheClientBillFragment : Fragment() {
             })
         binding.rvClientBill.adapter = adapter
         val itemTouchCallBack = SwipeCallBack(adapter)
-        val itemTouchHelper = androidx.recyclerview.widget.ItemTouchHelper(itemTouchCallBack)
+        val itemTouchHelper = ItemTouchHelper(itemTouchCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvClientBill)
 
 

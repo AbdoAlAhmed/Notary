@@ -15,12 +15,12 @@ class FirebaseBillClient {
     private val billClientRef = db.collection("BillClient")
     private val userUid = FirebaseAuth.getInstance().currentUser?.uid
 
-    suspend fun checkIfBillOpen(contactId: String): BillContact {
+    suspend fun checkIfBillOpen(contactId: String): List<BillContact> {
         val bill = billClientRef
             .whereEqualTo("userId", userUid)
             .whereEqualTo("contactId", contactId)
             .get().await()
-        return bill!!.toObjects(BillContact::class.java).first() ?: BillContact()
+        return bill!!.toObjects(BillContact::class.java)
     }
 
     suspend fun createBillClient(contactId: String): BillContact {

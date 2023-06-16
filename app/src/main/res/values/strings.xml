@@ -84,6 +84,7 @@
     <string name="prise_format">%1$.2f EG</string>
     <string name="weight_format">%1$.2f kg</string>
     <string name="confirm_delete_item">Are you sure you want to delete this item?</string>
+    <string name="confirm_delete_contact">Are you sure you want to delete this contact?</string>
     <string name="confirm_delete_bill">Are you sure you want to delete this bill all items will be deleted?</string>
     <string name="sure">Sure</string>
     <string name="cancel"> Cancel </string>

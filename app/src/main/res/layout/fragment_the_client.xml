@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/btn_fragment_the_client_margin_start_end"
-                android:onClick="@{() -> theClientViewModel.createBill(contact)}"
+                android:onClick="@{() -> theClientViewModel.checkIfBillIsOpen(contact.contactId)}"
                 android:onLongClick="@{() -> theClientViewModel.createBillWithLongClickIfThereIsBillOpened(contact)}"
                 android:text="@string/transactions" />
         </LinearLayout>

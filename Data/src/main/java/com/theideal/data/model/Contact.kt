@@ -8,10 +8,11 @@ import kotlinx.android.parcel.Parcelize
 data class Contact(
     var contactId: String,
     var userId: String,
+    var contactRef:String,
     var name: String,
     var phone: String,
     var createAt: Timestamp = Timestamp.now(),
     var updateAt: String,
 ): Parcelable {
-    constructor() : this("", "", "", "", Timestamp.now(), "")
+    constructor() : this("","", "", "", "", Timestamp.now(), "")
 }

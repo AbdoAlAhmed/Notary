@@ -13,7 +13,7 @@ class FirebaseClient : FirebaseAuthentication() {
     suspend fun createClient(client: Contact) {
         clientRef.add(client).addOnSuccessListener {
             clientRef.document(it.id).update(
-                "contactId", client.phone, "userId", currentUser?.uid
+                "contactId", client.phone, "userId", currentUser?.uid, "contactRef", it.id
             )
         }.await()
 
@@ -54,15 +54,7 @@ class FirebaseClient : FirebaseAuthentication() {
     }
 
     suspend fun deleteClient(client: Contact) {
-        clientRef.whereEqualTo("userId", currentUser!!.uid)
-            .whereEqualTo("contactId", client.contactId)
-            .get().addOnSuccessListener {
-                if (it.documents.isNotEmpty()) {
-                    clientRef.document(it.documents[0].id).delete()
-                }
-            }.addOnFailureListener {
-                it.printStackTrace()
-            }.await()
+        clientRef.document(client.contactRef).delete().await()
     }
 
 }

@@ -6,7 +6,10 @@ import com.theideal.data.model.Transfer
 import com.theideal.notary.databinding.ItemTransferBinding
 import com.theideal.notary.utils.SwipeAdapter
 
-class TheClientAdapterTransfer(private val onClick: OnClick) :
+class TheClientAdapterTransfer(
+    private val theClientViewModel: TheClientViewModel,
+    private val onClick: OnClick
+) :
     androidx.recyclerview.widget.ListAdapter<Transfer, TheClientAdapterTransfer.ViewHolder>(
         DiffCallBAck
     ),
@@ -50,6 +53,7 @@ class TheClientAdapterTransfer(private val onClick: OnClick) :
             onClick.onClick(transfer)
         }
         holder.bind(transfer)
+        sortList()
     }
 
     class OnClick(val clickListener: (transfer: Transfer) -> Unit) {
@@ -58,13 +62,67 @@ class TheClientAdapterTransfer(private val onClick: OnClick) :
 
 
     override fun onItemDelete(position: Int) {
+        deleteItem(position)
     }
 
     override fun onItemEdit(position: Int) {
+        editItem(position)
     }
 
 
     override fun setDataChanged() {
+        notifyDataSetChanged()
+    }
+
+    private fun sortList() {
+        val sortedList =
+            currentList.sortedWith(compareBy({ it.typeOfFinancialTransfer }, { it.createAt }))
+        submitList(sortedList)
+    }
+
+    fun addItem(transfer: Transfer) {
+        val list = currentList.toMutableList()
+        list.add(transfer)
+        sortList()
+        submitList(list)
+    }
+
+    private fun editItem(position: Int) {
+        if (position in 0 until itemCount) {
+            val item = getItem(position)
+            val list = currentList.toMutableList()
+            theClientViewModel.editDialog(item)
+            submitList(list)
+
+        }
+    }
+
+    private fun deleteItem(position: Int) {
+        if (position in 0 until itemCount) {
+            val item = getItem(position)
+            val list = currentList.toMutableList()
+            theClientViewModel.deleteDialog(item)
+            submitList(list)
+        }
+    }
+
+    fun updateItemAt(transfer: Transfer) {
+        val list = currentList.toMutableList()
+        list.replaceAll { if (it.transferId == transfer.transferId) transfer else it }
+        submitList(list)
+        notifyItemChanged(list.indexOf(transfer))
+    }
+
+
+    fun removeItemAt(transfer: Transfer) {
+        val list = currentList.toMutableList()
+        list.removeIf { it.transferId == transfer.transferId }
+        submitList(list)
+    }
+
+    fun refreshList() {
+        val updatedList = currentList.toMutableList()
+        submitList(updatedList)
     }
 
 }
