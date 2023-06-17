@@ -104,4 +104,7 @@
     <string name="remaining_money">Remaining Money</string>
     <string name="paid_money">Paid Money</string>
     <string name="paid">Paid</string>
+    <string name="paid_money_less_than_total_money">"Paid money must be less than total money"</string>
+    <string name="no_item">No Items</string>
+    <string name="no_item_error">"You must add at least one item"</string>
 </resources>

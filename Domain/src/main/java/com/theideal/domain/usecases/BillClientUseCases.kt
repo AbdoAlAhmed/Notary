@@ -7,11 +7,29 @@ import com.theideal.domain.repository.BillClientRepository
 import com.theideal.domain.repository.BillSupplierRepository
 import com.theideal.domain.repository.SupplierRepository
 
-class CreateBillClientUseCases(
+class BillClientUseCases(
     private val billRepository: BillClientRepository,
     private val billSupplierRepository: BillSupplierRepository,
     private val supplierRepository: SupplierRepository,
+    private val transferUseCase: TransferUseCase
 ) {
+
+
+    suspend fun calculateBills(contactId: String): Double {
+        val list = getBillsByContactId(contactId)
+        var remainingMoney = 0.0
+        var amount = 0.0
+        for (bill in list) {
+            remainingMoney += bill.remainingMoney!!
+            amount += bill.amount!!
+        }
+        return remainingMoney
+    }
+
+
+    suspend fun contactTotal(contactId: String): Double {
+        return transferUseCase.calculateTransfer(contactId) + calculateBills(contactId)
+    }
 
 
     suspend fun checkIfBillIsOpen(contactId: String): Boolean {

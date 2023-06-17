@@ -14,11 +14,11 @@ import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
 import com.theideal.domain.repository.ClientRepository
-import com.theideal.domain.usecases.CreateBillClientUseCases
+import com.theideal.domain.usecases.BillClientUseCases
 import kotlinx.coroutines.launch
 
 class ClientBillViewModel(
-    private val createBillClientUseCases: CreateBillClientUseCases,
+    private val billClientUseCases: BillClientUseCases,
     private val clientRepo: ClientRepository,
     private val app: Application,
 ) :
@@ -69,11 +69,24 @@ class ClientBillViewModel(
     val setBillStatus: LiveData<String>
         get() = _setBillStatus
 
+    private val _snackBar = MutableLiveData<String>()
+    val snackBar: LiveData<String>
+        get() = _snackBar
+
+
+    fun setSnackBar(message: String) {
+        _snackBar.value = message
+    }
+
+    fun setSnackComplete() {
+        _setBillStatus.value = ""
+    }
+
 
     fun getSuppliersList() {
         viewModelScope.launch {
             _suppliersList.postValue(
-                createBillClientUseCases.getSuppliersNameFromId()
+                billClientUseCases.getSuppliersNameFromId()
             )
         }
     }
@@ -81,8 +94,8 @@ class ClientBillViewModel(
     fun setTotalToBillContact(billContact: BillContact) {
         viewModelScope.launch {
             if (billContact.billId.isNotEmpty()) {
-                val grossMoney = createBillClientUseCases.totalMoneyItems(billContact.billId)
-                val amount = createBillClientUseCases.totalAmountItems(billContact.billId)
+                val grossMoney = billClientUseCases.totalMoneyItems(billContact.billId)
+                val amount = billClientUseCases.totalAmountItems(billContact.billId)
                 billContact.grossMoney = grossMoney
                 billContact.amount = amount
                 _billContact.value = billContact
@@ -91,7 +104,6 @@ class ClientBillViewModel(
     }
 
     fun updateBillContact(billContact: BillContact) {
-        // update part of billContact
         _billContact.value = billContact
     }
 
@@ -107,7 +119,7 @@ class ClientBillViewModel(
         viewModelScope.launch {
             try {
                 if (billId.isNotEmpty()) {
-                    _items.value = createBillClientUseCases.getItemsFromBillId(billId)
+                    _items.value = billClientUseCases.getItemsFromBillId(billId)
                 }
             } catch (e: Exception) {
                 _items.value = emptyList()
@@ -117,31 +129,31 @@ class ClientBillViewModel(
 
     fun updateItem(billId: String, item: Item) {
         viewModelScope.launch {
-            createBillClientUseCases.updateItem(billId, item)
+            billClientUseCases.updateItem(billId, item)
         }
     }
 
     fun addItemToBillClient(billId: String, item: Item) {
         viewModelScope.launch {
-            createBillClientUseCases.addItemToBillClientWithBillId(billId, item)
+            billClientUseCases.addItemToBillClientWithBillId(billId, item)
         }
     }
 
     fun deleteItemFromBill(billId: String, itemId: String) {
         viewModelScope.launch {
-            createBillClientUseCases.deleteItemFromBill(billId, itemId)
+            billClientUseCases.deleteItemFromBill(billId, itemId)
         }
     }
 
     fun deleteBill(billId: String) {
         viewModelScope.launch {
-            createBillClientUseCases.deleteBill(billId)
+            billClientUseCases.deleteBill(billId)
         }
     }
 
     fun updateBill(billId: String, keyValue: Map<String, Any>) {
         viewModelScope.launch {
-            createBillClientUseCases.updateBill(billId = billId, keyValue)
+            billClientUseCases.updateBill(billId = billId, keyValue)
         }
     }
 
@@ -208,7 +220,6 @@ class ClientBillViewModel(
     fun setBillStatus(status: String) {
         _setBillStatus.value = status
     }
-
 
 
 }

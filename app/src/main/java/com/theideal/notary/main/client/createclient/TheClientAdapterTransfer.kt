@@ -85,6 +85,7 @@ class TheClientAdapterTransfer(
         list.add(transfer)
         sortList()
         submitList(list)
+        notifyItemChanged(list.indexOf(transfer))
     }
 
     private fun editItem(position: Int) {
@@ -93,7 +94,7 @@ class TheClientAdapterTransfer(
             val list = currentList.toMutableList()
             theClientViewModel.editDialog(item)
             submitList(list)
-
+            notifyItemChanged(position)
         }
     }
 

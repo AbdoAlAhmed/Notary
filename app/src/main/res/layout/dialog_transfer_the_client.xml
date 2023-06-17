@@ -7,8 +7,6 @@
             name="transfer"
             type="com.theideal.data.model.Transfer" />
 
-
-
         <variable
             name="theClientViewModel"
             type="com.theideal.notary.main.client.createclient.TheClientViewModel" />

@@ -9,14 +9,14 @@ import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Transfer
 import com.theideal.domain.repository.ClientRepository
-import com.theideal.domain.usecases.CreateBillClientUseCases
+import com.theideal.domain.usecases.BillClientUseCases
 import com.theideal.domain.usecases.TransferUseCase
 import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
 class TheClientViewModel(
     private val clientRepo: ClientRepository,
-    private val createBillClientUseCases: CreateBillClientUseCases,
+    private val billClientUseCases: BillClientUseCases,
     private val transferUseCase: TransferUseCase,
     private val app: Application
 
@@ -69,6 +69,10 @@ class TheClientViewModel(
     val dialogDeleteTransferItem: LiveData<Transfer>
         get() = _dialogDeleteTransferItem
 
+    private val _clientTotal = MutableLiveData<Double>()
+    val clientTotal: LiveData<Double>
+        get() = _clientTotal
+
     fun getClient(contactId: String) {
         viewModelScope.launch {
             _contact.value = clientRepo.getClient(contactId)
@@ -81,7 +85,7 @@ class TheClientViewModel(
 
     fun checkIfBillIsOpen(contactId: String) {
         viewModelScope.launch {
-            if (!createBillClientUseCases.checkIfBillIsOpen(contactId)) {
+            if (!billClientUseCases.checkIfBillIsOpen(contactId)) {
                 createBill(contactId)
             } else {
                 _snackBar.value = app.getString(R.string.open_transactions_message)
@@ -94,7 +98,7 @@ class TheClientViewModel(
     fun createBill(contactId: String) {
         viewModelScope.launch {
             _billContact.value =
-                createBillClientUseCases.createBill(contactId)
+                billClientUseCases.createBill(contactId)
             _navToClientBill.value = true
 
         }
@@ -102,7 +106,7 @@ class TheClientViewModel(
 
     fun createBillWithLongClickIfThereIsBillOpened(contact: Contact): Boolean {
         viewModelScope.launch {
-            createBillClientUseCases.createBill(contact.contactId)
+            billClientUseCases.createBill(contact.contactId)
             _navToClientBill.value = true
         }
         return true
@@ -111,7 +115,7 @@ class TheClientViewModel(
 
     fun getBillsByContactId(contactId: String) {
         viewModelScope.launch {
-            _bills.postValue(createBillClientUseCases.getBillsByContactId(contactId))
+            _bills.postValue(billClientUseCases.getBillsByContactId(contactId))
         }
     }
 
@@ -228,13 +232,19 @@ class TheClientViewModel(
 
     fun deleteBill(billContact: BillContact) {
         viewModelScope.launch {
-            createBillClientUseCases.deleteBill(billContact.billId)
+            billClientUseCases.deleteBill(billContact.billId)
         }
     }
 
     fun deleteContact(contact: Contact) {
         viewModelScope.launch {
             clientRepo.deleteClient(contact)
+        }
+    }
+
+    fun getTheClientTotal(contactId: String) {
+        viewModelScope.launch {
+            _clientTotal.value = billClientUseCases.contactTotal(contactId)
         }
     }
 

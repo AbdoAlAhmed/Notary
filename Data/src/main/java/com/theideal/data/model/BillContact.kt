@@ -2,8 +2,6 @@ package com.theideal.data.model
 
 import android.os.Parcelable
 import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
-import androidx.databinding.library.baseAdapters.BR
 import com.google.firebase.Timestamp
 import kotlinx.android.parcel.Parcelize
 
@@ -36,12 +34,15 @@ data class BillContact(
     val totalMoneyCalculate
         get() = grossMoney!! + allFees
 
+    val totalPaidMoney
+        get() = paidMoney!! + payMoney!!
+
     val remainingMoney
-        get() = totalMoneyCalculate - paidMoney!!
+        get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
 
 
     val deptCalculate
-        get() = totalMoneyCalculate - (paidMoney!! + discount!!)
+        get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
 
     fun setStatus(): String {
         return if (deptCalculate <= 0.0) {
@@ -52,9 +53,6 @@ data class BillContact(
             "open"
         }
     }
-
-
-
 
 
     constructor() : this(
@@ -75,7 +73,6 @@ data class BillContact(
         "",
 
         )
-
 
 
     constructor(billId: String, userId: String, contactId: String, status: String) : this(

@@ -1,11 +1,7 @@
 package com.theideal.data.remote
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.protobuf.DescriptorProtos.FieldOptions
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Item
 import kotlinx.coroutines.tasks.await

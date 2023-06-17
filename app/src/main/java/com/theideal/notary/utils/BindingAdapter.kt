@@ -6,6 +6,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.theideal.data.model.Contact
@@ -85,15 +86,6 @@ fun CardView.setRemainingMoneyVisibility(status: String) {
     visibility = if (status != "open") View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("set_paid_enable")
-fun View.setPaidEnable(status: String) {
-    isEnabled = status == "open"
-}
-
-@BindingAdapter("set_pay_visibility")
-fun View.setPayVisibility(status: String) {
-    visibility = if (status == "closed") View.GONE else View.VISIBLE
-}
 
 @BindingAdapter("set_text_color")
 fun TextView.setTextColor(status: String) {
@@ -101,6 +93,26 @@ fun TextView.setTextColor(status: String) {
         "DEPOSIT" -> setTextColor(resources.getColor(R.color.dark_ocean_blue, null))
         "WITHDRAW" -> setTextColor(resources.getColor(R.color.black, null))
     }
+}
+
+@BindingAdapter("set_pay_discount_btn_text_visibility_enabled")
+fun TextView.setPayVisibility(status: String) {
+    isVisible = status != "closed"
+}
+
+@BindingAdapter("set_paid_visibility")
+fun TextView.setPaidVisibility(status: String) {
+    isVisible = status != "open"
+}
+
+@BindingAdapter("set_texted")
+fun TextView.setTexted(string: String) {
+    text = string.toString()
+}
+
+@BindingAdapter("set_paid_enabled")
+fun TextView.setPaidEnabled(status: String) {
+    isEnabled = status == "deferred"
 }
 
 

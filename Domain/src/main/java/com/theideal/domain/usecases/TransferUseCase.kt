@@ -14,6 +14,20 @@ class TransferUseCase(
         return listOfTransfer
     }
 
+    suspend fun calculateTransfer(contactId: String): Double {
+        val listDeposit = depositUseCase.getDepositsWithContactId(contactId)
+        val listWithdraw = withdrawUseCase.getWithdrawsWithContactId(contactId)
+        var totalDeposit = 0.0
+        var totalWithdraw = 0.0
+        for (i in listDeposit) {
+            totalDeposit += i.amount
+        }
+        for (i in listWithdraw) {
+            totalWithdraw += i.amount
+        }
+        return totalDeposit - totalWithdraw
+    }
+
     suspend fun addDeposit(transfer: Transfer) {
         depositUseCase.addDeposit(transfer)
     }

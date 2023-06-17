@@ -60,16 +60,19 @@ class TheClientFragment : Fragment() {
                 binding.contact = it
             }
         }
+        // todo theClientViewModel.getTheClientTotal(contact) and it's calculate wrong
 
         val contact =
             requireActivity().intent.getStringExtra("contactId") // get contactId from SaleTransactionsFragment
         if (contact != null) {
             theClientViewModel.getClient(contact)
             theClientViewModel.getBillsByContactId(contact)
+            theClientViewModel.getTheClientTotal(contact)
             theClientViewModel.getTransfersWithContactId(contact)
 
         } else {
             theClientViewModel.setClient(args.contact!!)
+            theClientViewModel.getTheClientTotal(args.contact.contactId!!)
             theClientViewModel.getTransfersWithContactId(args.contact.phone)
             theClientViewModel.getBillsByContactId(args.contact.phone)
         }

@@ -123,6 +123,13 @@ class TheClientBillFragment : Fragment() {
             customViewForCloseBill(it)
         }
 
+        clientBillViewModel.snackBar.observe(viewLifecycleOwner) {
+            if (it != "") {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                clientBillViewModel.setSnackComplete()
+            }
+        }
+
 
         binding.lifecycleOwner = this
 
@@ -143,6 +150,7 @@ class TheClientBillFragment : Fragment() {
                     }
                 }
             }
+
             "deferred" -> {
                 binding.apply {
                     btnSell.setBackgroundColor(resources.getColor(R.color.sunset_orange))
@@ -152,6 +160,7 @@ class TheClientBillFragment : Fragment() {
                     }
                 }
             }
+
             else -> {
                 binding.apply {
                     btnPay.visibility = View.VISIBLE
@@ -168,8 +177,8 @@ class TheClientBillFragment : Fragment() {
     private fun noItemDialog() {
         val dialogAlert = AlertDialog.Builder(requireContext())
         val dialogCreate = dialogAlert.create()
-        dialogCreate.setTitle("No item")
-        dialogCreate.setMessage("You must add at least one item")
+        dialogCreate.setTitle(getString(R.string.no_item))
+        dialogCreate.setMessage(getString(R.string.no_item_error))
         dialogCreate.show()
     }
 
@@ -185,37 +194,46 @@ class TheClientBillFragment : Fragment() {
             )
             clientBillViewModel.updateBill(billContact.billId, keyValue = otherFee)
             clientBillViewModel.updateBillContact(billContact)
+            transferDialog(billContact)
             dialogCreate.dismiss()
-            transferDialog()
             clientBillViewModel.transferDialogComplete()
         }
         dialogCreate.show()
     }
 
-    private fun transferDialog() {
+    private fun transferDialog(billContact: BillContact) {
         val dialogAlert = AlertDialog.Builder(requireContext())
         val dialogCreate = dialogAlert.create()
         val view = DialogPayTheBillBinding.inflate(layoutInflater)
         view.billContact = billContact
-        billContact.status = billContact.setStatus()
-
+        view.lifecycleOwner = this
         dialogCreate.setView(view.root)
+        // show toast message (paid money must be less than total money) if paid money > total money
         view.btnPayTheBill.setOnClickListener {
-            val billInfo = mapOf(
-                "paidMoney" to billContact.paidMoney!!,
-                "discount" to billContact.discount!!,
-                "deptCalculate" to billContact.deptCalculate,
-                "allFees" to billContact.allFees!!,
-                "status" to billContact.setStatus(),
-                "totalMoney" to billContact.totalMoney!!
-            )
-            clientBillViewModel.updateBill(billContact.billId, keyValue = billInfo)
-            clientBillViewModel.setBillStatus(billContact.setStatus())
-            clientBillViewModel.updateBillContact(billContact)
-            dialogCreate.dismiss()
+            if (billContact.payMoney!! > billContact.totalMoneyCalculate!!
+                || billContact.paidMoney!! > billContact.totalMoneyCalculate!!
+                || billContact.totalPaidMoney!! > billContact.totalMoneyCalculate!!
+            ) {
+                clientBillViewModel.setSnackBar(getString(R.string.paid_money_less_than_total_money))
+            } else {
+                val billInfo = mapOf(
+                    "paidMoney" to billContact.paidMoney!!,
+                    "payMoney" to billContact.payMoney!!,
+                    "totalPaidMoney" to billContact.totalPaidMoney!!,
+                    "discount" to billContact.discount!!,
+                    "deptCalculate" to billContact.deptCalculate,
+                    "allFees" to billContact.allFees!!,
+                    "status" to billContact.setStatus(),
+                    "totalMoney" to billContact.totalMoney!!
+                )
+                clientBillViewModel.updateBill(billContact.billId, keyValue = billInfo)
+                billContact.status = billContact.setStatus()
+                clientBillViewModel.setBillStatus(billContact.setStatus())
+                clientBillViewModel.updateBillContact(billContact)
+                dialogCreate.dismiss()
+            }
         }
         dialogCreate.show()
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

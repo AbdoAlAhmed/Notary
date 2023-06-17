@@ -15,7 +15,7 @@ import com.theideal.domain.repository.SupplierRepository
 import com.theideal.domain.repository.UserRepository
 import com.theideal.domain.repository.WithdrawRepository
 import com.theideal.domain.usecases.ContactUseCases
-import com.theideal.domain.usecases.CreateBillClientUseCases
+import com.theideal.domain.usecases.BillClientUseCases
 import com.theideal.domain.usecases.DepositUseCase
 import com.theideal.domain.usecases.TransferUseCase
 import com.theideal.domain.usecases.WithdrawUseCase
@@ -79,7 +79,7 @@ val BillClientModule = module {
         SupplierRepository(get())
     }
     single {
-        CreateBillClientUseCases(get(), get(), get())
+        BillClientUseCases(get(), get(), get(), get())
     }
     viewModel {
         TheClientViewModel(get(), get(), get(), get())
