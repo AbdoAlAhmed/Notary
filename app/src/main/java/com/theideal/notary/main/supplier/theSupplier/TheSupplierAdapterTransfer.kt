@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.createclient
+package com.theideal.notary.main.supplier.theSupplier
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,11 +7,12 @@ import com.theideal.data.model.Transfer
 import com.theideal.notary.databinding.ItemTransferBinding
 import com.theideal.notary.utils.SwipeAdapter
 
-class TheClientAdapterTransfer(
-    private val theClientViewModel: TheClientViewModel,
+class TheSupplierAdapterTransfer(
+    private val theSupplierViewModel: TheSupplierViewModel,
     private val onClick: OnClick
+
 ) :
-    androidx.recyclerview.widget.ListAdapter<Transfer, TheClientAdapterTransfer.ViewHolder>(
+    androidx.recyclerview.widget.ListAdapter<Transfer, TheSupplierAdapterTransfer.ViewHolder>(
         DiffCallBAck
     ),
     SwipeAdapter {
@@ -93,7 +94,7 @@ class TheClientAdapterTransfer(
         if (position in 0 until itemCount) {
             val item = getItem(position)
             val list = currentList.toMutableList()
-            theClientViewModel.editDialog(item)
+            theSupplierViewModel.editDialog(item)
             submitList(list)
             notifyItemChanged(position)
         }
@@ -103,7 +104,7 @@ class TheClientAdapterTransfer(
         if (position in 0 until itemCount) {
             val item = getItem(position)
             val list = currentList.toMutableList()
-            theClientViewModel.deleteDialog(item)
+            theSupplierViewModel.deleteDialog(item)
             submitList(list)
         }
     }

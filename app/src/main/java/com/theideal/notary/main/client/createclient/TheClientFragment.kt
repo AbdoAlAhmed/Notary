@@ -60,7 +60,7 @@ class TheClientFragment : Fragment() {
                 binding.contact = it
             }
         }
-        // todo theClientViewModel.getTheClientTotal(contact) and it's calculate wrong
+        // todo theClientViewModel.getTheClientTotal(contact)  look where to put this
 
         val contact =
             requireActivity().intent.getStringExtra("contactId") // get contactId from SaleTransactionsFragment
@@ -131,11 +131,13 @@ class TheClientFragment : Fragment() {
                 dialogTransferEdit(it)
             }
         }
+
         theClientViewModel.dialogDeleteTransferItem.observe(viewLifecycleOwner) {
             if (it.transferId != "") {
                 confirmDeleteItemTransfer(it)
             }
         }
+
         theClientViewModel.navToClientBillWithBillContact.observe(viewLifecycleOwner) {
             if (it.status != "") {
                 findNavController().navigate(
@@ -146,6 +148,7 @@ class TheClientFragment : Fragment() {
                 theClientViewModel.navToClientBillWithBillContactComplete()
             }
         }
+
         theClientViewModel.deleteBillConfirmDialog.observe(viewLifecycleOwner) {
             if (it.status != "") {
                 confirmDeleteItemBill(it)
