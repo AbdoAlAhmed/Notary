@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.theideal.data.model.Contact
 import com.theideal.notary.databinding.ItemContactInfoBinding
+import com.theideal.notary.utils.SwipeAdapter
 
 class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListener) :
     ListAdapter<Contact, SaleTransactionsAdapter.SaleTransactionsViewHolder>(
         SaleTransactionsDiffCallback
-    ) {
+    ), SwipeAdapter {
 
     object SaleTransactionsDiffCallback : DiffUtil.ItemCallback<Contact>() {
         override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
@@ -59,5 +60,38 @@ class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListene
 
     class SaleTransactionsListener(val clickListener: (contact: Contact) -> Unit) {
         fun onClick(contact: Contact) = clickListener(contact)
+    }
+
+
+    fun getNameBySearchAndPutItInTheFirstPosition(name: String): String {
+        var name = name
+        for (i in 0 until itemCount) {
+            if (getItem(i).name == name) {
+                name = getItem(i).name
+                currentList.first().name = name
+            }
+        }
+        return name
+    }
+
+    override fun onItemDelete(position: Int) {
+        deleteItem(position)
+    }
+
+    override fun onItemEdit(position: Int) {
+        editItem(position)
+    }
+
+    override fun setDataChanged() {
+        notifyDataSetChanged()
+    }
+
+    private fun deleteItem(position: Int) {
+
+
+    }
+
+    private fun editItem(position: Int) {
+
     }
 }

@@ -48,6 +48,7 @@ class ClientBillViewModel(
     private val _suppliersList = MutableLiveData<List<Contact>>()
     val supperList: LiveData<List<Contact>>
         get() = _suppliersList
+
     private val _contact = MutableLiveData<Contact>()
     val contact: LiveData<Contact>
         get() = _contact

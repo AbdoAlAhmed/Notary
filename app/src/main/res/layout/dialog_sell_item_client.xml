@@ -57,8 +57,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:text="@={`` + item.price}"
-                    app:set_double_text_to_empty="@{`` + item.price}"
-                    />
+                    app:set_double_text_to_empty="@{`` + item.price}" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -81,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:text="@={`` + item.amount}"
-                    app:set_double_text_to_empty="@{`` + item.amount}"/>
+                    app:set_double_text_to_empty="@{`` + item.amount}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,14 +99,15 @@
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
         <TextView
             android:id="@+id/tv_supplier_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@{item.supplierName}"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:text="@{item.supplierId}"
-            />
+            android:visibility="gone" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="?attr/textInputOutlinedExposedDropdownMenuStyle"
             android:layout_width="match_parent"
@@ -119,7 +119,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
-                android:text="@{item.supplierId}"
                 app:bind_auto_complete_text="@{clientBillViewModel.supperList}"
                 app:bind_contact="@{contact}" />
         </com.google.android.material.textfield.TextInputLayout>

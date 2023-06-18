@@ -28,8 +28,8 @@ class SaleTransactionsViewModel(
     val snackBar: LiveData<String>
         get() = _snackBar
 
-    private val _clients = MutableLiveData<List<Contact>>()
-    val clients: LiveData<List<Contact>>
+    private val _clients = MutableLiveData<List<Contact>?>()
+    val clients: LiveData<List<Contact>?>
         get() = _clients
 
     fun checkUserInfo() {
@@ -65,7 +65,7 @@ class SaleTransactionsViewModel(
     fun getAllClients() {
         viewModelScope.launch {
             try {
-                _clients.postValue(clientRepo.getClientByUserId())
+                _clients.value = clientRepo.getClientByUserId()
             } catch (e: Exception) {
                 _snackBar.value = app.getString(R.string.error_getting_the_data)
             }

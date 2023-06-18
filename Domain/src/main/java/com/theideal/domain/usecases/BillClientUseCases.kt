@@ -28,7 +28,7 @@ class BillClientUseCases(
 
 
     suspend fun contactTotal(contactId: String): Double {
-        return transferUseCase.calculateTransfer(contactId) + calculateBills(contactId)
+        return transferUseCase.calculateTransfer(contactId) - calculateBills(contactId)
     }
 
 

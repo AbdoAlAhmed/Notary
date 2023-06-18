@@ -39,7 +39,8 @@ class FirebaseBillClient {
     suspend fun getBillsByContactId(contactId: String): List<BillContact> {
         val bill =
             billClientRef.whereEqualTo("userId", userUid)
-                .whereEqualTo("contactId", contactId).get()
+                .whereEqualTo("contactId", contactId)
+                .get()
                 .await()
         return bill!!.toObjects(BillContact::class.java)
     }

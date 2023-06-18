@@ -178,11 +178,9 @@ class TheClientViewModel(
 
     fun deleteTransfer(transfer: Transfer) {
         viewModelScope.launch {
-            if (_typeOfFinancialTransfer.value == "WITHDRAW") {
-                transfer.typeOfFinancialTransfer = "WITHDRAW"
+            if (transfer.typeOfFinancialTransfer == "WITHDRAW") {
                 transferUseCase.deleteWithdraw(transfer)
             } else {
-                transfer.typeOfFinancialTransfer = "DEPOSIT"
                 transferUseCase.deleteDeposit(transfer)
             }
         }

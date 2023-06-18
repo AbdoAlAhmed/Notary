@@ -53,7 +53,7 @@
                 android:text="@={`` + billContact.paidMoney}"
                 app:set_paid_enabled="@{billContact.status}"
                 app:set_paid_visibility="@{billContact.status}"
-                app:set_texted="@{`` +billContact.totalPaidMoney}" />
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

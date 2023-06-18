@@ -1,5 +1,6 @@
 package com.theideal.notary.utils
 
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -26,18 +27,13 @@ fun bindDataToRecyclerView(recyclerView: RecyclerView, data: List<Any>?) {
     adapter!!.submitList(data as List<Nothing>?)
 }
 
-@BindingAdapter("set_empty_card_visibility")
-fun bindEmptyCardVisibility(card: CardView, string: String) {
-    card.visibility = if (string == "0.0") View.GONE else View.VISIBLE
-}
 
-
-@BindingAdapter("bind_auto_complete_text")
+@BindingAdapter("bind_auto_complete_text", "bind_contact")
 fun bindAutoComplete(
     autoCompleteText: AutoCompleteTextView,
     list: List<Contact>?,
-
-    ) {
+    contact: Contact
+) {
     if (list != null) {
         val adapter = ArrayAdapter(
             autoCompleteText.context,
@@ -45,20 +41,20 @@ fun bindAutoComplete(
             list.map { it.name }
         )
         autoCompleteText.setAdapter(adapter)
+        autoCompleteText.setOnItemClickListener { parent, _, position, _ ->
+            val chosenName = parent.getItemAtPosition(position).toString()
+            val chosenContact = list.find { it.name == chosenName }
+            chosenContact?.let {
+                contact.contactId = it.contactId
+                contact.name = it.name
+                autoCompleteText.setText(it.name, false)
+            }
+        }
+        autoCompleteText.setText(contact.name, false)
         adapter.notifyDataSetChanged()
     }
 }
 
-@BindingAdapter("bind_contact")
-fun bindAutoComplete(
-    autoCompleteText: AutoCompleteTextView,
-    contact: Contact,
-) {
-    autoCompleteText.setOnItemClickListener { parent, _, position, _ ->
-        contact.name = parent.getItemAtPosition(position).toString()
-    }
-    autoCompleteText.setText(contact.name, false)
-}
 
 @BindingAdapter("set_double_text_to_empty")
 fun bindDoubleTextToEmpty(textView: TextView, string: String) {
@@ -81,9 +77,15 @@ fun TextView.setTimestampToDate(timestamp: com.google.firebase.Timestamp) {
     text = dateFormat.format(timestamp.toDate())
 }
 
-@BindingAdapter("card_close_bill_visibility")
-fun CardView.setRemainingMoneyVisibility(status: String) {
-    visibility = if (status != "open") View.VISIBLE else View.GONE
+@BindingAdapter("set_empty_card_visibility")
+fun bindEmptyCardVisibility(card: CardView, string: String) {
+    card.visibility = if (string == "0.0") View.GONE else View.VISIBLE
+}
+
+@BindingAdapter("card_remaining_visibility_amount", "card_remaining_visibility_paid")
+fun CardView.setRemainingMoneyVisibility(amount: String, paid: String) {
+    visibility =
+        if (amount > "0.0" && paid > "0.0") View.VISIBLE else View.GONE
 }
 
 

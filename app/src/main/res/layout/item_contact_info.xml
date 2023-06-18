@@ -9,6 +9,10 @@
             name="contact"
             type="com.theideal.data.model.Contact" />
 
+        <variable
+            name="billContact"
+            type="com.theideal.data.model.BillContact" />
+
         <import type="com.theideal.data.model.Contact" />
     </data>
 
@@ -27,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:ems="@integer/item_tv_total_money_ems"
                 android:paddingStart="@dimen/item_tv_total_money_padding_start"
-                android:text="@string/million"
+                android:text="@{`` + billContact.deptCalculate}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlSymmetry" />
@@ -38,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:ems="@integer/item_tv_total_count_ems"
                 android:paddingStart="@dimen/item_tv_total_count_padding_start"
-                android:text="@string/million"
+                android:text="@{`` + billContact.amount}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_tv_total_money"
                 tools:ignore="RtlSymmetry" />

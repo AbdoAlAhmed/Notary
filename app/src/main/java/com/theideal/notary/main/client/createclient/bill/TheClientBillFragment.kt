@@ -68,7 +68,6 @@ class TheClientBillFragment : Fragment() {
         adapter = TheClientBillAdapter(
             clientBillViewModel,
             TheClientBillAdapter.OnClick {
-
             })
         binding.rvClientBill.adapter = adapter
         val itemTouchCallBack = SwipeCallBack(adapter)
@@ -206,23 +205,22 @@ class TheClientBillFragment : Fragment() {
         val dialogCreate = dialogAlert.create()
         val view = DialogPayTheBillBinding.inflate(layoutInflater)
         view.billContact = billContact
+        view.executePendingBindings()
         view.lifecycleOwner = this
         dialogCreate.setView(view.root)
         // show toast message (paid money must be less than total money) if paid money > total money
         view.btnPayTheBill.setOnClickListener {
-            if (billContact.payMoney!! > billContact.totalMoneyCalculate!!
-                || billContact.paidMoney!! > billContact.totalMoneyCalculate!!
-                || billContact.totalPaidMoney!! > billContact.totalMoneyCalculate!!
+            if (billContact.payMoney!! > billContact.totalMoneyCalculate
+                || billContact.paidMoney!! > billContact.totalMoneyCalculate
+                || billContact.totalPaidMoney > billContact.totalMoneyCalculate
             ) {
                 clientBillViewModel.setSnackBar(getString(R.string.paid_money_less_than_total_money))
             } else {
                 val billInfo = mapOf(
-                    "paidMoney" to billContact.paidMoney!!,
-                    "payMoney" to billContact.payMoney!!,
-                    "totalPaidMoney" to billContact.totalPaidMoney!!,
+                    "paidMoney" to billContact.totalPaidMoney,
                     "discount" to billContact.discount!!,
                     "deptCalculate" to billContact.deptCalculate,
-                    "allFees" to billContact.allFees!!,
+                    "allFees" to billContact.allFees,
                     "status" to billContact.setStatus(),
                     "totalMoney" to billContact.totalMoney!!
                 )
@@ -245,12 +243,14 @@ class TheClientBillFragment : Fragment() {
         view.contact = contact
         view.item = item
         view.btnSellItem.setOnClickListener {
-            item.supplierId = contact.name
+            item.supplierId = contact.contactId
+            item.supplierName = contact.name
             clientBillViewModel.addItemToBillClient(billContact.billId, item)
             dialogCreate.dismiss()
             clientBillViewModel.transactionDialogComplete()
             clientBillViewModel.setTotalToBillContact(billContact)
             adapter.addItem(item)
+
         }
         dialogCreate.setView(view.root)
         dialogCreate.show()
@@ -288,7 +288,8 @@ class TheClientBillFragment : Fragment() {
         view.contact = contact
         view.item = item
         view.btnSellItem.setOnClickListener {
-            item.supplierId = contact.name
+            item.supplierId = contact.contactId
+            item.supplierName = contact.name
             clientBillViewModel.updateItem(billContact.billId, item)
             clientBillViewModel.setTotalToBillContact(billContact)
             adapter.updateItem(item)
@@ -312,6 +313,7 @@ class TheClientBillFragment : Fragment() {
         ) { dialog, _ ->
             clientBillViewModel.updateBill(billContact.billId, keyValue = mapOf("status" to "open"))
             clientBillViewModel.setBillStatus("open")
+            clientBillViewModel.updateBillContact(billContact)
         }
         dialogCreate.show()
 

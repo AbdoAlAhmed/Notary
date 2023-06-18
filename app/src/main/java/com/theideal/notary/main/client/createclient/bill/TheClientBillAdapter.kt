@@ -58,7 +58,14 @@ class TheClientBillAdapter(
         holder.itemView.setOnClickListener {
             onClick.onClick(item)
         }
-//        sortList()
+        sortList()
+    }
+
+    override fun onCurrentListChanged(
+        previousList: MutableList<Item>,
+        currentList: MutableList<Item>
+    ) {
+        super.onCurrentListChanged(previousList, currentList)
     }
 
     class OnClick(val clickListener: (item: Item) -> Unit) {
@@ -102,7 +109,7 @@ class TheClientBillAdapter(
         val updatedList = currentList.toMutableList()
         updatedList.add(item)
         submitList(updatedList)
-        notifyItemChanged(currentList.indexOf(item))
+        notifyItemInserted(currentList.indexOf(item))
     }
 
     fun removeItem(item: String) {

@@ -327,7 +327,7 @@
                 style="@style/cardStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:card_close_bill_visibility="@{`` + bill.status}">
+                app:set_empty_card_visibility="@{`` + bill.paidMoney}">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -419,7 +419,8 @@
                 style="@style/cardStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:card_close_bill_visibility="@{`` + bill.status}">
+                app:card_remaining_visibility_amount="@{`` + bill.amount}"
+                app:card_remaining_visibility_paid="@{`` + bill.paidMoney}">
 
                 <LinearLayout
                     android:layout_width="match_parent"

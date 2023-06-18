@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.theideal.data.model.BillContact
+import com.theideal.data.model.Contact
 import com.theideal.notary.databinding.FragmentSaleTransactionsBinding
 import com.theideal.notary.main.client.createclient.ClientActivity
 import com.theideal.notary.main.company.CompanyActivity
@@ -19,6 +19,7 @@ class SaleTransactionsFragment : Fragment() {
     private val saleTransactionsViewModel by viewModel<SaleTransactionsViewModel>()
     private lateinit var binding: FragmentSaleTransactionsBinding
     private val billContact = BillContact()
+    private val contact = Contact()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         saleTransactionsViewModel.getAllClients()
@@ -32,8 +33,9 @@ class SaleTransactionsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSaleTransactionsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.saleTransactionsViewModel = saleTransactionsViewModel
         binding.billClient = billContact
+        binding.contact = contact
+        binding.saleTransactionsViewModel = saleTransactionsViewModel
         binding.rvSaleTransactions.adapter =
             SaleTransactionsAdapter(SaleTransactionsAdapter.SaleTransactionsListener { contact ->
                 val intent = Intent(requireContext(), ClientActivity::class.java).apply {
@@ -43,6 +45,7 @@ class SaleTransactionsFragment : Fragment() {
                 }
                 startActivity(intent)
             })
+
         saleTransactionsViewModel.snackBar.observe(viewLifecycleOwner) {
             if (it != "") {
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()

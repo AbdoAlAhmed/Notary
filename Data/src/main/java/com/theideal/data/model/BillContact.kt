@@ -23,7 +23,6 @@ data class BillContact(
     var discount: Double? = 0.0,
     var createAt: Timestamp = Timestamp.now(),
     var updateAt: String,
-    private var _remainingMoney: Double? = 0.0,
 
     ) : Parcelable, BaseObservable() {
 
@@ -105,7 +104,7 @@ data class BillContact(
         status: String
     ) : this(
         "", "", "", "", status, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, Timestamp.now(), "", 0.0
+        0.0, Timestamp.now(), ""
     )
 
     constructor(
@@ -125,52 +124,10 @@ data class BillContact(
         0.0,
         0.0,
         Timestamp.now(),
-        "",
-        0.0
+        ""
     )
 
 
 }
 
 
-/*
-fun calculateGrossMoney() {
-    grossMoney.set(totalMoney.get()!! + discount.get()!!)
-}
-
-fun calculateDebt() {
-    debt.set(totalMoney.get()!! - paidMoney.get()!!)
-}
-
-fun calculateDiscount() {
-    discount.set(grossMoney.get()!! - totalMoney.get()!!)
-}
-
-fun calculatePaidMoney() {
-    paidMoney.set(totalMoney.get()!! - debt.get()!!)
-}
-
-fun calculateOtherFees() {
-    otherFees.set(totalMoney.get()!! - paidMoney.get()!!)
-}
-
-fun calculateTotalMoney() {
-    totalMoney.set((grossMoney.get()!! + otherFees.get()!!) - (paidMoney.get()!! + discount.get()!!))
-}
-
-// return the calculated money
-fun calculateAmount(): Double {
-    return totalMoney.get()!! - paidMoney.get()!!
-}
-
-// set status to deferred if debt > 0
-fun setStatus(): String {
-    return if ((totalMoney.get()!! - paidMoney.get()!!) > 0) {
-        "deferred"
-    } else if ((totalMoney.get()!! - paidMoney.get()!!) == 0.0) {
-        "closed"
-    } else {
-        "open"
-    }
-}
-*/

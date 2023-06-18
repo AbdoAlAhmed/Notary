@@ -13,6 +13,10 @@
             name="billClient"
             type="com.theideal.data.model.BillContact" />
 
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
+
     </data>
 
     <RelativeLayout
@@ -28,22 +32,21 @@
             android:layout_alignParentTop="true"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btn_preference"
-                android:layout_width="@dimen/btn_preference_width"
-                android:layout_height="@dimen/btn_preference_height"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_preference" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="?attr/textInputOutlinedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search">
+                android:hint="@string/search"
+                app:startIconDrawable="@drawable/vc_options">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
+                    android:id="@+id/actv_search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:bind_auto_complete_text="@{saleTransactionsViewModel.clients}"
+                    app:bind_contact="@{contact}"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -56,9 +59,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_sale_transactions"
-                app:bind_data="@{saleTransactionsViewModel.clients}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:bind_data="@{saleTransactionsViewModel.clients}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="20"
                 tools:listitem="@layout/item_contact_info" />
