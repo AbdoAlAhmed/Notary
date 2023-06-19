@@ -7,6 +7,7 @@ data class Item(
     var itemId: String,
     var supplierId: String,
     var supplierName: String,
+    var userId: String,
     var status: String, // 0 = pending, 1 = paid, 2 = canceled
     var amount: Double,
     var description: String,
@@ -24,6 +25,7 @@ data class Item(
         "",
         "",
         "",
+        "",
         0.0,
         "",
         0.0,
@@ -36,6 +38,7 @@ data class Item(
         itemId: String,
     ) : this(
         itemId,
+        "",
         "",
         "",
         "",

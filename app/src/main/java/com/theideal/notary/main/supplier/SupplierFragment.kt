@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.theideal.notary.databinding.FragmentSupplierBinding
 import com.theideal.notary.main.company.CompanyActivity
@@ -32,10 +31,10 @@ class SupplierFragment : Fragment() {
         binding.supplierViewModel = supplierViewModel
         binding.lifecycleOwner = this
         binding.rvSuppliers.adapter = SupplierAdapter(SupplierAdapter.OnClick {
-           val intent = Intent(activity, SupplierActivity::class.java).apply {
+            val intent = Intent(activity, SupplierActivity::class.java).apply {
                 putExtra("fragment", "TheSupplier")
-                putExtra("contactId", it.phone)
-           }
+                putExtra("contactId", it.contactId)
+            }
             startActivity(intent)
         })
 

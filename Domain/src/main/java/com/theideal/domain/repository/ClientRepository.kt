@@ -12,7 +12,7 @@ class ClientRepository(private val firebaseClient: FirebaseClient) {
         firebaseClient.getClient(clientId)
 
 
-    suspend fun getClientByUserId() = firebaseClient.getClientByUserId()
+    suspend fun getClientByUserId() = firebaseClient.getClientsByUserId()
 
 
     suspend fun clientPhoneExists(phone: String) = firebaseClient.clientPhoneExists(phone)

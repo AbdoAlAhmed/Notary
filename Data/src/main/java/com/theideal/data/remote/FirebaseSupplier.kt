@@ -2,7 +2,6 @@ package com.theideal.data.remote
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import kotlinx.coroutines.tasks.await
 
@@ -12,17 +11,17 @@ class FirebaseSupplier {
     private val userUid = FirebaseAuth.getInstance().currentUser!!.uid
 
 
-    suspend fun createSupplier(supplier: Contact) {
-        supplierRef.add(supplier).addOnSuccessListener {
+    suspend fun createSupplier(contact: Contact) {
+        supplierRef.add(contact).addOnSuccessListener {
             supplierRef.document(it.id).update(
-                "contactId", supplier.phone, "userId", userUid
+                "contactId", contact.userId, "userId", userUid
             )
         }.await()
     }
 
-    suspend fun supplierExists(supplierId: String): Boolean {
+    suspend fun supplierExists(contactId: String): Boolean {
         val supplier =
-            supplierRef.whereEqualTo("userId", userUid).whereEqualTo("contactId", supplierId).get()
+            supplierRef.whereEqualTo("userId", userUid).whereEqualTo("contactId", contactId).get()
                 .await()
         return supplier.documents.isEmpty()
     }
@@ -32,9 +31,9 @@ class FirebaseSupplier {
         return suppliers.toObjects(Contact::class.java)
     }
 
-    suspend fun getSuppliersWithId(supplierId: String): List<Contact> {
+    suspend fun getSuppliersWithId(contactId: String): List<Contact> {
         val suppliers = supplierRef.whereEqualTo("userId", userUid)
-            .whereEqualTo("contactId", supplierId).get().await()
+            .whereEqualTo("contactId", contactId).get().await()
         return suppliers.toObjects(Contact::class.java)
     }
 

@@ -10,9 +10,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import timber.log.Timber
 
-open class FirebaseAuthentication() {
+ class FirebaseAuthentication() {
     private val mAuth = FirebaseAuth.getInstance()
-    val currentUser = mAuth.currentUser
+    private val currentUser = mAuth.currentUser
 
 
     fun signInWithEmailAndPassword(

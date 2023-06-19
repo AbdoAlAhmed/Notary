@@ -30,7 +30,7 @@ class TheSupplierFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = TheSupplierFragmentArgs.fromBundle(requireArguments())
-        theSupplierViewModel.getTransfersWithContactId(args.contact.phone)
+        theSupplierViewModel.getTransfersWithContactId(args.contact.contactId)
     }
 
     override fun onCreateView(
@@ -75,7 +75,7 @@ class TheSupplierFragment : Fragment() {
             theSupplierViewModel.getTransfersWithContactId(intent)
         } else {
             theSupplierViewModel.setSupplier(args.contact)
-            theSupplierViewModel.getBillBySupplierId(args.contact.phone)
+            theSupplierViewModel.getBillBySupplierId(args.contact.contactId)
         }
 
         theSupplierViewModel.navToSupplierBill.observe(viewLifecycleOwner) {

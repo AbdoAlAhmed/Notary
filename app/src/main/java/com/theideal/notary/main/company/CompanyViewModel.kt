@@ -36,7 +36,7 @@ open class CompanyViewModel(
             _navToClientTransactionsFees.postValue(true)
         }
     }
-    // todo after create company update the company id in user info
+    // todo after create company update the company userId in user info
 
     fun navToClientTransactionsFeesComplete() {
         _navToClientTransactionsFees.value = false

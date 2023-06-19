@@ -1,8 +1,6 @@
 package com.theideal.data.remote
 
-import android.annotation.SuppressLint
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
@@ -28,7 +26,7 @@ class FirebaseBillSupplier {
                 .update(
                     "billId", it.id,
                     "userId", userUid,
-                    "contactId", contact.phone,
+                    "contactId", contact.contactId,
                     "status", "open"
                 )
         }.await()
@@ -46,15 +44,10 @@ class FirebaseBillSupplier {
 
     suspend fun updateBillSupplier(keyValue: Map<String, Any>, billId: String) {
         for ((key, value) in keyValue) {
-            if (key == "amount") {
-                billSupplierRef.document(billId).update(
-                    key, FieldValue.increment(value as Double)
-                ).await()
-            } else {
-                billSupplierRef.document(billId).update(
-                    key, value
-                ).await()
-            }
+            billSupplierRef.document(billId).update(
+                key, value
+            ).await()
+
         }
     }
 
@@ -68,7 +61,7 @@ class FirebaseBillSupplier {
         bill.add(item).addOnSuccessListener {
             bill.document(it.id).update(
                 "itemId", it.id,
-                "status", "open"
+                "status", "open", "userId", userUid
             )
         }.await()
     }
@@ -83,6 +76,8 @@ class FirebaseBillSupplier {
             .document(item.itemId).delete()
     }
 
+    // todo change it to close when the amount is finished
+    // and instead of return just the contact id you should return the all data class ( contact)
     suspend fun getSupplierIdIFBillOpen(): List<String> {
         val suppliersId =
             billSupplierRef.whereEqualTo("userId", userUid).whereEqualTo("status", "open").get()

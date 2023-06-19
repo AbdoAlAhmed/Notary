@@ -12,6 +12,7 @@ import com.theideal.domain.usecases.CreateBillSupplierUseCases
 import com.theideal.domain.usecases.SupplierUseCase
 import com.theideal.notary.main.supplier.SupplierViewModel
 import com.theideal.notary.main.supplier.theSupplier.CreateSupplierViewModel
+import com.theideal.notary.main.supplier.theSupplier.TheSupplierBillViewModel
 import com.theideal.notary.main.supplier.theSupplier.TheSupplierViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -62,6 +63,9 @@ val createBillSupplier = module {
     }
     single {
         CreateBillSupplierUseCases(get())
+    }
+    viewModel {
+        TheSupplierBillViewModel(get())
     }
     viewModel {
         TheSupplierViewModel(get(), get(), get())

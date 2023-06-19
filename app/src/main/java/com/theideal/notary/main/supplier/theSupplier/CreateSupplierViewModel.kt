@@ -19,7 +19,7 @@ class CreateSupplierViewModel(private val supplierUseCase: SupplierUseCase) : Vi
         get() = _snackBar
 
     private suspend fun supplierExists(contact: Contact) =
-        supplierUseCase.supplierExists(contact.phone)
+        supplierUseCase.supplierExists(contact.contactId)
 
     fun createSupplier(contact: Contact) {
         viewModelScope.launch {

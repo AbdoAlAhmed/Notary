@@ -5,56 +5,57 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.Contact
 import kotlinx.coroutines.tasks.await
 
-class FirebaseClient : FirebaseAuthentication() {
+class FirebaseClient {
     private val db = FirebaseFirestore.getInstance()
     private val clientRef = db.collection("Client")
     private val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
-    suspend fun createClient(client: Contact) {
-        clientRef.add(client).addOnSuccessListener {
+    suspend fun createClient(contact: Contact) {
+        clientRef.add(contact).addOnSuccessListener {
             clientRef.document(it.id).update(
-                "contactId", client.phone, "userId", currentUser?.uid, "contactRef", it.id
+                "contactId", contact.contactId, "userId", currentUserUid
+
             )
         }.await()
 
     }
 
-    suspend fun getClient(clientId: String): Contact? {
+    suspend fun getClient(contactId: String): Contact? {
         val contactInfo = clientRef.whereEqualTo("userId", currentUserUid)
-            .whereEqualTo("contactId", clientId).get().await()
+            .whereEqualTo("contactId", contactId).get().await()
         val contacts = contactInfo.toObjects(Contact::class.java)
         return contacts.firstOrNull()
     }
 
 
-    suspend fun getClientByUserId(): List<Contact> {
-        val contactInfo = clientRef.whereEqualTo("userId", currentUser!!.uid).get().await()
+    suspend fun getClientsByUserId(): List<Contact> {
+        val contactInfo = clientRef.whereEqualTo("userId", currentUserUid).get().await()
         return contactInfo.toObjects(Contact::class.java)
     }
 
     suspend fun clientPhoneExists(phone: String): Boolean {
         val contactInfo = clientRef
-            .whereEqualTo("userId", currentUser!!.uid)
+            .whereEqualTo("userId", currentUserUid)
             .whereEqualTo(
-                "contactId", phone
+                "phone", phone
             ).get().await()
         return contactInfo.documents.isEmpty()
     }
 
-    suspend fun updateClient(client: Contact) {
-        clientRef.whereEqualTo("userId", currentUser!!.uid)
-            .whereEqualTo("contactId", client.contactId)
+    suspend fun updateClient(contact: Contact) {
+        clientRef.whereEqualTo("userId", currentUserUid)
+            .whereEqualTo("contactId", contact.contactId)
             .get().addOnSuccessListener {
                 if (it.documents.isNotEmpty()) {
-                    clientRef.document(it.documents[0].id).set(client)
+                    clientRef.document(it.documents[0].id).set(contact)
                 }
             }.addOnFailureListener {
                 it.printStackTrace()
             }.await()
     }
 
-    suspend fun deleteClient(client: Contact) {
-        clientRef.document(client.contactRef).delete().await()
+    suspend fun deleteClient(contact: Contact) {
+        clientRef.document(contact.contactId).delete().await()
     }
 
 }

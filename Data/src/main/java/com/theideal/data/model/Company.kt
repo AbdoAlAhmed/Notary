@@ -11,10 +11,10 @@ data class Company(
     var phone1: String,
     var phone2: String,
     var bossId: String,
-    var Partner_id: String,
+    var Partners_id: String,
     var employers_id: String,
     var updateAt: String,
-    var CreateAt: Timestamp,
+    var CreateAt: Timestamp = Timestamp.now(),
     var ClientTransactionsFees: String,
     var suppliersTransactionsFees: String,
 ) {

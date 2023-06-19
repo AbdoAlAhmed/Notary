@@ -1,20 +1,21 @@
 package com.theideal.data.remote
 
-import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.AdditionalTransactionsFees
 import com.theideal.data.model.Company
 import kotlinx.coroutines.tasks.await
 
-class FirebaseCompany : FirebaseAuthentication() {
+class FirebaseCompany{
     private val db = FirebaseFirestore.getInstance()
     private val companyRef = db.collection("Company")
+    private val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
     suspend fun createCompany(company: Company) {
         companyRef.add(company).addOnSuccessListener {
             companyRef.document(it.id).update(
                 "companyId", it.id,
-                "bossId", currentUser!!.uid
+                "bossId", currentUserUid
             )
         }.await()
     }
@@ -22,7 +23,7 @@ class FirebaseCompany : FirebaseAuthentication() {
     suspend fun getCompany(): Company? {
         return try {
             val querySnapshot = companyRef
-                .whereEqualTo("bossId", currentUser!!.uid)
+                .whereEqualTo("bossId", currentUserUid)
                 .get()
                 .await()
             val companies = querySnapshot.toObjects(Company::class.java)

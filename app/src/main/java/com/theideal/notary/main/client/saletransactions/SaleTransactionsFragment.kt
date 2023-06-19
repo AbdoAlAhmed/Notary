@@ -40,7 +40,7 @@ class SaleTransactionsFragment : Fragment() {
             SaleTransactionsAdapter(SaleTransactionsAdapter.SaleTransactionsListener { contact ->
                 val intent = Intent(requireContext(), ClientActivity::class.java).apply {
                     putExtra("fragment", "TheClientFragment")
-                    putExtra("contactId", contact.phone)
+                    putExtra("contactId", contact.contactId)
                     putExtra("contactName", contact.name)
                 }
                 startActivity(intent)

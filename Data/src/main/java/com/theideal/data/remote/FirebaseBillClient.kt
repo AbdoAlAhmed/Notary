@@ -1,5 +1,6 @@
 package com.theideal.data.remote
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.BillContact
@@ -12,6 +13,7 @@ class FirebaseBillClient {
     private val userUid = FirebaseAuth.getInstance().currentUser?.uid
 
     suspend fun checkIfBillOpen(contactId: String): List<BillContact> {
+        Log.i("UID", "FirebaseBillClient: - 16 - $contactId")
         val bill = billClientRef
             .whereEqualTo("userId", userUid)
             .whereEqualTo("contactId", contactId)
@@ -20,6 +22,8 @@ class FirebaseBillClient {
     }
 
     suspend fun createBillClient(contactId: String): BillContact {
+        Log.i("UID", "FirebaseBillClient: - 25 - $contactId")
+
         var billId = ""
         billClientRef.add(BillContact()).addOnSuccessListener {
             billClientRef.document(it.id).update(
@@ -37,6 +41,8 @@ class FirebaseBillClient {
     }
 
     suspend fun getBillsByContactId(contactId: String): List<BillContact> {
+        Log.i("UID", "FirebaseBillClient: - 44 - $contactId")
+
         val bill =
             billClientRef.whereEqualTo("userId", userUid)
                 .whereEqualTo("contactId", contactId)
@@ -61,7 +67,7 @@ class FirebaseBillClient {
         val bill = billClientRef.document(billId).collection("Items")
         bill.add(item).addOnSuccessListener {
             bill.document(it.id).update(
-                "itemId", it.id, "status", "open"
+                "itemId", it.id, "status", "open", "userId", userUid
             )
         }.await()
     }

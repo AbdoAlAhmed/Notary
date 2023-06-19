@@ -73,8 +73,8 @@ class TheClientFragment : Fragment() {
         } else {
             theClientViewModel.setClient(args.contact!!)
             theClientViewModel.getTheClientTotal(args.contact.contactId!!)
-            theClientViewModel.getTransfersWithContactId(args.contact.phone)
-            theClientViewModel.getBillsByContactId(args.contact.phone)
+            theClientViewModel.getTransfersWithContactId(args.contact.contactId)
+            theClientViewModel.getBillsByContactId(args.contact.contactId)
         }
         adapterTransactions =
             TheClientAdapterTransactions(theClientViewModel, TheClientAdapterTransactions.OnClick {

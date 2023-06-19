@@ -15,7 +15,7 @@ class BillClientUseCases(
 ) {
 
 
-    suspend fun calculateBills(contactId: String): Double {
+    private suspend fun calculateBills(contactId: String): Double {
         val list = getBillsByContactId(contactId)
         var remainingMoney = 0.0
         var amount = 0.0

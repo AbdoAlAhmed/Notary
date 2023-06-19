@@ -115,7 +115,7 @@ class TheClientViewModel(
 
     fun getBillsByContactId(contactId: String) {
         viewModelScope.launch {
-            _bills.postValue(billClientUseCases.getBillsByContactId(contactId))
+            _bills.value = billClientUseCases.getBillsByContactId(contactId)
         }
     }
 
