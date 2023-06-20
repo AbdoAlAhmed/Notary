@@ -2,11 +2,13 @@ package com.theideal.notary.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.User
 import com.theideal.domain.repository.AuthenticationRepository
+import kotlinx.coroutines.launch
 
-class SignInEmailViewModel(private val repo: AuthenticationRepository) :
-    AuthenticationViewModel(repo) {
+class SignInEmailViewModel(private val repo: AuthenticationRepository) : ViewModel() {
 
     private val _user = MutableLiveData<User>()
     val user: LiveData<User>
@@ -16,64 +18,40 @@ class SignInEmailViewModel(private val repo: AuthenticationRepository) :
     val navToCreateAccountPage2: LiveData<Boolean>
         get() = _navToCreateAccountPage2
 
+    private val _snackBarMessage = MutableLiveData<String>()
+    val snackBarMessage: LiveData<String>
+        get() = _snackBarMessage
+
+    private val _progressBar = MutableLiveData<Boolean>()
+    val progressBar: LiveData<Boolean>
+        get() = _progressBar
+
     init {
 
         _navToCreateAccountPage2.postValue(false)
-        _progressBar.postValue(false)
+        _progressBar.value = false
     }
 
-    private fun signInEmail(user: User) {
+    fun signInWithEmail(user: User) {
         _progressBar.value = true
-        repo.signInWithEmailAndPassword(user.email, user.getPassword()) {
-            when (it) {
-                "success" -> {
-                    _isUserLoggedIn.value = true
-                    _snackBarMessage.value = it
-                    _progressBar.value = false
-                }
-
-                "EmailNotFound" -> {
-                    createUser(user)
-                    _progressBar.value = false
-                }
-
-                else -> {
-                    _snackBarMessage.value = it
-                    _progressBar.value = false
-                }
+        viewModelScope.launch {
+            repo.signInWithEmailAndPassword(user.email, user.getPassword()) {
+                _snackBarMessage.value = it
+                _progressBar.value = false
             }
         }
-
     }
 
-    fun createUser(user: User) {
-        _progressBar.value = true
-        repo.createUserWithEmailAndPassword(user.email, user.getPassword()) {
-            // created true direct to get more info
-            when (it) {
-                "success" -> {
-                    _navToCreateAccountPage2.value = true
-                    _snackBarMessage.value = it
-                    _progressBar.value = false
-                }
 
-                "EmailUsed" -> {
-                    _progressBar.value = false
-                    _snackBarMessage.value = it
-                    signInEmail(user)
-                }
-
-                else -> {
-                    _progressBar.value = false
-                    _snackBarMessage.value = it
-                }
-            }
-        }
-
-
+    fun navToCreateAccount() {
+        _navToCreateAccountPage2.value = true
     }
 
     fun navToCreateAccountPage2Done() {
         _navToCreateAccountPage2.value = false
+    }
+
+    fun snackBarComplete() {
+        _snackBarMessage.value = ""
     }
 }

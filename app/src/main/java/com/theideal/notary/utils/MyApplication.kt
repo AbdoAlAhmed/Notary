@@ -13,17 +13,14 @@ import org.koin.core.context.startKoin
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
         startKoin {
             androidContext(this@MyApplication)
             androidLogger()
             modules(clientModule)
             modules(supplierModule)
-            modules(
-                authModule,
-                companyModule,
-            )
+            modules(authModule)
+            modules(companyModule)
         }
     }
 

@@ -2,48 +2,50 @@ package com.theideal.data.remote
 
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.User
 import kotlinx.coroutines.tasks.await
 
 class FirebaseUser {
-    private val db = Firebase.firestore
+    private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("users")
-    private val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
 
     suspend fun uploadUserInfo(user: User, result: (String) -> Unit) {
         try {
-            val userInfo = userCollection.document(currentUser)
-            userInfo.set(user).await()
-            userInfo.update("userId", currentUser).await()
-            result("success")
+            userCollection.document(currentUser!!.uid).set(user)
+                .addOnSuccessListener {
+                    userCollection.document(currentUser.uid).update("userId", currentUser!!.uid)
+                    result("Succeed")
+                }.addOnFailureListener {
+                    result(it.message.toString())
+                }.await()
         } catch (e: FirebaseNetworkException) {
             result("check your internet connection")
         } catch (e: Exception) {
-            result("something went wrong")
+            result(e.message.toString())
         }
     }
 
 
     suspend fun getUserInfo(): User? {
         return try {
-            val userInfo = userCollection.document(currentUser).get().await()
+            val userInfo = userCollection.document(currentUser!!.uid).get().await()
             if (userInfo.exists()) {
                 val user = userInfo.toObject(User::class.java)
                 user
             } else {
-                null
+                User()
             }
         } catch (e: Exception) {
-            null
+            User()
         }
     }
 
     suspend fun updateUserInfo(vararg keyValue: String): Result<String> {
         return try {
-            val userInfo = userCollection.document(currentUser)
+            val userInfo = userCollection.document(currentUser!!.uid)
             for (i in keyValue.indices step 2) {
                 userInfo.update(keyValue[i], keyValue[i + 1]).await()
             }

@@ -89,6 +89,7 @@
                     android:layout_margin="@dimen/btn_send_code_sig_in_margin"
                     android:text="@string/send_code"
                     android:textColor="@color/black"
+                    android:enabled="false"
                     android:onClick="@{()->signInPhoneViewModel.sigInPhoneNotEnabled()}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

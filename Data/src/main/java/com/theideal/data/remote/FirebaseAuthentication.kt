@@ -1,88 +1,55 @@
 package com.theideal.data.remote
 
-import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.firestore.FirebaseFirestoreException
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
  class FirebaseAuthentication() {
+
     private val mAuth = FirebaseAuth.getInstance()
-    private val currentUser = mAuth.currentUser
+     val currentUser = mAuth.currentUser
 
 
-    fun signInWithEmailAndPassword(
+    suspend fun signInWithEmailAndPassword(
         email: String,
         password: String,
-        result: (String) -> Unit,
+        result: (String) -> Unit
     ) {
         try {
-            mAuth.signInWithEmailAndPassword(email, password).addOnCanceledListener {
-                result("something went wrong")
-            }.addOnSuccessListener {
-                result("success")
+            mAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+                result("Succeed")
             }.addOnFailureListener {
-                result("something went wrong")
-            }
-        } catch (e: FirebaseAuthInvalidUserException) {
-            result("EmailNotFound")
+                result(it.message.toString())
+            }.await()
         } catch (e: FirebaseNetworkException) {
-            result("check your internet connection")
-        } catch (e: FirebaseException) {
-            result("something went wrong")
-
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            result("invalid email or password")
-        } catch (e: FirebaseAuthException) {
-            result("something went wrong")
+            result("check your network")
+        } catch (e: FirebaseFirestoreException) {
+            result("try again")
         } catch (e: Exception) {
-            result("something went wrong")
-
-        } catch (e: Error) {
-            result("something went wrong")
-
+            result("try again")
         }
+
     }
 
-    fun createUserWithEmailAndPassword(
+    suspend fun createUserWithEmailAndPassword(
         email: String,
         password: String,
-        result: (String) -> Unit,
+        result: (String) -> Unit
     ) {
         try {
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCanceledListener {
-                result("something went wrong")
-            }.addOnSuccessListener {
-                result("success")
+            mAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+                result("Succeed")
             }.addOnFailureListener {
-                if (it is FirebaseAuthUserCollisionException) {
-                    result("EmailUsed")
-                } else {
-                    result("something went wrong")
-                }
-            }
-        } catch (e: FirebaseAuthUserCollisionException) {
-            result("EmailUsed")
+                result(it.message.toString())
+            }.await()
         } catch (e: FirebaseNetworkException) {
-            result("check your internet connection")
-        } catch (e: FirebaseException) {
-            result("something went wrong")
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            result("invalid email")
-        } catch (e: FirebaseAuthWeakPasswordException) {
-            result("weak password")
-        } catch (e: FirebaseAuthException) {
-            result("something went wrong")
-
+            result("check your network")
+        } catch (e: FirebaseFirestoreException) {
+            result("try again")
         } catch (e: Exception) {
-            result("something went wrong")
-
-        } catch (e: Error) {
-            result("something went wrong")
+            result("try again")
         }
     }
 

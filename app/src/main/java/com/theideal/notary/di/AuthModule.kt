@@ -1,35 +1,24 @@
 package com.theideal.notary.di
 
 import com.theideal.data.remote.FirebaseAuthentication
-import com.theideal.data.remote.FirebaseBillSupplier
-import com.theideal.data.remote.FirebaseCompany
 import com.theideal.data.remote.FirebaseUser
 import com.theideal.domain.repository.AuthenticationRepository
-import com.theideal.domain.repository.BillSupplierRepository
-import com.theideal.domain.repository.CompanyRepository
 import com.theideal.domain.repository.UserRepository
 import com.theideal.notary.auth.AuthenticationViewModel
 import com.theideal.notary.auth.SignInEmailViewModel
-import com.theideal.notary.auth.SignInInformationViewModel
 import com.theideal.notary.auth.SignInPhoneViewModel
-import com.theideal.notary.main.company.CompanyViewModel
-import com.theideal.notary.main.company.TransactionFeesViewModel
+import com.theideal.notary.auth.register.RegisterViewModel
+import com.theideal.notary.auth.register.UserInfoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
-val authModule = module {
+val auth = module {
     single {
         FirebaseAuthentication()
     }
     single {
         AuthenticationRepository(get())
-    }
-    single {
-        FirebaseUser()
-    }
-    single {
-        UserRepository(get())
     }
     viewModel {
         AuthenticationViewModel(get())
@@ -40,26 +29,29 @@ val authModule = module {
     viewModel {
         SignInEmailViewModel(get())
     }
-    viewModel {
-        SignInInformationViewModel(get(), get())
-    }
+
 }
 
+val user = module {
+    single {
+        FirebaseUser()
+    }
+    single {
+        UserRepository(get())
+    }
 
-val companyModule = module {
-    single {
-        FirebaseCompany()
-    }
-    single {
-        CompanyRepository(get())
-    }
+}
+val register = module {
 
     viewModel {
-        CompanyViewModel(get(), get())
+        RegisterViewModel(get())
     }
     viewModel {
-        TransactionFeesViewModel(get(), get())
+        UserInfoViewModel(get())
     }
 }
+val authModule = listOf(auth, register, user)
+
+
 
 

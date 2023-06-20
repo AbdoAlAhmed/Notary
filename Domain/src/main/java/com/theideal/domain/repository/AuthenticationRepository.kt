@@ -4,14 +4,18 @@ import com.theideal.data.remote.FirebaseAuthentication
 
 class AuthenticationRepository(private val firebaseAuthentication: FirebaseAuthentication) {
 
-     fun signInWithEmailAndPassword(email: String, password: String, result: (String) -> Unit) {
+    suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String,
+        result: (String) -> Unit
+    ) {
         firebaseAuthentication.signInWithEmailAndPassword(email, password) {
             result(it)
         }
     }
 
-     fun createUserWithEmailAndPassword(email: String, password: String, result: (String) -> Unit) {
-        firebaseAuthentication.createUserWithEmailAndPassword(email, password) {
+    suspend fun createUserWithEmailAndPassword(email: String, password: String,result: (String) -> Unit) {
+        firebaseAuthentication.createUserWithEmailAndPassword(email, password){
             result(it)
         }
     }

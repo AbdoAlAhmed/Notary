@@ -2,10 +2,11 @@ package com.theideal.notary.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.theideal.domain.repository.AuthenticationRepository
 
 class SignInPhoneViewModel(private val repo: AuthenticationRepository) :
-    AuthenticationViewModel(repo) {
+    ViewModel() {
 
     private val _dialogPhoneNotEnabled = MutableLiveData<Boolean>()
     val dialogPhoneNotEnabled: LiveData<Boolean>

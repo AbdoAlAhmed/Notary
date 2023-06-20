@@ -12,16 +12,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AuthenticationActivity : AppCompatActivity() {
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
-    private val signInEmailViewModel by viewModel<SignInEmailViewModel>()
     private lateinit var binding: ActivityAuthentactionBinding
-    private val auth = FirebaseAuth.getInstance()
-    private val user = User()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthentactionBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         authenticationViewModel.isUserLoggedIn()
-        signInEmailViewModel.isUserLoggedIN.observe(this) {
+        authenticationViewModel.isUserLoggedIN.observe(this) {
             if (it) {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

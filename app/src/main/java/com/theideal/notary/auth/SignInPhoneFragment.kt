@@ -18,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SignInPhoneFragment : Fragment() {
     private lateinit var binding: FragmentSignInPhoneBinding
     private val signInPhoneViewModel by viewModel<SignInPhoneViewModel>()
-    private val signInEmailViewModel by viewModel<SignInEmailViewModel>()
     private val user = User()
 
     override fun onCreate(savedInstanceState: Bundle?) {

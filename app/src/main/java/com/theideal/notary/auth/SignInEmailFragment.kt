@@ -33,7 +33,7 @@ class SignInEmailFragment : Fragment() {
         binding.user = user
         binding.lifecycleOwner = this
         signInEmailViewModel.snackBarMessage.observe(viewLifecycleOwner) {
-            if (it != null) {
+            if (it != "") {
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
             }
         }
@@ -43,12 +43,7 @@ class SignInEmailFragment : Fragment() {
                 signInEmailViewModel.navToCreateAccountPage2Done()
             }
         }
-        signInEmailViewModel.isUserLoggedIN.observe(viewLifecycleOwner) {
-            if (it) {
-                startActivity(Intent(requireContext(), MainActivity::class.java))
-                requireActivity().finish()
-            }
-        }
+
 
         return binding.root
     }
