@@ -5,11 +5,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.data.model.ItemInfo
 import kotlinx.coroutines.tasks.await
 
 class FirebaseBillSupplier {
     private val db = FirebaseFirestore.getInstance()
     private val billSupplierRef = db.collection("BillSupplier")
+    private val billClientRef = db.collection("BillClient")
+    private val itemRef = db.collection("Items")
     private val userUid = FirebaseAuth.getInstance().currentUser!!.uid
 
     suspend fun checkIfBillOpen(contactId: String): Boolean {
@@ -55,13 +58,28 @@ class FirebaseBillSupplier {
         billSupplierRef.document(billSupplier.billId).delete()
     }
 
-
-    suspend fun addItemToBillSupplierWithBillId(billId: String, item: Item) {
-        val bill = billSupplierRef.document(billId).collection("Items") //bill
-        bill.add(item).addOnSuccessListener {
+    suspend fun addInfoItemToBillSupplierWithBillId(billId: String, itemInfo: ItemInfo) {
+        val bill = billSupplierRef.document(billId).collection("ItemsInfo") //bill
+        bill.add(itemInfo).addOnSuccessListener {
             bill.document(it.id).update(
                 "itemId", it.id,
-                "status", "open", "userId", userUid
+                "userId", userUid
+            )
+        }.await()
+    }
+
+
+    suspend fun getListOfItemBillInfo(billId: String): List<ItemInfo> {
+        val itemsInfo = billSupplierRef.document(billId).collection("ItemsInfo").get().await()
+        return itemsInfo.toObjects(ItemInfo::class.java)
+    }
+
+
+    suspend fun addItemToBillClientFromSupplier(billId: String, item: Item) {
+        itemRef.add(item).addOnSuccessListener {
+            itemRef.document(it.id).update(
+                "itemId", it.id,
+                "userId", userUid, "billId", billId
             )
         }.await()
     }
@@ -75,6 +93,16 @@ class FirebaseBillSupplier {
         billSupplierRef.document(billId.billId).collection("Items")
             .document(item.itemId).delete()
     }
+
+    // todo i'm here it's not returning the list
+    suspend fun getItemListBySupplierId(supplierId: String): List<Item> {
+        val items = itemRef
+            .whereEqualTo("supplierId", supplierId)
+            .get().await()
+
+        return items.toObjects(Item::class.java)
+    }
+
 
     // todo change it to close when the amount is finished
     // and instead of return just the contact id you should return the all data class ( contact)

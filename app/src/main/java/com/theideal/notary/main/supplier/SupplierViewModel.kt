@@ -1,5 +1,6 @@
 package com.theideal.notary.main.supplier
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,11 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.Contact
 import com.theideal.domain.usecases.ContactUseCases
 import com.theideal.domain.usecases.SupplierUseCase
+import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
 class SupplierViewModel(
     private val contactUseCases: ContactUseCases,
     private val supplierUseCase: SupplierUseCase,
+    private val app: Application
 ) : ViewModel() {
 
     private val _startSupplierActivity = MutableLiveData<Boolean>()
@@ -40,11 +43,11 @@ class SupplierViewModel(
                 when (contactUseCases.checkUserInfoToCreateContact()) {
                     "NoCompany" -> {
                         _startCompanyActivity.value = true
-                        _snackBar.value = "No company"
+                        _snackBar.value = app.getString(R.string.create_company_error)
                     }
 
                     "NoUser" -> {
-
+                        _snackBar.value = app.getString(R.string.no_user)
                     }
 
                     else -> {

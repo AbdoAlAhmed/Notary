@@ -42,6 +42,7 @@ class FirebaseCompany{
         companyRef.document(company.companyId).delete()
     }
 
+    // in additional transactions for client and supplier we haven't added the user id
     suspend fun additionalTransactionToClient(
         companyId: String,
         additionalTransactionsFees: AdditionalTransactionsFees,

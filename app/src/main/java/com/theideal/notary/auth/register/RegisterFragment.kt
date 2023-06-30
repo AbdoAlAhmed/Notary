@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.findNavController
+import com.theideal.data.model.User
 import com.theideal.notary.databinding.FragmentRegsiterBinding
 import com.theideal.notary.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegsiterBinding
     private val registerViewModel by viewModel<RegisterViewModel>()
-    private val user: RegisterFragmentArgs by navArgs()
+    private val user = User()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +31,7 @@ class RegisterFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentRegsiterBinding.inflate(inflater, container, false)
-        binding.user = user.user
+        binding.user = user
         binding.signInInformationViewModel = registerViewModel
         binding.lifecycleOwner = this
         registerViewModel.startMainActivity.observe(viewLifecycleOwner) {
@@ -47,11 +48,9 @@ class RegisterFragment : Fragment() {
         }
         registerViewModel.navToUserInfo.observe(viewLifecycleOwner) {
             if (it) {
-//                findNavController().navigate(
-//                    RegisterFragmentDirections.actionSignInInformationFragmentToUserInfoFragment(
-//                        user = user.user
-//                    )
-//                )
+                findNavController().navigate(
+                    RegisterFragmentDirections.actionRegisterFragmentToUserInfoFragment(user)
+                )
                 registerViewModel.doneNavToUserInfo()
             }
         }

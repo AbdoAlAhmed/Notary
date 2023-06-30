@@ -55,8 +55,8 @@ class TheSupplierFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.rvBillsTheSupplier.adapter = BillsSupplierAdapter(BillsSupplierAdapter.OnClick {
             findNavController().navigate(
-                TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillFragment(
-                    it
+                TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillInfoFragment(
+                    it,theSupplierViewModel.returnContact()
                 )
             )
         })
@@ -78,11 +78,11 @@ class TheSupplierFragment : Fragment() {
             theSupplierViewModel.getBillBySupplierId(args.contact.contactId)
         }
 
-        theSupplierViewModel.navToSupplierBill.observe(viewLifecycleOwner) {
+        theSupplierViewModel.navToSupplierBillInfo.observe(viewLifecycleOwner) {
             if (it) {
                 findNavController().navigate(
-                    TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillFragment(
-                        billContact
+                    TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillInfoFragment(
+                        billContact, theSupplierViewModel.returnContact()
                     )
                 )
                 theSupplierViewModel.navToSupplierBillComplete()

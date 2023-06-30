@@ -13,7 +13,7 @@ class FirebaseClient {
     suspend fun createClient(contact: Contact) {
         clientRef.add(contact).addOnSuccessListener {
             clientRef.document(it.id).update(
-                "contactId", contact.contactId, "userId", currentUserUid
+                "contactId", it.id, "userId", currentUserUid
 
             )
         }.await()

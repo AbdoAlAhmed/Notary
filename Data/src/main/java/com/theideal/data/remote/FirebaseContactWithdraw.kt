@@ -14,7 +14,9 @@ class FirebaseContactWithdraw {
     suspend fun addWithdraw(transfer: Transfer) {
         withdrawRef.add(transfer).addOnSuccessListener {
             withdrawRef.document(it.id).update(
-                "transferId", it.id, "userId", userUid
+                "transferId", it.id
+                , "userId", userUid
+                , "contactId", transfer.contactId
             )
         }.await()
     }

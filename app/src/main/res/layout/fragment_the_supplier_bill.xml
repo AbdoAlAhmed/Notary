@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            app:title="@{contact.name}" />
+            app:title="@{theSupplierBillViewModel.contact.name}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view_supplier_bill_example"
@@ -120,8 +120,10 @@
                     android:layout_height="match_parent">
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_supplier_bill"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        bind_data="@{theSupplierBillViewModel.itemsList}"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </ScrollView>
 

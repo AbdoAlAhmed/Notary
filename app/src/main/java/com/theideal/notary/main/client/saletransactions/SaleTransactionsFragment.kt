@@ -14,7 +14,6 @@ import com.theideal.notary.main.client.createclient.ClientActivity
 import com.theideal.notary.main.company.CompanyActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class SaleTransactionsFragment : Fragment() {
     private val saleTransactionsViewModel by viewModel<SaleTransactionsViewModel>()
     private lateinit var binding: FragmentSaleTransactionsBinding
@@ -63,6 +62,8 @@ class SaleTransactionsFragment : Fragment() {
                 saleTransactionsViewModel.createClientStarting()
             }
         }
+
+
 
         return binding.root
     }

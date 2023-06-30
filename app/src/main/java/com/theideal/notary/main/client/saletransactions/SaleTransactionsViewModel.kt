@@ -1,6 +1,7 @@
 package com.theideal.notary.main.client.saletransactions
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,6 +33,9 @@ class SaleTransactionsViewModel(
     val clients: LiveData<List<Contact>?>
         get() = _clients
 
+
+
+
     fun checkUserInfo() {
         viewModelScope.launch {
             try {
@@ -45,7 +49,7 @@ class SaleTransactionsViewModel(
                     }
 
                     "NoUser" -> {
-                        // Handle the "NoUser" case if needed
+                        _snackBar.value = app.getString(R.string.no_user)
                     }
 
                     "Success" -> {
@@ -61,6 +65,8 @@ class SaleTransactionsViewModel(
             }
         }
     }
+
+
 
     fun getAllClients() {
         viewModelScope.launch {

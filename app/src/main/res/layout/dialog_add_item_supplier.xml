@@ -2,50 +2,52 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
-            name="item"
-            type="com.theideal.data.model.Item" />
+            name="itemInfo"
+            type="com.theideal.data.model.ItemInfo" />
 
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:orientation="vertical">
+
         <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/item_amount"
-            style="?attr/textInputOutlinedStyle"
-            >
+            android:hint="@string/item_amount">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@={`` + item.amount}"
-                />
+                android:inputType="numberDecimal"
+                android:text="@={`` + itemInfo.value}" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/item_description"
-            style="?attr/textInputOutlinedStyle"
-            >
+            android:hint="@string/item_description">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@={item.description}"
+                android:text="@={itemInfo.description}"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/btn_add_item_supplier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textAllCaps="false"
             android:text="@string/add"
-            />
+            android:textAllCaps="false" />
 
     </LinearLayout>
 </layout>

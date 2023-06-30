@@ -46,6 +46,7 @@
     <string name="transport_fees">Transport Fees</string>
     <string name="other_fee">Other Fee</string>
     <string name="_continue">Continue</string>
+    <string name="no_user">User Not Fount</string>
     <string name="transaction_fee_instructions">This fee will be applied to a specific bill or to all bills based on your request but you can change it</string>
     <string name="transaction_fee_instructions_0">You can leave the fields empty if you don\'t want to add any fees.</string>
     <string name="complete">Complete</string>
@@ -108,4 +109,9 @@
     <string name="no_item">No Items</string>
     <string name="no_item_error">"You must add at least one item"</string>
     <string name="register">Register</string>
+    <string name="create_an_account">Create An Account</string>
+    <string name="this_fragment_is_under_construction">This Fragment is under construction</string>
+    <string name="logout">logout</string>
+    <string name="varieties">Varieties</string>
+    <string name="remaining_value">Remaining Value</string>
 </resources>

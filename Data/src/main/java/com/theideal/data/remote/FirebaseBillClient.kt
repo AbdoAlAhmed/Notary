@@ -13,7 +13,6 @@ class FirebaseBillClient {
     private val userUid = FirebaseAuth.getInstance().currentUser?.uid
 
     suspend fun checkIfBillOpen(contactId: String): List<BillContact> {
-        Log.i("UID", "FirebaseBillClient: - 16 - $contactId")
         val bill = billClientRef
             .whereEqualTo("userId", userUid)
             .whereEqualTo("contactId", contactId)
@@ -22,8 +21,6 @@ class FirebaseBillClient {
     }
 
     suspend fun createBillClient(contactId: String): BillContact {
-        Log.i("UID", "FirebaseBillClient: - 25 - $contactId")
-
         var billId = ""
         billClientRef.add(BillContact()).addOnSuccessListener {
             billClientRef.document(it.id).update(
@@ -41,8 +38,6 @@ class FirebaseBillClient {
     }
 
     suspend fun getBillsByContactId(contactId: String): List<BillContact> {
-        Log.i("UID", "FirebaseBillClient: - 44 - $contactId")
-
         val bill =
             billClientRef.whereEqualTo("userId", userUid)
                 .whereEqualTo("contactId", contactId)

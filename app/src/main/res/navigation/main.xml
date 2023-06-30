@@ -9,7 +9,11 @@
         android:id="@+id/homeFragment"
         android:name="com.theideal.notary.main.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_userInfoFragment2"
+            app:destination="@id/userInfoFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/supplierFragment"
         android:name="com.theideal.notary.main.supplier.SupplierFragment"
@@ -20,4 +24,12 @@
         android:name="com.theideal.notary.main.client.ClientFragment"
         android:label="fragment_client"
         tools:layout="@layout/fragment_client" />
+    <fragment
+        android:id="@+id/userInfoFragment2"
+        android:name="com.theideal.notary.auth.register.UserInfoFragment"
+        android:label="UserInfoFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.theideal.data.model.User" />
+    </fragment>
 </navigation>

@@ -14,7 +14,7 @@ class FirebaseContactDeposit {
     suspend fun addDeposit(transfer: Transfer) {
         transferRef.add(transfer).addOnSuccessListener {
             transferRef.document(it.id).update(
-                "transferId", it.id, "userId", currentUserUid
+                "transferId", it.id, "userId", currentUserUid, "contactId", transfer.contactId
             )
         }.await()
     }

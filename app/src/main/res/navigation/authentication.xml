@@ -13,28 +13,30 @@
         <action
             android:id="@+id/action_signInPhoneFragment_to_signInMailFragment"
             app:destination="@id/signInMailFragment" />
+        <action
+            android:id="@+id/action_signInPhoneFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInMailFragment"
         android:name="com.theideal.notary.auth.SignInEmailFragment"
-        android:label="SignInMailFragment" >
-        <action
-            android:id="@+id/action_signInMailFragment_to_signInInformationFragment"
-            app:destination="@id/signInInformationFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signInInformationFragment"
-        android:name="com.theideal.notary.auth.register.RegisterFragment"
-        android:label="SignInInformationFragment" >
-        <argument
-            android:name="user"
-            app:argType="com.theideal.data.model.User" />
-        <action
-            android:id="@+id/action_signInInformationFragment_to_userInfoFragment"
-            app:destination="@id/userInfoFragment" />
-    </fragment>
+        android:label="SignInMailFragment"
+        tools:layout="@layout/fragment_sign_in_mail"
+        />
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="com.theideal.notary.auth.register.UserInfoFragment"
-        android:label="UserInfoFragment" />
+        android:label="UserInfoFragment" >
+        <argument
+            android:name="user"
+            app:argType="com.theideal.data.model.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.theideal.notary.auth.register.RegisterFragment"
+        android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+    </fragment>
 </navigation>

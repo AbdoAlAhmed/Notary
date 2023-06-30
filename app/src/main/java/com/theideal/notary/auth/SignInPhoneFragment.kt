@@ -1,7 +1,6 @@
 package com.theideal.notary.auth
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.theideal.data.model.User
 import com.theideal.notary.R
 import com.theideal.notary.databinding.FragmentSignInPhoneBinding
-import com.theideal.notary.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -44,6 +42,12 @@ class SignInPhoneFragment : Fragment() {
             if (it) {
                 findNavController().navigate(SignInPhoneFragmentDirections.actionSignInPhoneFragmentToSignInMailFragment())
                 signInPhoneViewModel.navToSinInEmailComplete()
+            }
+        }
+        signInPhoneViewModel.navToCreateAccount.observe(viewLifecycleOwner) {
+            if (it) {
+                findNavController().navigate(SignInPhoneFragmentDirections.actionSignInPhoneFragmentToRegisterFragment())
+                signInPhoneViewModel.navToCreateAccountComplete()
             }
         }
 

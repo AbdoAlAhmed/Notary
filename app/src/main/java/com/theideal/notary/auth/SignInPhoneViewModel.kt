@@ -16,6 +16,10 @@ class SignInPhoneViewModel(private val repo: AuthenticationRepository) :
     val navToSinInEmail: LiveData<Boolean>
         get() = _navToSinInEmail
 
+    private val _navToCreateAccount = MutableLiveData<Boolean>()
+    val navToCreateAccount: LiveData<Boolean>
+        get() = _navToCreateAccount
+
 
     fun sigInPhoneNotEnabled() {
         _dialogPhoneNotEnabled.value = true
@@ -31,5 +35,13 @@ class SignInPhoneViewModel(private val repo: AuthenticationRepository) :
 
     fun navToSinInEmailComplete() {
         _navToSinInEmail.value = false
+    }
+
+    fun navToCreateAccount() {
+        _navToCreateAccount.value = true
+    }
+
+    fun navToCreateAccountComplete() {
+        _navToCreateAccount.value = false
     }
 }

@@ -1,8 +1,5 @@
 package com.theideal.domain.usecases
 
-import android.util.Log
-import com.theideal.data.model.User
-import com.theideal.domain.repository.BillClientRepository
 import com.theideal.domain.repository.ClientRepository
 import com.theideal.domain.repository.UserRepository
 
@@ -11,14 +8,8 @@ class ContactUseCases(
     private val clientRepo: ClientRepository,
 ) {
 
-    private suspend fun getUserInfo(): User {
-        return try {
-            userRepo.getUserInfo()!!
-        } catch (e: Exception) {
-            User()
-        }
-
-    }
+     suspend fun getUserInfo() =
+        userRepo.getUserInfo()!!
 
 
     suspend fun checkUserInfoToCreateContact(): String {
@@ -26,10 +17,10 @@ class ContactUseCases(
             val userInfo = getUserInfo()
             if (userInfo.companyId.isNotEmpty() && userInfo.name.isNotEmpty()) {
                 "Success"
-            } else if (userInfo.companyId.isEmpty()) {
-                "NoCompany"
             } else if (userInfo.name.isEmpty()) {
                 "NoUser"
+            } else if (userInfo.companyId.isEmpty()) {
+                "NoCompany"
             } else {
                 "Something went wrong1"
             }

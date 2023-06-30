@@ -15,10 +15,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SupplierFragment : Fragment() {
     private lateinit var binding: FragmentSupplierBinding
     private val supplierViewModel by viewModel<SupplierViewModel>()
+    private lateinit var suppliersAdapter: SupplierAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         supplierViewModel.getSuppliersList()
     }
 
@@ -30,13 +30,14 @@ class SupplierFragment : Fragment() {
         binding = FragmentSupplierBinding.inflate(inflater, container, false)
         binding.supplierViewModel = supplierViewModel
         binding.lifecycleOwner = this
-        binding.rvSuppliers.adapter = SupplierAdapter(SupplierAdapter.OnClick {
+        suppliersAdapter = SupplierAdapter(SupplierAdapter.OnClick {
             val intent = Intent(activity, SupplierActivity::class.java).apply {
                 putExtra("fragment", "TheSupplier")
                 putExtra("contactId", it.contactId)
             }
             startActivity(intent)
         })
+        binding.rvSuppliers.adapter = suppliersAdapter
 
         supplierViewModel.startSupplierActivity.observe(viewLifecycleOwner) {
             if (it) {

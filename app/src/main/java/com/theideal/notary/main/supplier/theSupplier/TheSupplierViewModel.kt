@@ -28,9 +28,9 @@ class TheSupplierViewModel(
     val billContact: LiveData<BillContact>
         get() = _billContact
 
-    private val _navToSupplierBill = MutableLiveData<Boolean>()
-    val navToSupplierBill: LiveData<Boolean>
-        get() = _navToSupplierBill
+    private val _navToSupplierBillInfo = MutableLiveData<Boolean>()
+    val navToSupplierBillInfo: LiveData<Boolean>
+        get() = _navToSupplierBillInfo
 
     private val _billList = MutableLiveData<List<BillContact>>()
     val billList: LiveData<List<BillContact>>
@@ -76,6 +76,10 @@ class TheSupplierViewModel(
         }
     }
 
+    fun returnContact(): Contact {
+        return _contact.value!!
+    }
+
     fun setSupplier(contact: Contact) {
         _contact.value = contact
     }
@@ -84,12 +88,12 @@ class TheSupplierViewModel(
     fun createBillSupplier(contact: Contact) {
         viewModelScope.launch {
             createBillUseCase.createBill(BillContact(), contact)
-            _navToSupplierBill.value = true
+            _navToSupplierBillInfo.value = true
         }
     }
 
     fun navToSupplierBillComplete() {
-        _navToSupplierBill.value = false
+        _navToSupplierBillInfo.value = false
     }
 
 

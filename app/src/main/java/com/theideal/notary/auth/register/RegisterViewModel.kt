@@ -42,6 +42,7 @@ class RegisterViewModel(
                     _navToUserInfo.value = true
                 }
             }
+            _progressBar.value = false
         }
     }
 

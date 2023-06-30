@@ -61,4 +61,7 @@ import timber.log.Timber
         Timber.i("sigInWithPhoneNumber")
     }
 
+    fun signOut() {
+        mAuth.signOut()
+    }
 }

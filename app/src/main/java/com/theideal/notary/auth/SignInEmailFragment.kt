@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.theideal.data.model.User
 import com.theideal.notary.databinding.FragmentSignInMailBinding
@@ -35,13 +34,13 @@ class SignInEmailFragment : Fragment() {
         signInEmailViewModel.snackBarMessage.observe(viewLifecycleOwner) {
             if (it != "") {
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                signInEmailViewModel.snackBarComplete()
             }
         }
-        signInEmailViewModel.navToCreateAccountPage2.observe(viewLifecycleOwner) {
-            if (it) {
-                findNavController().navigate(SignInEmailFragmentDirections.actionSignInMailFragmentToSignInInformationFragment(user))
-                signInEmailViewModel.navToCreateAccountPage2Done()
-            }
+        signInEmailViewModel.startMainActivity.observe(viewLifecycleOwner) {
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
 
 

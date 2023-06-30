@@ -9,7 +9,7 @@
         android:id="@+id/createSupplierFragment2"
         android:name="com.theideal.notary.main.supplier.theSupplier.CreateSupplierFragment"
         android:label="fragment_create_supplier"
-        tools:layout="@layout/fragment_create_supplier" >
+        tools:layout="@layout/fragment_create_supplier">
         <action
             android:id="@+id/action_createSupplierFragment2_to_theSupplierFragment"
             app:destination="@id/theSupplierFragment"
@@ -20,20 +20,39 @@
         android:id="@+id/theSupplierFragment"
         android:name="com.theideal.notary.main.supplier.theSupplier.TheSupplierFragment"
         android:label="fragment_the_supplier"
-        tools:layout="@layout/fragment_the_supplier" >
-        <action
-            android:id="@+id/action_theSupplierFragment_to_theSupplierBillFragment"
-            app:destination="@id/theSupplierBillFragment" />
+        tools:layout="@layout/fragment_the_supplier">
         <argument
             android:name="contact"
             app:argType="com.theideal.data.model.Contact" />
+        <action
+            android:id="@+id/action_theSupplierFragment_to_theSupplierBillInfoFragment"
+            app:destination="@id/theSupplierBillInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/theSupplierBillFragment"
         android:name="com.theideal.notary.main.supplier.theSupplier.TheSupplierBillFragment"
         android:label="fragment_the_supplier_bill"
-        tools:layout="@layout/fragment_the_supplier_bill" >
-        <argument android:name="billContact"
+        tools:layout="@layout/fragment_the_supplier_bill">
+        <argument
+            android:name="billContact"
             app:argType="com.theideal.data.model.BillContact" />
+        <argument
+            android:name="contact"
+            app:argType="com.theideal.data.model.Contact" />
+    </fragment>
+    <fragment
+        android:id="@+id/theSupplierBillInfoFragment"
+        android:name="com.theideal.notary.main.supplier.theSupplier.TheSupplierBillInfoFragment"
+        android:label="TheSupplierBillInfoFragment"
+        tools:layout="@layout/fragment_the_supplier_bill_info">
+        <action
+            android:id="@+id/action_theSupplierBillInfoFragment_to_theSupplierBillFragment"
+            app:destination="@id/theSupplierBillFragment" />
+        <argument
+            android:name="billContact"
+            app:argType="com.theideal.data.model.BillContact" />
+        <argument
+            android:name="contact"
+            app:argType="com.theideal.data.model.Contact" />
     </fragment>
 </navigation>

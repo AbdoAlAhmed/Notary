@@ -3,6 +3,7 @@ package com.theideal.domain.repository
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.data.model.ItemInfo
 import com.theideal.data.remote.FirebaseBillSupplier
 
 class BillSupplierRepository(private val firebaseBillSupplier: FirebaseBillSupplier) {
@@ -28,9 +29,18 @@ class BillSupplierRepository(private val firebaseBillSupplier: FirebaseBillSuppl
         firebaseBillSupplier.deleteBillSupplier(billSupplier)
     }
 
-    suspend fun addItemToBillSupplierWithBillId(billId: String, item: Item) {
-        firebaseBillSupplier.addItemToBillSupplierWithBillId(billId, item)
+    suspend fun addItemToBillClientFromSupplier(billId: String, item: Item) {
+        firebaseBillSupplier.addItemToBillClientFromSupplier(billId, item)
     }
+
+    suspend fun getItemsListBySupplierId(supplierId: String) =
+        firebaseBillSupplier.getItemListBySupplierId(supplierId)
+    suspend fun addItemBillSupplierInfoWithBillId(billId: String, item: ItemInfo) {
+        firebaseBillSupplier.addInfoItemToBillSupplierWithBillId(billId, item)
+    }
+
+    suspend fun getListOfItemsBillInfo(billId: String) =  firebaseBillSupplier.getListOfItemBillInfo(billId)
+
 
     suspend fun updateItemToBillSupplierWithBillId(billId: BillContact, item: Item) {
         firebaseBillSupplier.updateItemToBillSupplierWithBillId(billId, item)

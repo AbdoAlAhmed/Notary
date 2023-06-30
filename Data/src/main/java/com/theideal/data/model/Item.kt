@@ -33,6 +33,19 @@ data class Item(
         Timestamp.now(),
         ""
     )
+    constructor(price: Double,weight: Double,amount: Double):this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        amount,
+        "",
+        weight,
+        price,
+        Timestamp.now(),
+        ""
+    )
 
     constructor(
         itemId: String,

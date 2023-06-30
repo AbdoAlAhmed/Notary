@@ -14,8 +14,12 @@ class AuthenticationRepository(private val firebaseAuthentication: FirebaseAuthe
         }
     }
 
-    suspend fun createUserWithEmailAndPassword(email: String, password: String,result: (String) -> Unit) {
-        firebaseAuthentication.createUserWithEmailAndPassword(email, password){
+    suspend fun createUserWithEmailAndPassword(
+        email: String,
+        password: String,
+        result: (String) -> Unit
+    ) {
+        firebaseAuthentication.createUserWithEmailAndPassword(email, password) {
             result(it)
         }
     }
@@ -26,5 +30,9 @@ class AuthenticationRepository(private val firebaseAuthentication: FirebaseAuthe
 
     fun sigInWithPhoneNumber(phoneNumber: String) {
         firebaseAuthentication.sigInWithPhoneNumber(phoneNumber)
+    }
+
+    fun signOut() {
+        firebaseAuthentication.signOut()
     }
 }

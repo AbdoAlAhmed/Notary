@@ -14,7 +14,7 @@ class FirebaseSupplier {
     suspend fun createSupplier(contact: Contact) {
         supplierRef.add(contact).addOnSuccessListener {
             supplierRef.document(it.id).update(
-                "contactId", contact.userId, "userId", userUid
+                "contactId", it.id, "userId", userUid
             )
         }.await()
     }

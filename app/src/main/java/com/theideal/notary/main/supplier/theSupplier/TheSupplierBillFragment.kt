@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
-import com.theideal.notary.databinding.DialogAddItemSupplierBinding
+import com.theideal.notary.databinding.DialogSellItemClientBinding
 import com.theideal.notary.databinding.FragmentTheSupplierBillBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,6 +24,7 @@ class TheSupplierBillFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         theSupplierBillArgs = TheSupplierBillFragmentArgs.fromBundle(requireArguments())
+        theSupplierBillViewModel.getItemsListBySupplierId(theSupplierBillArgs.billContact.contactId)
     }
 
     override fun onCreateView(
@@ -34,27 +36,38 @@ class TheSupplierBillFragment : Fragment() {
         binding.billContact = theSupplierBillArgs.billContact
         binding.contact = contact
         binding.theSupplierBillViewModel = theSupplierBillViewModel
+        theSupplierBillViewModel.setContact(theSupplierBillArgs.contact)
+        theSupplierBillViewModel.setBillContact(theSupplierBillArgs.billContact)
         theSupplierBillViewModel.addDialog.observe(viewLifecycleOwner) {
-            if (it) {
-                addItemDialog()
-                theSupplierBillViewModel.addDialogComplete()
-            }
+            addItemDialog()
         }
+        binding.rvSupplierBill.adapter = TheSupplierBillAdapter()
         binding.lifecycleOwner = this
         return binding.root
     }
 
     private fun addItemDialog() {
-        val dialog = AlertDialog.Builder(requireContext())
-        val dialogCreate = dialog.create()
-        val dialogView = DialogAddItemSupplierBinding.inflate(layoutInflater, null, false)
-        dialogView.item = item
-        dialogCreate.setView(dialogView.root)
-        dialogView.btnAddItemSupplier.setOnClickListener {
-            theSupplierBillViewModel.addItem( theSupplierBillArgs.billContact.billId,item)
-            dialogCreate.dismiss()
+        val alertDialog = AlertDialog.Builder(requireContext())
+        val createDialog = alertDialog.create()
+        val view = DialogSellItemClientBinding.inflate(layoutInflater)
+        view.item = item
+        item.supplierName = theSupplierBillViewModel.returnContact().name
+        item.supplierId = theSupplierBillViewModel.returnContact().contactId
+        view.contact = theSupplierBillViewModel.returnContact()
+        view.apply {
+            tilSupplierList.isVisible = false
+            tvSupplierName.isVisible = true
         }
-        dialogCreate.show()
+        view.lifecycleOwner = this
+        view.btnSellItem.setOnClickListener {
+            theSupplierBillViewModel.addItem(
+                theSupplierBillViewModel.returnBillContact().billId,
+                item
+            )
+            createDialog.dismiss()
+        }
+        createDialog.setView(view.root)
+        createDialog.show()
     }
 
 }
