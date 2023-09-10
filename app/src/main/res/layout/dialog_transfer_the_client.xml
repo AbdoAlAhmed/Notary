@@ -9,7 +9,7 @@
 
         <variable
             name="theClientViewModel"
-            type="com.theideal.notary.main.client.createclient.TheClientViewModel" />
+            type="com.theideal.notary.main.client.theclient.TheClientViewModel" />
     </data>
 
     <LinearLayout

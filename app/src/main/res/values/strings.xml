@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Notary</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="phone_number">PhoneNumber</string>
-    <string name="send_code">send code</string>
-    <string name="sign_in_with_email">Sign in with email</string>
-    <string name="sign_in">Sign In</string>
-    <string name="sign_in_email">Sign In With Email</string>
-    <string name="dialog_title_sign_in_with_phone_not_enabled">Sign In With Phone </string>
-    <string name="dialog_message_sign_in_with_phone_not_enabled">Sign In With Phone Is not enabled</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="phone_number" translatable="false">PhoneNumber</string>
+    <string name="send_code" translatable="false">send code</string>
+    <string name="sign_in_with_email" translatable="false">Sign in with email</string>
+    <string name="sign_in" translatable="false">Sign In</string>
+    <string name="sign_in_email" translatable="false">Sign In With Email</string>
+    <string name="dialog_title_sign_in_with_phone_not_enabled" translatable="false">Sign In With Phone </string>
+    <string name="dialog_message_sign_in_with_phone_not_enabled" translatable="false">Sign In With Phone Is not enabled</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password" translatable="false">Password</string>
     <string name="additional_information">Additional Information</string>
     <string name="name">Name</string>
     <string name="start">Start</string>
@@ -20,9 +20,9 @@
     <string name="deferred_sale">deferred sale</string>
     <string name="remaining_sales_transactions">remaining sales transactions :  </string>
     <string name="search">Search</string>
-    <string name="_0">0</string>
-    <string name="million">1000000</string>
-    <string name="_2024_12_12">2024/12/12</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="million" translatable="false">1000000</string>
+    <string name="_2024_12_12" translatable="false">2024/12/12</string>
     <string name="add_client">Add Client</string>
     <string name="total_money">Total Money</string>
     <string name="add_a_debt">Add a debt</string>
@@ -37,81 +37,85 @@
     <string name="phone_2_optional">Phone 2 optional</string>
     <string name="save">Save</string>
     <string name="btn_create_company">Create Company</string>
-    <string name="work_with_company">Work with company</string>
-    <string name="client_transactions_fees">Client Transactions Fees</string>
-    <string name="supplier_transactions_fees">Supplier Transactions Fees</string>
-    <string name="commission">Commission</string>
-    <string name="lift_coast">Lift Coast</string>
-    <string name="warranty_fee">Warranty Fee</string>
-    <string name="transport_fees">Transport Fees</string>
-    <string name="other_fee">Other Fee</string>
+    <string name="work_with_company" translatable="false">Work with company</string>
+    <string name="client_transactions_fees" translatable="false">Client Transactions Fees</string>
+    <string name="supplier_transactions_fees" translatable="false">Supplier Transactions Fees</string>
+    <string name="commission" translatable="false">Commission</string>
+    <string name="lift_coast" translatable="false">Lift Coast</string>
+    <string name="warranty_fee" translatable="false">Warranty Fee</string>
+    <string name="transport_fees" translatable="false">Transport Fees</string>
+    <string name="other_fee" translatable="false">Other Fee</string>
     <string name="_continue">Continue</string>
-    <string name="no_user">User Not Fount</string>
-    <string name="transaction_fee_instructions">This fee will be applied to a specific bill or to all bills based on your request but you can change it</string>
-    <string name="transaction_fee_instructions_0">You can leave the fields empty if you don\'t want to add any fees.</string>
-    <string name="complete">Complete</string>
-    <string name="create_client">Create Client</string>
-    <string name="create">create</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-    <string name="share">Share</string>
-    <string name="print">Print</string>
+    <string name="no_user" translatable="false">User Not Fount</string>
+    <string name="transaction_fee_instructions" translatable="false">This fee will be applied to a specific bill or to all bills based on your request but you can change it</string>
+    <string name="transaction_fee_instructions_0" translatable="false">You can leave the fields empty if you don\'t want to add any fees.</string>
+    <string name="complete" translatable="false">Complete</string>
+    <string name="create_client" translatable="false">Create Client</string>
+    <string name="create" translatable="false">create</string>
+    <string name="edit" translatable="false">Edit</string>
+    <string name="delete" translatable="false">Delete</string>
+    <string name="share" translatable="false">Share</string>
+    <string name="print" translatable="false">Print</string>
     <string name="add_transactions">Add Transactions</string>
-    <string name="phone_already_exists">phone already exists</string>
-    <string name="deposit">Deposit</string>
+    <string name="phone_already_exists" translatable="false">phone already exists</string>
+    <string name="deposit" translatable="false">Deposit</string>
     <string name="weight">Weight</string>
     <string name="price">Price</string>
     <string name="amount">Amount</string>
-    <string name="total">Total</string>
-    <string name="_200">200</string>
-    <string name="_5">5</string>
-    <string name="_2000">2000</string>
-    <string name="sell">Sell</string>
-    <string name="pay">Pay</string>
-    <string name="_transfer">Transfer</string>
-    <string name="description">Description</string>
-    <string name="the_amount">The Amount</string>
-    <string name="error_getting_the_data">Error getting the data</string>
-    <string name="deserved_amount">Deserved Amount</string>
-    <string name="_1000">1000</string>
-    <string name="remaining_amount">Remaining amount</string>
-    <string name="money_left_message">If there is any money left, it will be transferred directly to the deferred sale in the name of the customer</string>
-    <string name="withdraw">Withdraw</string>
-    <string name="add">Add</string>
-    <string name="close_bill">Close Bill</string>
+    <string name="total" translatable="false">Total</string>
+    <string name="_200" translatable="false">200</string>
+    <string name="_5" translatable="false">5</string>
+    <string name="_2000" translatable="false">2000</string>
+    <string name="sell" translatable="false">Sell</string>
+    <string name="pay" translatable="false">Pay</string>
+    <string name="_transfer" translatable="false">Transfer</string>
+    <string name="description" translatable="false">Description</string>
+    <string name="the_amount" translatable="false">The Amount</string>
+    <string name="error_getting_the_data" translatable="false">Error getting the data</string>
+    <string name="deserved_amount" translatable="false">Deserved Amount</string>
+    <string name="_1000" translatable="false">1000</string>
+    <string name="remaining_amount" translatable="false">Remaining amount</string>
+    <string name="money_left_message" translatable="false">If there is any money left, it will be transferred directly to the deferred sale in the name of the customer</string>
+    <string name="withdraw" translatable="false">Withdraw</string>
+    <string name="add" translatable="false">Add</string>
+    <string name="close_bill" translatable="false">Close Bill</string>
     <string name="add_item">Add Item</string>
     <string name="item_amount">Item Amount</string>
     <string name="item_description">Item Description</string>
-    <string name="prise_format">%1$.2f EG</string>
-    <string name="weight_format">%1$.2f kg</string>
-    <string name="confirm_delete_item">Are you sure you want to delete this item?</string>
-    <string name="confirm_delete_contact">Are you sure you want to delete this contact?</string>
-    <string name="confirm_delete_bill">Are you sure you want to delete this bill all items will be deleted?</string>
+    <string name="prise_format" translatable="false">%1$.2f EG</string>
+    <string name="weight_format" translatable="false">%1$.2f kg</string>
+    <string name="confirm_delete_item" translatable="false">Are you sure you want to delete this item?</string>
+    <string name="confirm_delete_contact" translatable="false">Are you sure you want to delete this contact?</string>
+    <string name="confirm_delete_bill" translatable="false">Are you sure you want to delete this bill all items will be deleted?</string>
     <string name="sure">Sure</string>
     <string name="cancel"> Cancel </string>
     <string name="update">Update</string>
-    <string name="signature">signature</string>
-    <string name="dialog_other_fee_message">You can leave the fields empty if you don\'t want to add any fees.</string>
+    <string name="signature" translatable="false">signature</string>
+    <string name="dialog_other_fee_message" translatable="false">You can leave the fields empty if you don\'t want to add any fees.</string>
     <string name="discount">Discount</string>
     <string name="transactions">Transactions</string>
     <string name="transfer">Transfer</string>
-    <string name="open_transactions_message">There is an open bill if you want to open a new transaction, do a long click</string>
-    <string name="edit_bill">Edit Bill</string>
-    <string name="reopen_the_bill">Open The Bill</string>
-    <string name="reopen_the_bill_message">Are you sure you want to reopen this bill?</string>
-    <string name="print_error_message">You have to close the bill </string>
-    <string name="fees">Fees</string>
-    <string name="gross_money">Gross Money</string>
-    <string name="remaining_money">Remaining Money</string>
-    <string name="paid_money">Paid Money</string>
-    <string name="paid">Paid</string>
-    <string name="paid_money_less_than_total_money">"Paid money must be less than total money"</string>
+    <string name="open_transactions_message" translatable="false">There is an open bill if you want to open a new transaction, do a long click</string>
+    <string name="edit_bill" translatable="false">Edit Bill</string>
+    <string name="reopen_the_bill" translatable="false">Open The Bill</string>
+    <string name="reopen_the_bill_message" translatable="false">Are you sure you want to reopen this bill?</string>
+    <string name="print_error_message" translatable="false">You have to close the bill </string>
+    <string name="fees" translatable="false">Fees</string>
+    <string name="gross_money" translatable="false">Gross Money</string>
+    <string name="remaining_money" translatable="false">Remaining Money</string>
+    <string name="paid_money" translatable="false">Paid Money</string>
+    <string name="paid" translatable="false">Paid</string>
+    <string name="paid_money_less_than_total_money" translatable="false">"Paid money must be less than total money"</string>
     <string name="no_item">No Items</string>
     <string name="no_item_error">"You must add at least one item"</string>
-    <string name="register">Register</string>
-    <string name="create_an_account">Create An Account</string>
-    <string name="this_fragment_is_under_construction">This Fragment is under construction</string>
+    <string name="register" translatable="false">Register</string>
+    <string name="create_an_account" translatable="false">Create An Account</string>
+    <string name="this_fragment_is_under_construction" translatable="false">This Fragment is under construction</string>
     <string name="logout">logout</string>
     <string name="varieties">Varieties</string>
     <string name="remaining_value">Remaining Value</string>
+    <string name="more">More</string>
+    <string name="forget_password">Forget Password ?</string>
+    <string name="daily">Daily</string>
+    <string name="clients">Clients</string>
 </resources>

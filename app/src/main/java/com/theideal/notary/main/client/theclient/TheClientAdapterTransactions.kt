@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.createclient
+package com.theideal.notary.main.client.theclient
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

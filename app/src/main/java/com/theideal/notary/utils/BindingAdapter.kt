@@ -1,6 +1,5 @@
 package com.theideal.notary.utils
 
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -60,6 +59,8 @@ fun bindAutoComplete(
 fun bindDoubleTextToEmpty(textView: TextView, string: String) {
     textView.text = if (string == "0.0") "" else string
 }
+
+
 
 
 @BindingAdapter("status_text_color")

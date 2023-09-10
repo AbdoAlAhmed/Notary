@@ -2,14 +2,15 @@ package com.theideal.data.remote
 
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
- class FirebaseAuthentication() {
+class FirebaseAuthentication() {
 
     private val mAuth = FirebaseAuth.getInstance()
-     val currentUser = mAuth.currentUser
+    private val currentUser = mAuth.currentUser
 
 
     suspend fun signInWithEmailAndPassword(
@@ -58,8 +59,12 @@ import timber.log.Timber
     }
 
     fun sigInWithPhoneNumber(phoneNumber: String) {
-        Timber.i("sigInWithPhoneNumber")
+        PhoneAuthOptions.newBuilder().setPhoneNumber(phoneNumber).
+            setTimeout(1000,TimeUnit.SECONDS).requireSmsValidation(true)
+
+                .build()
     }
+
 
     fun signOut() {
         mAuth.signOut()

@@ -15,7 +15,7 @@
 
         <variable
             name="clientBillViewModel"
-            type="com.theideal.notary.main.client.createclient.bill.ClientBillViewModel" />
+            type="com.theideal.notary.main.client.theclient.bill.ClientBillViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".main.client.createclient.bill.TheClientBillFragment">
+        tools:context=".main.client.theclient.bill.TheClientBillFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_client_bill"

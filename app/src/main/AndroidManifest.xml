@@ -33,7 +33,7 @@
             android:name=".main.supplier.theSupplier.SupplierActivity"
             android:exported="false" />
         <activity
-            android:name=".main.client.createclient.ClientActivity"
+            android:name=".main.client.theclient.ClientActivity"
             android:exported="false" />
         <activity
             android:name=".main.company.CompanyActivity"

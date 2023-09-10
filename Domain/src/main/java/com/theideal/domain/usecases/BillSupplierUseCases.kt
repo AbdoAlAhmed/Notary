@@ -1,13 +1,12 @@
 package com.theideal.domain.usecases
 
-import android.util.Log
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
 import com.theideal.data.model.ItemInfo
 import com.theideal.domain.repository.BillSupplierRepository
 
-class CreateBillSupplierUseCases(private val billRepository: BillSupplierRepository) {
+class BillSupplierUseCases(private val billRepository: BillSupplierRepository) {
 
 
     suspend fun createBill(billContact: BillContact, contact: Contact) {

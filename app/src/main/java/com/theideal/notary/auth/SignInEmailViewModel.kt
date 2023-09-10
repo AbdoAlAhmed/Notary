@@ -22,6 +22,14 @@ class SignInEmailViewModel(private val repo: AuthenticationRepository) : ViewMod
     val startMainActivity: LiveData<Boolean>
         get() = _startMainActivity
 
+    private val _navToForgetPassword = MutableLiveData<Boolean>()
+    val navToForgetPassword: LiveData<Boolean>
+        get() = _navToForgetPassword
+
+    private val _navToRegister = MutableLiveData<Boolean>()
+    val navToRegister: LiveData<Boolean>
+        get() = _navToRegister
+
     init {
         _progressBar.value = false
     }
@@ -47,4 +55,21 @@ class SignInEmailViewModel(private val repo: AuthenticationRepository) : ViewMod
     fun startMainActivityComplete() {
         _startMainActivity.value = false
     }
+
+    fun navToForgetPassword() {
+        _navToForgetPassword.value = true
+    }
+
+    fun doneNavToForgetPassword() {
+        _navToForgetPassword.value = false
+    }
+
+    fun navToRegister() {
+        _navToRegister.value = true
+    }
+
+    fun doneNavToRegister() {
+        _navToRegister.value = false
+    }
+
 }

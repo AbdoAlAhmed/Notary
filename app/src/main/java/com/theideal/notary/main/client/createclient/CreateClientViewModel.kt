@@ -25,19 +25,30 @@ class CreateClientViewModel(
     val snackBarMessage: LiveData<String>
         get() = _snackBarMessage
 
+    private val _contact = MutableLiveData<Contact>()
+    val contact: LiveData<Contact>
+        get() = _contact
+
     private suspend fun checkTheNumberToCreateContact(phone: Contact) =
         contactUseCases.checkTheNumberToCreateContact(phone.phone)
 
     fun createClient(contact: Contact) {
         viewModelScope.launch {
-            if (checkTheNumberToCreateContact(contact)) {
-                clientRepo.createClient(contact)
-                _clientCreatedNavToTheClient.postValue(true)
+            if (contact.phone == "") {
+                _contact.value = clientRepo.createClient(contact)
+                _clientCreatedNavToTheClient.value = true
             } else {
-                _snackBarMessage.postValue(app.getString(R.string.phone_already_exists))
+                if (checkTheNumberToCreateContact(contact)) {
+                    _contact.value = clientRepo.createClient(contact)
+                    _clientCreatedNavToTheClient.value = true
+                } else {
+                    _snackBarMessage.postValue(app.getString(R.string.phone_already_exists))
+                }
             }
         }
     }
+
+
 
     fun doneNavigatingToTheClient() {
         _clientCreatedNavToTheClient.value = false

@@ -1,21 +1,22 @@
-package com.theideal.notary.main.client.saletransactions
+package com.theideal.notary.main.client.daily
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.Contact
 import com.theideal.domain.repository.ClientRepository
+import com.theideal.domain.usecases.ClientsUseCases
 import com.theideal.domain.usecases.ContactUseCases
 import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
-class SaleTransactionsViewModel(
+class DailyViewModel(
     private val useCase: ContactUseCases,
     private val app: Application,
     private val clientRepo: ClientRepository,
+    private val clientUseCases: ClientsUseCases
 ) : ViewModel() {
 
     private val _createClient = MutableLiveData<Boolean>()
@@ -35,6 +36,10 @@ class SaleTransactionsViewModel(
 
 
 
+
+    init {
+
+    }
 
     fun checkUserInfo() {
         viewModelScope.launch {
@@ -67,11 +72,11 @@ class SaleTransactionsViewModel(
     }
 
 
-
     fun getAllClients() {
         viewModelScope.launch {
             try {
                 _clients.value = clientRepo.getClientByUserId()
+
             } catch (e: Exception) {
                 _snackBar.value = app.getString(R.string.error_getting_the_data)
             }

@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.createclient.bill
+package com.theideal.notary.main.client.theclient.bill
 
 import android.app.Activity
 import android.app.Application
@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.data.model.PayBook
 import com.theideal.domain.repository.ClientRepository
 import com.theideal.domain.usecases.BillClientUseCases
 import kotlinx.coroutines.launch
@@ -155,6 +156,12 @@ class ClientBillViewModel(
     fun updateBill(billId: String, keyValue: Map<String, Any>) {
         viewModelScope.launch {
             billClientUseCases.updateBill(billId = billId, keyValue)
+        }
+    }
+
+    fun addPayBook(billId: String, payBook: PayBook) {
+        viewModelScope.launch {
+            billClientUseCases.addPayBookToBill(billId, payBook)
         }
     }
 

@@ -80,6 +80,7 @@ class FirebaseBillSupplier {
             itemRef.document(it.id).update(
                 "itemId", it.id,
                 "userId", userUid, "billId", billId
+
             )
         }.await()
     }

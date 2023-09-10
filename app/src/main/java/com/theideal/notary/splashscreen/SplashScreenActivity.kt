@@ -9,14 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.theideal.notary.R
 import com.theideal.notary.auth.AuthenticationActivity
 import com.theideal.notary.auth.AuthenticationViewModel
-import com.theideal.notary.auth.SignInEmailViewModel
 import com.theideal.notary.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
-    private val signInEmailViewModel by viewModel<SignInEmailViewModel>()
     private var isSignIn: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

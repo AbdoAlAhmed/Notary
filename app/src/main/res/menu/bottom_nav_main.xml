@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/moreFragment"
+        android:title="@string/more"
+        android:icon="@drawable/ic_more"/>
     <item
         android:id="@+id/supplierFragment"
         android:icon="@drawable/ic_supplier"
@@ -8,9 +13,9 @@
         android:id="@+id/clientFragment"
         android:icon="@drawable/ic_person"
         android:title="@string/client" />
-    <item
-        android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_home"
-        android:title="@string/home" />
+<!--    <item-->
+<!--        android:id="@+id/homeFragment"-->
+<!--        android:icon="@drawable/ic_home"-->
+<!--        android:title="@string/home" />-->
 
 </menu>

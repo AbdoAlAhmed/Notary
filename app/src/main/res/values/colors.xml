@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="dark_sky_blue">#00BFFF</color>
-    <color name="sunset_orange">#FFA500</color>
+    <color name="near_to_blue">#1F89B1</color>
     <color name="dark_sunset_orange">#FF8C00</color>
     <color name="ocean_blue">#00BFFF</color>
     <color name="dark_ocean_blue">#008B8B</color>
@@ -17,5 +17,11 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="grey_500">#E7E9EE	</color>
+    <color name="grey_500">#E7E9EE</color>
+    <color name="sky_blue">#75CDE6ff</color>
+    <color name="rose_quartz">#BA95A3ff</color>
+    <color name="crimson">#CF1F35ff</color>
+    <color name="gam_boge">#F2A342ff</color>
+    <color name="timber_wolf">#D4D0D1ff</color>
+
 </resources>

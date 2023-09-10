@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.saletransactions
+package com.theideal.notary.main.client.daily
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +9,11 @@ import com.theideal.data.model.Contact
 import com.theideal.notary.databinding.ItemContactInfoBinding
 import com.theideal.notary.utils.SwipeAdapter
 
-class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListener) :
-    ListAdapter<Contact, SaleTransactionsAdapter.SaleTransactionsViewHolder>(
+class DailyAdapter(
+    private val dailyViewModel: DailyViewModel,
+    private val clickListener: SaleTransactionsListener
+) :
+    ListAdapter<Contact, DailyAdapter.SaleTransactionsViewHolder>(
         SaleTransactionsDiffCallback
     ), SwipeAdapter {
 
@@ -31,6 +34,7 @@ class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListene
             binding.contact = contact
             binding.executePendingBindings()
         }
+
 
     }
 
@@ -63,17 +67,6 @@ class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListene
     }
 
 
-    fun getNameBySearchAndPutItInTheFirstPosition(name: String): String {
-        var name = name
-        for (i in 0 until itemCount) {
-            if (getItem(i).name == name) {
-                name = getItem(i).name
-                currentList.first().name = name
-            }
-        }
-        return name
-    }
-
     override fun onItemDelete(position: Int) {
         deleteItem(position)
     }
@@ -82,9 +75,11 @@ class SaleTransactionsAdapter(private val clickListener: SaleTransactionsListene
         editItem(position)
     }
 
+
     override fun setDataChanged() {
         notifyDataSetChanged()
     }
+
 
     private fun deleteItem(position: Int) {
 

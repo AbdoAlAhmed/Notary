@@ -14,15 +14,16 @@ import com.theideal.domain.repository.DepositRepository
 import com.theideal.domain.repository.SupplierRepository
 import com.theideal.domain.repository.UserRepository
 import com.theideal.domain.repository.WithdrawRepository
-import com.theideal.domain.usecases.ContactUseCases
 import com.theideal.domain.usecases.BillClientUseCases
+import com.theideal.domain.usecases.ClientsUseCases
+import com.theideal.domain.usecases.ContactUseCases
 import com.theideal.domain.usecases.DepositUseCase
 import com.theideal.domain.usecases.TransferUseCase
 import com.theideal.domain.usecases.WithdrawUseCase
 import com.theideal.notary.main.client.createclient.CreateClientViewModel
-import com.theideal.notary.main.client.createclient.TheClientViewModel
-import com.theideal.notary.main.client.createclient.bill.ClientBillViewModel
-import com.theideal.notary.main.client.saletransactions.SaleTransactionsViewModel
+import com.theideal.notary.main.client.theclient.TheClientViewModel
+import com.theideal.notary.main.client.theclient.bill.ClientBillViewModel
+import com.theideal.notary.main.client.daily.DailyViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -82,7 +83,7 @@ val BillClientModule = module {
         BillClientUseCases(get(), get(), get(), get())
     }
     viewModel {
-        TheClientViewModel(get(), get(), get(), get())
+        TheClientViewModel(get(), get(), get())
     }
     viewModel {
         ClientBillViewModel(get(), get(), get())
@@ -99,8 +100,11 @@ val contactUseCases = module {
     single {
         ContactUseCases(get(), get())
     }
+    single {
+        ClientsUseCases(get(),get())
+    }
     viewModel {
-        SaleTransactionsViewModel(get(), get(), get())
+        DailyViewModel(get(), get(), get(), get())
     }
     viewModel {
         CreateClientViewModel(get(), get(), get())

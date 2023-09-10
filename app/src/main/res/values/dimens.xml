@@ -36,8 +36,8 @@
     <dimen name="btn_preference_height">40dp</dimen>
     <dimen name="item_tv_total_money_padding_start">5dp</dimen>
     <dimen name="item_tv_total_count_padding_start">5dp</dimen>
-    <dimen name="item_tv_name_padding_end">5dp</dimen>
-    <dimen name="item_tv_date_padding_end">5dp</dimen>
+    <dimen name="item_tv_name_padding_end">2dp</dimen>
+    <dimen name="item_tv_date_padding_end">2dp</dimen>
     <dimen name="tv_company_information_margin_top">8dp</dimen>
     <dimen name="tv_contact_transactions_fees_margin_top">8dp</dimen>
     <dimen name="iv_company_information_margin_top">8dp</dimen>
@@ -66,5 +66,6 @@
     <dimen name="btn_fragment_the_client_margin_start_end">10dp</dimen>
     <dimen name="radio_btn_transfer_dialog">4dp</dimen>
     <dimen name="tv_text_size">18sp</dimen>
+    <dimen name="tv_forget_password_margin">10dp</dimen>
 
 </resources>

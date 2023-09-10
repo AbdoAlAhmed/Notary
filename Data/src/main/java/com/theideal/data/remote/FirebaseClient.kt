@@ -1,5 +1,6 @@
 package com.theideal.data.remote
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.Contact
@@ -10,13 +11,14 @@ class FirebaseClient {
     private val clientRef = db.collection("Client")
     private val currentUserUid = FirebaseAuth.getInstance().currentUser!!.uid
 
-    suspend fun createClient(contact: Contact) {
-        clientRef.add(contact).addOnSuccessListener {
+    suspend fun createClient(contact: Contact): Contact {
+        val clientRef = clientRef.add(contact).addOnSuccessListener {
             clientRef.document(it.id).update(
                 "contactId", it.id, "userId", currentUserUid
-
             )
         }.await()
+
+        return Contact().copy(contactId = clientRef.id)
 
     }
 

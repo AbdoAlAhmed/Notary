@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/deferredSaleFragment"
-        android:name="com.theideal.notary.main.client.deferredsale.DeferredSaleFragment"
+        android:name="com.theideal.notary.main.client.Clients.ClientsFragment"
         android:label="fragment_deferred_sale"
-        tools:layout="@layout/fragment_deferred_sale" >
+        tools:layout="@layout/fragment_clients" >
         <action
             android:id="@+id/action_deferredSaleFragment_to_userInfoFragment3"
             app:destination="@id/userInfoFragment3" />
     </fragment>
     <fragment
         android:id="@+id/saleTransactionsFragment"
-        android:name="com.theideal.notary.main.client.saletransactions.SaleTransactionsFragment"
+        android:name="com.theideal.notary.main.client.daily.DailyFragment"
         android:label="fragment_sale_transactions"
-        tools:layout="@layout/fragment_sale_transactions" />
+        tools:layout="@layout/fragment_daily" />
     <fragment
         android:id="@+id/userInfoFragment3"
         android:name="com.theideal.notary.auth.register.UserInfoFragment"

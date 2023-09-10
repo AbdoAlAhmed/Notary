@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notary</string>
+    <string name="name">اسم</string>
+
+    <string name="additional_information">معلومات إضافية</string>
+    <string name="start">يبدأ</string>
+    <string name="home">home</string>
+    <string name="client">عميل</string>
+    <string name="supplier">المورد</string>
+    <string name="sale_transactions">معاملات البيع</string>
+    <string name="deferred_sale">deferred_sale</string>
+    <string name="remaining_sales_transactions">معاملات البيع المتبقية:</string>
+    <string name="search">يبحث</string>
+    <string name="add_client">إضافة عميل</string>
+    <string name="total_money">مجموع الأموال</string>
+    <string name="add_a_debt">أضف دين</string>
+    <string name="add_supplier">إضافة مورد</string>
+    <string name="total_funds_to_suppliers">إجمالي الأموال للموردين</string>
+    <string name="create_company_error">يجب عليك إنشاء شركة أولاً أو العمل داخل الشركة</string>
+    <string name="company_information">معلومات الشركة</string>
+    <string name="company_name">اسم الشركة</string>
+    <string name="company_description">وصف الشركة</string>
+    <string name="company_address">عنوان الشركة</string>
+    <string name="phone">هاتف</string>
+    <string name="phone_2_optional">Phone 2 optional</string>
+    <string name="save">يحفظ</string>
+    <string name="btn_create_company">إنشاء شركة</string>
+    <string name="_continue">يكمل</string>
+    <string name="add_transactions">أضف المعاملات</string>
+    <string name="weight">وزن</string>
+    <string name="price">سعر</string>
+    <string name="amount">كمية</string>
+    <string name="add_item">اضافة عنصر</string>
+    <string name="item_amount">كمية المادة</string>
+    <string name="item_description">وصف السلعة</string>
+    <string name="sure">بالتأكيد</string>
+    <string name="cancel">يلغي</string>
+    <string name="update">تحديث</string>
+    <string name="transactions">المعاملات</string>
+    <string name="transfer">تحويل</string>
+    <string name="no_item">لا توجد عناصر</string>
+    <string name="no_item_error">يجب عليك إضافة عنصر واحد على الأقل</string>
+    <string name="varieties">Varieties</string>
+    <string name="remaining_value">القيمة المتبقية</string>
+</resources>

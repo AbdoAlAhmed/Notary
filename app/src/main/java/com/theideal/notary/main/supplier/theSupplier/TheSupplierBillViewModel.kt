@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
-import com.theideal.domain.usecases.CreateBillSupplierUseCases
+import com.theideal.domain.usecases.BillSupplierUseCases
 import kotlinx.coroutines.launch
 
-class TheSupplierBillViewModel(private val billSupplierUseCases: CreateBillSupplierUseCases) :
+class TheSupplierBillViewModel(private val billSupplierUseCases: BillSupplierUseCases) :
     ViewModel() {
 
     private val _addDialog = MutableLiveData<Boolean>()

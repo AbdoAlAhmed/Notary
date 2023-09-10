@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CreateClientFragment : Fragment() {
     private lateinit var binding: FragmentCreateClientBinding
     private val createClientViewModel by viewModel<CreateClientViewModel>()
-    private val contact = Contact()
+    private var contact = Contact()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +32,9 @@ class CreateClientFragment : Fragment() {
         binding.createClientViewModel = createClientViewModel
         binding.contact = contact
         binding.lifecycleOwner = this
+        createClientViewModel.contact.observe(viewLifecycleOwner) {
+            contact.contactId = it.contactId
+        }
         createClientViewModel.clientCreatedNavToTheClient.observe(viewLifecycleOwner) {
             if (it) {
                 findNavController().navigate(
@@ -48,14 +51,7 @@ class CreateClientFragment : Fragment() {
                 createClientViewModel.doneShowingSnackBar()
             }
         }
-        val intent = requireActivity().intent.getStringExtra("fragment")
-        if (intent == "TheClientFragment") {
-            findNavController().navigate(
-                CreateClientFragmentDirections.actionCreateClientFragmentToTheClientFragment(
-                    contact
-                )
-            )
-        }
+
         return binding.root
     }
 

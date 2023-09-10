@@ -21,6 +21,9 @@ class SignInPhoneViewModel(private val repo: AuthenticationRepository) :
         get() = _navToCreateAccount
 
 
+    fun sigInPhone(phone: String){
+        repo.sigInWithPhoneNumber(phone)
+    }
     fun sigInPhoneNotEnabled() {
         _dialogPhoneNotEnabled.value = true
     }

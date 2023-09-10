@@ -3,9 +3,9 @@
     <item
         android:id="@+id/deferredSaleFragment"
         android:icon="@drawable/ic_bill"
-        android:title="@string/deferred_sale" />
+        android:title="@string/clients" />
     <item
         android:id="@+id/saleTransactionsFragment"
         android:icon="@drawable/ic_person"
-        android:title="@string/sale_transactions" />
+        android:title="@string/daily" />
 </menu>

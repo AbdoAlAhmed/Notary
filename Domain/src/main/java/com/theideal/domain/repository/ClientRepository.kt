@@ -4,9 +4,9 @@ import com.theideal.data.model.Contact
 import com.theideal.data.remote.FirebaseClient
 
 class ClientRepository(private val firebaseClient: FirebaseClient) {
-    suspend fun createClient(client: Contact) {
-        firebaseClient.createClient(client)
-    }
+    suspend fun createClient(client: Contact) = firebaseClient.createClient(client)
+
+
 
     suspend fun getClient(clientId: String) =
         firebaseClient.getClient(clientId)

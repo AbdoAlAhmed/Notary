@@ -40,6 +40,7 @@ data class BillContact(
         get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
 
 
+
     val deptCalculate
         get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
 

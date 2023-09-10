@@ -10,7 +10,7 @@
 
         <variable
             name="billContactViewModel"
-            type="com.theideal.notary.main.client.createclient.bill.ClientBillViewModel" />
+            type="com.theideal.notary.main.client.theclient.bill.ClientBillViewModel" />
     </data>
 
     <LinearLayout

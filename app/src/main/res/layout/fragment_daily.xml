@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="saleTransactionsViewModel"
-            type="com.theideal.notary.main.client.saletransactions.SaleTransactionsViewModel" />
+            name="dailyViewModel"
+            type="com.theideal.notary.main.client.daily.DailyViewModel" />
 
         <variable
             name="billClient"
@@ -22,7 +22,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.client.saletransactions.SaleTransactionsFragment">
+        tools:context=".main.client.daily.DailyFragment">
 
 
         <LinearLayout
@@ -44,11 +44,11 @@
                     android:id="@+id/actv_search"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:bind_auto_complete_text="@{saleTransactionsViewModel.clients}"
-                    app:bind_contact="@{contact}"
                     />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+<!--                    app:bind_contact="@{contact}"-->
+<!--                    app:bind_auto_complete_text="@{saleTransactionsViewModel.clients}"-->
 
         <androidx.cardview.widget.CardView
             style="@style/CardContainer"
@@ -58,10 +58,10 @@
             android:layout_below="@+id/ll_search">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sale_transactions"
+                android:id="@+id/rv_daily"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:bind_data="@{saleTransactionsViewModel.clients}"
+                app:bind_data="@{dailyViewModel.clients}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="20"
                 tools:listitem="@layout/item_contact_info" />
@@ -74,8 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:onClick="@{() -> saleTransactionsViewModel.checkUserInfo()}"
+            android:onClick="@{() -> dailyViewModel.checkUserInfo()}"
             android:text="@string/add_client"
-            android:textColor="@color/black" />
+            />
     </RelativeLayout>
 </layout>

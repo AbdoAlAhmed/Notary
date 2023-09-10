@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.createclient
+package com.theideal.notary.main.client.theclient
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -16,9 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
-import com.theideal.data.model.Transfer
 import com.theideal.notary.R
-import com.theideal.notary.databinding.DialogTransferTheClientBinding
 import com.theideal.notary.databinding.FragmentTheClientBinding
 import com.theideal.notary.main.MainActivity
 import com.theideal.notary.utils.SwipeCallBack
@@ -29,14 +27,24 @@ class TheClientFragment : Fragment() {
     private lateinit var binding: FragmentTheClientBinding
     private val theClientViewModel by viewModel<TheClientViewModel>()
     private var billContact = BillContact()
-    private val transfer = Transfer()
     private var contact = Contact()
     private lateinit var args: TheClientFragmentArgs
-    private lateinit var adapterTransfer: TheClientAdapterTransfer
     private lateinit var adapterTransactions: TheClientAdapterTransactions
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = TheClientFragmentArgs.fromBundle(requireArguments())
+        val intentContact =
+            requireActivity().intent.getStringExtra("contactId") // get contactId from SaleTransactionsFragment
+        intentContact?.let {
+            theClientViewModel.getContact(it)
+            contact.contactId = it
+        }
+        args.contact?.let {
+            theClientViewModel.setContact(it)
+            theClientViewModel.checkIfBillIsOpen(it.contactId)
+            contact = it
+        }
+
         setHasOptionsMenu(true)
     }
 
@@ -60,22 +68,6 @@ class TheClientFragment : Fragment() {
                 binding.contact = it
             }
         }
-        // todo theClientViewModel.getTheClientTotal(contact)  look where to put this
-
-        val contact =
-            requireActivity().intent.getStringExtra("contactId") // get contactId from SaleTransactionsFragment
-        if (contact != null) {
-            theClientViewModel.getClient(contact)
-            theClientViewModel.getBillsByContactId(contact)
-            theClientViewModel.getTheClientTotal(contact)
-            theClientViewModel.getTransfersWithContactId(contact)
-
-        } else {
-            theClientViewModel.setClient(args.contact!!)
-            theClientViewModel.getTheClientTotal(args.contact.contactId!!)
-            theClientViewModel.getTransfersWithContactId(args.contact.contactId)
-            theClientViewModel.getBillsByContactId(args.contact.contactId)
-        }
         adapterTransactions =
             TheClientAdapterTransactions(theClientViewModel, TheClientAdapterTransactions.OnClick {
                 findNavController().navigate(
@@ -86,21 +78,11 @@ class TheClientFragment : Fragment() {
             })
 
         binding.rvTheClientTransactions.adapter = adapterTransactions
+
         val swipeCallBack = SwipeCallBack(adapterTransactions)
         val itemTouchHelper = ItemTouchHelper(swipeCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvTheClientTransactions)
 
-        adapterTransfer =
-            TheClientAdapterTransfer(theClientViewModel,
-                TheClientAdapterTransfer.OnClick {
-
-                }
-            )
-
-        binding.rvTheClientTransfer.adapter = adapterTransfer
-        val swipeCallBackTransfer = SwipeCallBack(adapterTransfer)
-        val itemTouchHelperTransfer = ItemTouchHelper(swipeCallBackTransfer)
-        itemTouchHelperTransfer.attachToRecyclerView(binding.rvTheClientTransfer)
 
         theClientViewModel.navToClientBill.observe(viewLifecycleOwner) {
             if (it) {
@@ -113,12 +95,6 @@ class TheClientFragment : Fragment() {
             }
         }
 
-        theClientViewModel.startTransferDialog.observe(viewLifecycleOwner) {
-            if (it) {
-                dialogTransfer()
-            }
-        }
-
         theClientViewModel.snackBar.observe(viewLifecycleOwner) {
             if (it != "") {
                 Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
@@ -126,17 +102,6 @@ class TheClientFragment : Fragment() {
             }
         }
 
-        theClientViewModel.dialogEditTransferItem.observe(viewLifecycleOwner) {
-            if (it.transferId != "") {
-                dialogTransferEdit(it)
-            }
-        }
-
-        theClientViewModel.dialogDeleteTransferItem.observe(viewLifecycleOwner) {
-            if (it.transferId != "") {
-                confirmDeleteItemTransfer(it)
-            }
-        }
 
         theClientViewModel.navToClientBillWithBillContact.observe(viewLifecycleOwner) {
             if (it.status != "") {
@@ -158,85 +123,6 @@ class TheClientFragment : Fragment() {
         return binding.root
     }
 
-    private fun dialogTransfer() {
-        val dialogAlert = AlertDialog.Builder(requireContext())
-        val dialogCreate = dialogAlert.create()
-        val view = DialogTransferTheClientBinding.inflate(layoutInflater)
-        view.radioGroupTransfer.setOnCheckedChangeListener { radioGroup, i ->
-            when (i) {
-                view.radioBtnDeposit.id -> {
-                    theClientViewModel.setTypeOfFinancialTransfer("DEPOSIT")
-                }
-
-                view.radioBtnWithdraw.id -> {
-                    theClientViewModel.setTypeOfFinancialTransfer("WITHDRAW")
-                }
-            }
-        }
-        view.transfer = transfer
-        dialogCreate.setView(view.root)
-        dialogCreate.show()
-        view.btnTransfer.setOnClickListener {
-            transfer.contactId = contact.contactId
-            theClientViewModel.addTransfer(transfer = transfer)
-            adapterTransfer.addItem(transfer)
-            dialogCreate.dismiss()
-            theClientViewModel.startTransferDialogComplete()
-        }
-
-    }
-
-    private fun dialogTransferEdit(transfer: Transfer) {
-        val dialogAlert = AlertDialog.Builder(requireContext())
-        val dialogCreate = dialogAlert.create()
-        val view = DialogTransferTheClientBinding.inflate(layoutInflater)
-        view.btnTransfer.apply {
-            text = getString(R.string.edit)
-            setBackgroundColor(resources.getColor(R.color.dark_ocean_blue))
-        }
-        view.radioGroupTransfer.setOnCheckedChangeListener { radioGroup, i ->
-            when (i) {
-                view.radioBtnDeposit.id -> {
-                    theClientViewModel.setTypeOfFinancialTransfer("DEPOSIT")
-                }
-
-                view.radioBtnWithdraw.id -> {
-                    theClientViewModel.setTypeOfFinancialTransfer("WITHDRAW")
-                }
-            }
-        }
-        view.transfer = transfer
-        dialogCreate.setView(view.root)
-        dialogCreate.show()
-        theClientViewModel.editDialogComplete()
-        view.btnTransfer.setOnClickListener {
-            transfer.contactId = contact.contactId
-
-            theClientViewModel.updateTransfer(transfer = transfer)
-            adapterTransfer.updateItemAt(transfer)
-            dialogCreate.dismiss()
-            theClientViewModel.startTransferDialogComplete()
-
-        }
-
-    }
-
-    private fun confirmDeleteItemTransfer(transfer: Transfer) {
-        val dialogAlert = AlertDialog.Builder(requireContext())
-        val dialogCreate = dialogAlert.create()
-        dialogCreate.setTitle(getString(R.string.delete))
-        dialogCreate.setMessage(getString(R.string.confirm_delete_item))
-        dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            getString(R.string.sure)
-        ) { dialog, which ->
-            theClientViewModel.deleteTransfer(transfer)
-            adapterTransfer.removeItemAt(transfer)
-            dialog.dismiss()
-        }
-        theClientViewModel.deleteDialogComplete()
-        dialogCreate.show()
-    }
 
     private fun confirmDeleteItemBill(billContact: BillContact) {
         val dialogAlert = AlertDialog.Builder(requireContext())
@@ -250,6 +136,7 @@ class TheClientFragment : Fragment() {
             theClientViewModel.deleteBill(billContact)
             adapterTransactions.removeItemAt(billContact)
             dialog.dismiss()
+            theClientViewModel.getTheClientTotal(contact.contactId)
         }
         theClientViewModel.deleteBillConfirmDialogComplete()
         dialogCreate.show()
@@ -290,5 +177,12 @@ class TheClientFragment : Fragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    override fun onStart() {
+        theClientViewModel.getTheClientTotal(contact.contactId)
+        theClientViewModel.getBillsByContactId(contact.contactId)
+        super.onStart()
     }
 }

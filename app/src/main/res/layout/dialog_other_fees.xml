@@ -6,6 +6,7 @@
         <variable
             name="billContact"
             type="com.theideal.data.model.BillContact" />
+
     </data>
 
     <LinearLayout
@@ -24,7 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="numberDecimal"
-                android:text="@={`` + billContact.theBillOtherFees}" />
+                android:text="@={`` + billContact.theBillOtherFees}"
+
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 

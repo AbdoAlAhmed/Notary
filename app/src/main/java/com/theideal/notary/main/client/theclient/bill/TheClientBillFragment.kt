@@ -1,4 +1,4 @@
-package com.theideal.notary.main.client.createclient.bill
+package com.theideal.notary.main.client.theclient.bill
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.data.model.PayBook
 import com.theideal.notary.R
 import com.theideal.notary.databinding.DialogOtherFeesBinding
 import com.theideal.notary.databinding.DialogPayTheBillBinding
@@ -35,6 +36,7 @@ class TheClientBillFragment : Fragment() {
     private val contact = Contact()
     private var billContact = BillContact()
     private val item = Item()
+    private val payBook = PayBook()
     private var itemId = ""
     private lateinit var adapter: TheClientBillAdapter
     private lateinit var args: TheClientBillFragmentArgs
@@ -45,8 +47,10 @@ class TheClientBillFragment : Fragment() {
         setHasOptionsMenu(true)
         args = TheClientBillFragmentArgs.fromBundle(requireArguments())
         clientBillViewModel.getSuppliersList()
-        clientBillViewModel.getContact(args.billContact.contactId)
-        clientBillViewModel.getItemsByBillId(args.billContact.billId)
+        args.billContact.let {
+            clientBillViewModel.getContact(it.contactId)
+            clientBillViewModel.getItemsByBillId(it.billId)
+        }
         clientBillViewModel.setTotalToBillContact(billContact)
     }
 
@@ -68,7 +72,8 @@ class TheClientBillFragment : Fragment() {
         adapter = TheClientBillAdapter(
             clientBillViewModel,
             TheClientBillAdapter.OnClick {
-            })
+            }
+        )
         binding.rvClientBill.adapter = adapter
         val itemTouchCallBack = SwipeCallBack(adapter)
         val itemTouchHelper = ItemTouchHelper(itemTouchCallBack)
@@ -142,7 +147,7 @@ class TheClientBillFragment : Fragment() {
             "closed" -> {
                 binding.apply {
                     btnPay.visibility = View.GONE
-                    btnSell.setBackgroundColor(resources.getColor(R.color.sunset_orange))
+                    btnSell.setBackgroundColor(resources.getColor(R.color.near_to_blue))
                     btnSell.text = getString(R.string.edit_bill)
                     btnSell.setOnClickListener {
                         updateBill()
@@ -152,7 +157,7 @@ class TheClientBillFragment : Fragment() {
 
             "deferred" -> {
                 binding.apply {
-                    btnSell.setBackgroundColor(resources.getColor(R.color.sunset_orange))
+                    btnSell.setBackgroundColor(resources.getColor(R.color.near_to_blue))
                     btnSell.text = getString(R.string.edit_bill)
                     btnSell.setOnClickListener {
                         updateBill()
@@ -207,6 +212,7 @@ class TheClientBillFragment : Fragment() {
         view.billContact = billContact
         view.executePendingBindings()
         view.lifecycleOwner = this
+        view.notifyChange()
         dialogCreate.setView(view.root)
         // show toast message (paid money must be less than total money) if paid money > total money
         view.btnPayTheBill.setOnClickListener {
@@ -250,7 +256,6 @@ class TheClientBillFragment : Fragment() {
             clientBillViewModel.transactionDialogComplete()
             clientBillViewModel.setTotalToBillContact(billContact)
             adapter.addItem(item)
-
         }
         dialogCreate.setView(view.root)
         dialogCreate.show()
@@ -295,7 +300,7 @@ class TheClientBillFragment : Fragment() {
             adapter.updateItem(item)
             dialogCreate.dismiss()
             clientBillViewModel.updateDialogComplete()
-            adapter.refreshList()
+
         }
 
         dialogCreate.setView(view.root)
@@ -386,5 +391,10 @@ class TheClientBillFragment : Fragment() {
             .inflate(R.layout.pdf_print, null, false)
         customView.findViewById<LinearLayout>(R.id.pdf_print_layout).addView(binding.rvClientBill)
         return customView
+    }
+
+    override fun onStart() {
+
+        super.onStart()
     }
 }

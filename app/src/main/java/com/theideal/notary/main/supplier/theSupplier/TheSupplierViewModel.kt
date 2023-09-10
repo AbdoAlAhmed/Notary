@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Transfer
-import com.theideal.domain.usecases.CreateBillSupplierUseCases
+import com.theideal.domain.usecases.BillSupplierUseCases
 import com.theideal.domain.usecases.SupplierUseCase
 import com.theideal.domain.usecases.TransferUseCase
 import kotlinx.coroutines.launch
 
 class TheSupplierViewModel(
     private val supplierUseCase: SupplierUseCase,
-    private val createBillUseCase: CreateBillSupplierUseCases,
+    private val createBillUseCase: BillSupplierUseCases,
     private val transferUseCase: TransferUseCase
 
 ) : ViewModel() {
@@ -28,9 +28,9 @@ class TheSupplierViewModel(
     val billContact: LiveData<BillContact>
         get() = _billContact
 
-    private val _navToSupplierBillInfo = MutableLiveData<Boolean>()
-    val navToSupplierBillInfo: LiveData<Boolean>
-        get() = _navToSupplierBillInfo
+    private val _navToSupplierBill = MutableLiveData<Boolean>()
+    val navToSupplierBill: LiveData<Boolean>
+        get() = _navToSupplierBill
 
     private val _billList = MutableLiveData<List<BillContact>>()
     val billList: LiveData<List<BillContact>>
@@ -88,12 +88,12 @@ class TheSupplierViewModel(
     fun createBillSupplier(contact: Contact) {
         viewModelScope.launch {
             createBillUseCase.createBill(BillContact(), contact)
-            _navToSupplierBillInfo.value = true
+            _navToSupplierBill.value = true
         }
     }
 
     fun navToSupplierBillComplete() {
-        _navToSupplierBillInfo.value = false
+        _navToSupplierBill.value = false
     }
 
 

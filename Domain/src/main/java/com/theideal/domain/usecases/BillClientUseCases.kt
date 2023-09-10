@@ -3,6 +3,7 @@ package com.theideal.domain.usecases
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.data.model.PayBook
 import com.theideal.domain.repository.BillClientRepository
 import com.theideal.domain.repository.BillSupplierRepository
 import com.theideal.domain.repository.SupplierRepository
@@ -25,7 +26,6 @@ class BillClientUseCases(
         }
         return remainingMoney
     }
-
 
     suspend fun contactTotal(contactId: String): Double {
         return transferUseCase.calculateTransfer(contactId) - calculateBills(contactId)
@@ -121,5 +121,18 @@ class BillClientUseCases(
 
     }
 
+    suspend fun addPayBookToBill(billId: String, payBook: PayBook) {
+        billRepository.addPayBookToBill(billId, payBook)
+    }
 
+    suspend fun deletePayBookFromBill(billId: String, payBookId: String) {
+        billRepository.deletePayBookFromBill(billId, payBookId)
+    }
+
+    suspend fun getPayBooks(billId: String) = billRepository.getPayBooksFromBill(billId)
+
+
+    suspend fun updatePayBook(billId: String, payBook: PayBook) {
+        billRepository.updatePayBookOnBill(billId, payBook)
+    }
 }

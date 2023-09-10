@@ -1,10 +1,10 @@
 package com.theideal.data.remote
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Item
+import com.theideal.data.model.PayBook
 import kotlinx.coroutines.tasks.await
 
 class FirebaseBillClient {
@@ -84,4 +84,29 @@ class FirebaseBillClient {
         return items!!.toObjects(Item::class.java)
     }
 
+    suspend fun addPayBookToBill(billId: String, payBook: PayBook) {
+        val bill = billClientRef.document(billId).collection("PayBook")
+        bill.add(payBook).addOnSuccessListener {
+            bill.document(it.id).update(
+                "payBookId", it.id, "userId", userUid
+            )
+        }.await()
+    }
+
+    suspend fun updatePayBookToBillClientWithBillId(billId: String, payBook: PayBook) {
+        billClientRef.document(billId).collection("PayBook")
+            .document(payBook.payBookId).set(payBook).await()
+    }
+
+    suspend fun deletePayBookToBillClientWithBillId(billId: String, payBookId: String) {
+        billClientRef.document(billId).collection("PayBook")
+            .document(payBookId).delete().await()
+    }
+
+
+    suspend fun getPayBooksToBillClientWithBillId(billId: String): List<PayBook> {
+        val payBooks = billClientRef.document(billId).collection("PayBook")
+            .get().await()
+        return payBooks!!.toObjects(PayBook::class.java)
+    }
 }
