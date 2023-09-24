@@ -21,14 +21,18 @@ class BillClientUseCases(
         var remainingMoney = 0.0
         var amount = 0.0
         for (bill in list) {
-            remainingMoney += bill.remainingMoney!!
+            remainingMoney += bill.deptCalculate!!
             amount += bill.amount!!
         }
         return remainingMoney
     }
 
-    suspend fun contactTotal(contactId: String): Double {
+    suspend fun supplierTotal(contactId: String): Double {
         return transferUseCase.calculateTransfer(contactId) - calculateBills(contactId)
+    }
+
+    suspend fun clientTotal(contactId: String): Double {
+        return calculateBills(contactId)
     }
 
 
@@ -77,6 +81,19 @@ class BillClientUseCases(
         return billRepository.getItemsByBillId(billId)
     }
 
+    suspend fun getTotalPaidMoney(billId: String): Double {
+        val item = billRepository.getPayBooksFromBill(billId)
+        var totalPaid = 0.0
+        for (i in item) {
+            totalPaid += i.amount
+        }
+        val updatePaidMoney = mapOf(
+            "paidMoney" to totalPaid,
+        )
+        billRepository.updateBillClient(billId, updatePaidMoney)
+        return totalPaid
+    }
+
     suspend fun totalMoneyItems(billId: String): Double {
         val items = billRepository.getItemsByBillId(billId)
         var total = 0.0
@@ -121,6 +138,7 @@ class BillClientUseCases(
 
     }
 
+
     suspend fun addPayBookToBill(billId: String, payBook: PayBook) {
         billRepository.addPayBookToBill(billId, payBook)
     }
@@ -132,7 +150,7 @@ class BillClientUseCases(
     suspend fun getPayBooks(billId: String) = billRepository.getPayBooksFromBill(billId)
 
 
-    suspend fun updatePayBook(billId: String, payBook: PayBook) {
-        billRepository.updatePayBookOnBill(billId, payBook)
+    suspend fun updatePayBook(billId: String, payBookId: String, payBook: Map<String, PayBook>) {
+        billRepository.updatePayBookOnBill(billId, payBookId, payBook)
     }
 }

@@ -139,7 +139,7 @@ class TheClientViewModel(
 
     fun getTheClientTotal(contactId: String) {
         viewModelScope.launch {
-            _clientTotal.value = billClientUseCases.contactTotal(contactId)
+            _clientTotal.value = billClientUseCases.clientTotal(contactId)
         }
     }
 

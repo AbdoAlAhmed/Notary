@@ -118,4 +118,6 @@
     <string name="forget_password">Forget Password ?</string>
     <string name="daily">Daily</string>
     <string name="clients">Clients</string>
+    <string name="loading">Loading...\n</string>
+    <string name="please_wait">Please wait...</string>
 </resources>

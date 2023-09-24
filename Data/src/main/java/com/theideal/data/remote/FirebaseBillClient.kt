@@ -93,9 +93,16 @@ class FirebaseBillClient {
         }.await()
     }
 
-    suspend fun updatePayBookToBillClientWithBillId(billId: String, payBook: PayBook) {
-        billClientRef.document(billId).collection("PayBook")
-            .document(payBook.payBookId).set(payBook).await()
+    suspend fun updatePayBookToBillClientWithBillId(
+        billId: String,
+        payBookId: String,
+        keyValue: Map<String, Any>
+    ) {
+        for ((key, value) in keyValue) {
+            billClientRef.document(billId).collection("PayBook").document(payBookId).update(
+                key, value
+            ).await()
+        }
     }
 
     suspend fun deletePayBookToBillClientWithBillId(billId: String, payBookId: String) {

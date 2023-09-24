@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,6 +27,7 @@ import com.theideal.notary.databinding.DialogOtherFeesBinding
 import com.theideal.notary.databinding.DialogPayTheBillBinding
 import com.theideal.notary.databinding.DialogSellItemClientBinding
 import com.theideal.notary.databinding.FragmentClientBillBinding
+import com.theideal.notary.databinding.ProgressDialogBinding
 import com.theideal.notary.utils.SwipeCallBack
 import com.theideal.notary.utils.pdf
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,8 +53,8 @@ class TheClientBillFragment : Fragment() {
         args.billContact.let {
             clientBillViewModel.getContact(it.contactId)
             clientBillViewModel.getItemsByBillId(it.billId)
+            clientBillViewModel.setTotalToBillContact(it)
         }
-        clientBillViewModel.setTotalToBillContact(billContact)
     }
 
     override fun onCreateView(
@@ -206,38 +209,48 @@ class TheClientBillFragment : Fragment() {
     }
 
     private fun transferDialog(billContact: BillContact) {
-        val dialogAlert = AlertDialog.Builder(requireContext())
-        val dialogCreate = dialogAlert.create()
-        val view = DialogPayTheBillBinding.inflate(layoutInflater)
-        view.billContact = billContact
-        view.executePendingBindings()
-        view.lifecycleOwner = this
-        view.notifyChange()
-        dialogCreate.setView(view.root)
-        // show toast message (paid money must be less than total money) if paid money > total money
-        view.btnPayTheBill.setOnClickListener {
-            if (billContact.payMoney!! > billContact.totalMoneyCalculate
-                || billContact.paidMoney!! > billContact.totalMoneyCalculate
-                || billContact.totalPaidMoney > billContact.totalMoneyCalculate
-            ) {
-                clientBillViewModel.setSnackBar(getString(R.string.paid_money_less_than_total_money))
-            } else {
-                val billInfo = mapOf(
-                    "paidMoney" to billContact.totalPaidMoney,
-                    "discount" to billContact.discount!!,
-                    "deptCalculate" to billContact.deptCalculate,
-                    "allFees" to billContact.allFees,
-                    "status" to billContact.setStatus(),
-                    "totalMoney" to billContact.totalMoney!!
-                )
-                clientBillViewModel.updateBill(billContact.billId, keyValue = billInfo)
-                billContact.status = billContact.setStatus()
-                clientBillViewModel.setBillStatus(billContact.setStatus())
-                clientBillViewModel.updateBillContact(billContact)
-                dialogCreate.dismiss()
-            }
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        val dialog = dialogBuilder.create()
+
+        val dialogBinding = DialogPayTheBillBinding.inflate(layoutInflater)
+        dialogBinding.billContact = billContact
+        dialogBinding.payBook = payBook
+        dialogBinding.lifecycleOwner = this
+
+        dialog.setView(dialogBinding.root)
+        // Set click listener for the "Pay" button
+        dialogBinding.btnPayTheBill.setOnClickListener {
+            // Perform the necessary actions when the "Pay" button is clicked
+            clientBillViewModel.addPayBook(billContact.billId, payBook)
+            clientBillViewModel.setTotalToBillContact(billContact)
+            clientBillViewModel.getTotalPaidMoney(billId = billContact.billId)
+            calculateDialog(billContact)
+            dialog.dismiss()
         }
-        dialogCreate.show()
+
+        dialog.show()
+    }
+
+    private fun calculateDialog(billContact: BillContact) {
+        val progressDialog = AlertDialog.Builder(requireContext())
+        val progress = progressDialog.create()
+        val dialogBinding = ProgressDialogBinding.inflate(layoutInflater)
+        progress.setTitle("Loading...")
+        progress.setView(dialogBinding.root)
+
+        clientBillViewModel.updateBill(
+            billId = billContact.billId,
+            keyValue = mapOf("status" to billContact.setStatus())
+        )
+        billContact.status = billContact.setStatus()
+        clientBillViewModel.setBillStatus(billContact.setStatus())
+        progress.show()
+        val handlerThread = HandlerThread("handler")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+        handler.postDelayed({
+            progress.dismiss()
+        }, 2000)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -393,8 +406,5 @@ class TheClientBillFragment : Fragment() {
         return customView
     }
 
-    override fun onStart() {
 
-        super.onStart()
-    }
 }

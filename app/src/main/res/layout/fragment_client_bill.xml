@@ -132,9 +132,16 @@
                         bind_data="@{clientBillViewModel.items}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:itemCount="8"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="8" />
                 </ScrollView>
+
+                <ProgressBar
+                    android:id="@+id/progressbar3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
 
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
@@ -352,7 +359,7 @@
                         android:layout_margin="5dp"
                         android:background="@drawable/borader_text_view"
                         android:ems="8"
-                        android:text="@{`` + bill.totalPaidMoney}"
+                        android:text="@{`` + bill.paidMoney}"
                         android:textAlignment="center"
                         android:textSize="@dimen/tv_fragment_client_bill"
                         android:textStyle="bold" />

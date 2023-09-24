@@ -93,6 +93,14 @@ class ClientBillViewModel(
         }
     }
 
+    fun getTotalPaidMoney(billId: String): Double {
+        var totalPaidMoney = 0.0
+        viewModelScope.launch {
+            totalPaidMoney = billClientUseCases.getTotalPaidMoney(billId)
+        }
+        return totalPaidMoney
+    }
+
     fun setTotalToBillContact(billContact: BillContact) {
         viewModelScope.launch {
             if (billContact.billId.isNotEmpty()) {

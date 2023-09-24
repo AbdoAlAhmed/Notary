@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.theideal.data.model.BillContact
 import com.theideal.notary.databinding.ItemBillInfoBinding
+import com.theideal.notary.main.client.theclient.bill.ClientBillViewModel
 import com.theideal.notary.utils.SwipeAdapter
 
 class TheClientAdapterTransactions(

@@ -19,6 +19,7 @@ import com.theideal.data.model.Contact
 import com.theideal.notary.R
 import com.theideal.notary.databinding.FragmentTheClientBinding
 import com.theideal.notary.main.MainActivity
+import com.theideal.notary.main.client.theclient.bill.ClientBillViewModel
 import com.theideal.notary.utils.SwipeCallBack
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,6 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TheClientFragment : Fragment() {
     private lateinit var binding: FragmentTheClientBinding
     private val theClientViewModel by viewModel<TheClientViewModel>()
+    private val clientBillViewModel by viewModel<ClientBillViewModel>()
     private var billContact = BillContact()
     private var contact = Contact()
     private lateinit var args: TheClientFragmentArgs

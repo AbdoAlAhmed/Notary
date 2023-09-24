@@ -19,7 +19,6 @@ data class BillContact(
     var amount: Double? = 0.0,
     var theBillOtherFees: Double? = 0.0,
     var companyFees: Double? = 0.0,
-    var totalMoney: Double? = 0.0,
     var discount: Double? = 0.0,
     var createAt: Timestamp = Timestamp.now(),
     var updateAt: String,
@@ -33,24 +32,18 @@ data class BillContact(
     val totalMoneyCalculate
         get() = grossMoney!! + allFees
 
-    val totalPaidMoney
+    private val totalPaidMoney
         get() = paidMoney!! + payMoney!!
-
-    val remainingMoney
-        get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
-
 
 
     val deptCalculate
         get() = totalMoneyCalculate - (totalPaidMoney + discount!!)
 
     fun setStatus(): String {
-        return if (deptCalculate <= 0.0) {
-            "closed"
-        } else if (deptCalculate > 0.0) {
-            "deferred"
-        } else {
-            "open"
+        return when {
+            deptCalculate <= totalPaidMoney -> "closed"
+            deptCalculate > totalPaidMoney -> "deferred"
+            else -> "open"
         }
     }
 
@@ -61,7 +54,6 @@ data class BillContact(
         "",
         "",
         "",
-        0.0,
         0.0,
         0.0,
         0.0,
@@ -88,7 +80,6 @@ data class BillContact(
         0.0,
         0.0,
         0.0,
-        0.0,
         Timestamp.now(),
         ""
     )
@@ -98,14 +89,14 @@ data class BillContact(
         amount: Double?,
     ) : this(
         "", "", "", "", "", grossMoney,
-        0.0, amount, 0.0, 0.0, 0.0, 0.0, 0.0, Timestamp.now(), ""
+        0.0, amount, 0.0, 0.0, 0.0, 0.0, Timestamp.now(), ""
     )
 
     constructor(
         status: String
     ) : this(
         "", "", "", "", status, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, Timestamp.now(), ""
+        Timestamp.now(), ""
     )
 
     constructor(
@@ -123,12 +114,9 @@ data class BillContact(
         theBillOtherFees,
         0.0,
         0.0,
-        0.0,
         Timestamp.now(),
         ""
     )
-
-
 }
 
 

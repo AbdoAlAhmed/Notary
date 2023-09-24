@@ -43,8 +43,12 @@ class BillClientRepository(private val firebaseBillClient: FirebaseBillClient) {
         firebaseBillClient.addPayBookToBill(billId, payBook)
     }
 
-    suspend fun updatePayBookOnBill(billId: String, payBook: PayBook) {
-        firebaseBillClient.updatePayBookToBillClientWithBillId(billId, payBook)
+    suspend fun updatePayBookOnBill(
+        billId: String,
+        payBookId: String,
+        payBook: Map<String, PayBook>
+    ) {
+        firebaseBillClient.updatePayBookToBillClientWithBillId(billId, payBookId, payBook)
     }
 
     suspend fun deletePayBookFromBill(billId: String, payBookId: String) {
