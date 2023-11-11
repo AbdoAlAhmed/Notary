@@ -29,22 +29,28 @@ class TheSupplierBillViewModel(private val billSupplierUseCases: BillSupplierUse
     val itemsList: LiveData<List<Item>>
         get() = _itemsList
 
+    private val _snackBarMessage = MutableLiveData<String>()
+    val snackBarMessage: LiveData<String>
+        get() = _snackBarMessage
+
 
     fun setContact(contact: Contact) {
         _contact.value = contact
     }
 
-    fun returnContact(): Contact {
-        return _contact.value!!
-    }
 
     fun setBillContact(billContact: BillContact) {
         _billContact.value = billContact
     }
 
-    fun returnBillContact(): BillContact {
-        return _billContact.value!!
+    fun snackBarMessage(message: String) {
+        _snackBarMessage.value = message
     }
+
+    fun snackBarMessageComplete() {
+        _snackBarMessage.value = ""
+    }
+
 
     fun addItem(billId: String, item: Item) {
         viewModelScope.launch {

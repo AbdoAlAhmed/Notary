@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
-import com.theideal.domain.repository.ClientRepository
 import com.theideal.domain.usecases.BillClientUseCases
+import com.theideal.domain.usecases.ClientsUseCases
 import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
 class TheClientViewModel(
-    private val clientRepo: ClientRepository,
+    private val clientsUseCase: ClientsUseCases,
     private val billClientUseCases: BillClientUseCases,
     private val app: Application
 
@@ -55,7 +55,7 @@ class TheClientViewModel(
 
     fun getContact(contactId: String) {
         viewModelScope.launch {
-            _contact.value = clientRepo.getClient(contactId)
+            _contact.value = clientsUseCase.getClient(contactId)
         }
     }
 
@@ -68,17 +68,32 @@ class TheClientViewModel(
             if (!billClientUseCases.checkIfBillIsOpen(contactId)) {
                 createBill(contactId)
             } else {
-                _snackBar.value = app.getString(R.string.open_transactions_message)
+                snackBarMessage(app.getString(R.string.open_transactions_message))
 
             }
         }
     }
 
 
+    fun editContactPhone(contact: Contact, keyValue: Map<String, Any>) {
+        viewModelScope.launch {
+            if (clientsUseCase.clientPhoneExist(contact.phone)) {
+                clientsUseCase.updateClient(contact, keyValue)
+
+            }
+        }
+    }
+
+    fun editContactName(contact: Contact, keyValue: Map<String, Any>) {
+        viewModelScope.launch {
+            clientsUseCase.updateClient(contact, keyValue)
+        }
+    }
+
+
     fun createBill(contactId: String) {
         viewModelScope.launch {
-            _billContact.value =
-                billClientUseCases.createBill(contactId)
+            _billContact.value = billClientUseCases.createBill(contactId)
             _navToClientBill.value = true
 
         }
@@ -86,8 +101,7 @@ class TheClientViewModel(
 
     fun createBillWithLongClickIfThereIsBillOpened(contactId: String): Boolean {
         viewModelScope.launch {
-            _billContact.value =
-                billClientUseCases.createBill(contactId)
+            _billContact.value = billClientUseCases.createBill(contactId)
             _navToClientBill.value = true
         }
         return true
@@ -104,6 +118,9 @@ class TheClientViewModel(
         _navToClientBill.value = false
     }
 
+    fun snackBarMessage(massage: String){
+        _snackBar.value = massage
+    }
 
     fun snackBarComplete() {
         _snackBar.value = ""
@@ -133,7 +150,7 @@ class TheClientViewModel(
 
     fun deleteContact(contact: Contact) {
         viewModelScope.launch {
-            clientRepo.deleteClient(contact)
+            clientsUseCase.deleteClient(contact)
         }
     }
 

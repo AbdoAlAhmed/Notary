@@ -58,7 +58,6 @@ class TheClientBillAdapter(
         holder.itemView.setOnClickListener {
             onClick.onClick(item)
         }
-//        sortList()
     }
 
 
@@ -124,11 +123,9 @@ class TheClientBillAdapter(
         return currentList.toMutableList().isEmpty()
     }
 
-    // put bill that has item status = open at the top of the list
-    private fun sortList() {
-        val updatedList = currentList.toMutableList()
-        updatedList.sortBy { it.price }
-        submitList(updatedList)
+    fun refreshList() {
+        submitList(currentList.toMutableList())
     }
+
 
 }

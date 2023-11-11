@@ -1,14 +1,17 @@
 package com.theideal.notary.main.supplier.theSupplier
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.Contact
-import com.theideal.domain.usecases.SupplierUseCase
+import com.theideal.domain.usecases.SuppliersUseCase
 import kotlinx.coroutines.launch
 
-class CreateSupplierViewModel(private val supplierUseCase: SupplierUseCase) : ViewModel() {
+class CreateSupplierViewModel(
+    private val suppliersUseCase: SuppliersUseCase, private val app: Application
+) : ViewModel() {
 
     private val _navToTheSupplier = MutableLiveData<Boolean>()
     val navToTheSupplier: LiveData<Boolean>
@@ -19,18 +22,25 @@ class CreateSupplierViewModel(private val supplierUseCase: SupplierUseCase) : Vi
         get() = _snackBar
 
     private suspend fun supplierExists(contact: Contact) =
-        supplierUseCase.supplierExists(contact.contactId)
+        suppliersUseCase.supplierPhoneExist(contact.phone)
 
     fun createSupplier(contact: Contact) {
         viewModelScope.launch {
-            if (supplierExists(contact)) {
-                supplierUseCase.createSupplier(contact)
-                _navToTheSupplier.postValue(true)
+            if (contact.phone.isEmpty()) {
+                suppliersUseCase.createSupplier(contact)
+                _navToTheSupplier.value = true
             } else {
-                _snackBar.postValue("Supplier already exists")
+                if (supplierExists(contact)) {
+                    suppliersUseCase.createSupplier(contact)
+                    _navToTheSupplier.value = true
+                } else {
+                    _snackBar.value = app.getString(com.theideal.notary.R.string.phone_number_taken)
+                }
             }
+
         }
     }
+
     fun snackBarComplete() {
         _snackBar.value = ""
     }

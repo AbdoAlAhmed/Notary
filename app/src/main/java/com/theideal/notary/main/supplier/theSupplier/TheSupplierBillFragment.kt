@@ -3,12 +3,19 @@ package com.theideal.notary.main.supplier.theSupplier
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
+import com.theideal.notary.R
 import com.theideal.notary.databinding.DialogSellItemClientBinding
 import com.theideal.notary.databinding.FragmentTheSupplierBillBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,14 +24,24 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TheSupplierBillFragment : Fragment() {
     private lateinit var binding: FragmentTheSupplierBillBinding
     private val theSupplierBillViewModel by viewModel<TheSupplierBillViewModel>()
-    private val contact = Contact()
+    private var contact = Contact()
+    private var billContact = BillContact()
     private val item = Item()
     private lateinit var theSupplierBillArgs: TheSupplierBillFragmentArgs
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         theSupplierBillArgs = TheSupplierBillFragmentArgs.fromBundle(requireArguments())
-        theSupplierBillViewModel.getItemsListBySupplierId(theSupplierBillArgs.billContact.contactId)
+        theSupplierBillArgs.billContact.let {
+            billContact = it
+            theSupplierBillViewModel.setBillContact(it)
+        }
+        theSupplierBillArgs.contact.let {
+            contact = it
+            theSupplierBillViewModel.getItemsListBySupplierId(it.contactId)
+        }
+        setHasOptionsMenu(true)
+
     }
 
     override fun onCreateView(
@@ -33,13 +50,20 @@ class TheSupplierBillFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTheSupplierBillBinding.inflate(inflater, container, false)
-        binding.billContact = theSupplierBillArgs.billContact
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarSupplierBill)
+        binding.billContact = billContact
         binding.contact = contact
         binding.theSupplierBillViewModel = theSupplierBillViewModel
-        theSupplierBillViewModel.setContact(theSupplierBillArgs.contact)
         theSupplierBillViewModel.setBillContact(theSupplierBillArgs.billContact)
         theSupplierBillViewModel.addDialog.observe(viewLifecycleOwner) {
             addItemDialog()
+            theSupplierBillViewModel.snackBarMessage(resources.getString(R.string.add_item_from_the_bill_supplier))
+        }
+        theSupplierBillViewModel.snackBarMessage.observe(viewLifecycleOwner) {
+            if (it != ""){
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                theSupplierBillViewModel.snackBarMessageComplete()
+            }
         }
         binding.rvSupplierBill.adapter = TheSupplierBillAdapter()
         binding.lifecycleOwner = this
@@ -51,9 +75,9 @@ class TheSupplierBillFragment : Fragment() {
         val createDialog = alertDialog.create()
         val view = DialogSellItemClientBinding.inflate(layoutInflater)
         view.item = item
-        item.supplierName = theSupplierBillViewModel.returnContact().name
-        item.supplierId = theSupplierBillViewModel.returnContact().contactId
-        view.contact = theSupplierBillViewModel.returnContact()
+        view.contact = contact
+        item.supplierName = contact.name
+        item.supplierId = contact.contactId
         view.apply {
             tilSupplierList.isVisible = false
             tvSupplierName.isVisible = true
@@ -61,7 +85,7 @@ class TheSupplierBillFragment : Fragment() {
         view.lifecycleOwner = this
         view.btnSellItem.setOnClickListener {
             theSupplierBillViewModel.addItem(
-                theSupplierBillViewModel.returnBillContact().billId,
+                billContact.billId,
                 item
             )
             createDialog.dismiss()
@@ -70,4 +94,22 @@ class TheSupplierBillFragment : Fragment() {
         createDialog.show()
     }
 
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.toolbar_the_contact, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.action_delete -> {
+//            }
+//
+//            R.id.action_edit -> {
+//            }
+//
+//            R.id.action_share -> {
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 }

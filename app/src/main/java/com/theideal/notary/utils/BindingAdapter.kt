@@ -26,34 +26,32 @@ fun bindDataToRecyclerView(recyclerView: RecyclerView, data: List<Any>?) {
     adapter!!.submitList(data as List<Nothing>?)
 }
 
-
-@BindingAdapter("bind_auto_complete_text", "bind_contact")
+@BindingAdapter(
+    "bind_auto_complete_text", "bind_contact", "bind_on_item_selected", requireAll = false
+)
 fun bindAutoComplete(
-    autoCompleteText: AutoCompleteTextView,
-    list: List<Contact>?,
-    contact: Contact
+    autoCompleteText: AutoCompleteTextView, list: List<Contact>?, contact: Contact?,
+    onItemSelected: (() -> Unit)?
 ) {
     if (list != null) {
-        val adapter = ArrayAdapter(
-            autoCompleteText.context,
+        val adapter = ArrayAdapter(autoCompleteText.context,
             android.R.layout.simple_spinner_dropdown_item,
-            list.map { it.name }
-        )
+            list.map { it.name })
         autoCompleteText.setAdapter(adapter)
         autoCompleteText.setOnItemClickListener { parent, _, position, _ ->
             val chosenName = parent.getItemAtPosition(position).toString()
             val chosenContact = list.find { it.name == chosenName }
             chosenContact?.let {
-                contact.contactId = it.contactId
-                contact.name = it.name
+                contact?.contactId = it.contactId
+                contact?.name = it.name
                 autoCompleteText.setText(it.name, false)
+                onItemSelected?.invoke()
             }
         }
-        autoCompleteText.setText(contact.name, false)
+        autoCompleteText.setText("", false)
         adapter.notifyDataSetChanged()
     }
 }
-
 
 @BindingAdapter("set_double_text_to_empty")
 fun bindDoubleTextToEmpty(textView: TextView, string: String) {
@@ -61,16 +59,33 @@ fun bindDoubleTextToEmpty(textView: TextView, string: String) {
 }
 
 
-
-
 @BindingAdapter("status_text_color")
 fun TextView.setStatusTextColor(status: String) {
     when (status) {
-        "open" -> setTextColor(resources.getColor(R.color.dark_ocean_blue, null))
-        "closed" -> setTextColor(resources.getColor(R.color.black, null))
-        "deferred" -> setTextColor(resources.getColor(R.color.ride_red, null))
+        resources.getString(R.string.open) -> setTextColor(
+            resources.getColor(
+                R.color.dark_ocean_blue,
+                null
+            )
+        )
+
+        resources.getString(R.string.closed) -> setTextColor(
+            resources.getColor(
+                R.color.black,
+                null
+            )
+        )
+
+        resources.getString(R.string.deferred) -> setTextColor(
+            resources.getColor(
+                R.color.ride_red,
+                null
+            )
+        )
     }
 }
+
+
 
 @BindingAdapter("timestamp_to_date")
 fun TextView.setTimestampToDate(timestamp: com.google.firebase.Timestamp) {
@@ -85,16 +100,15 @@ fun bindEmptyCardVisibility(card: CardView, string: String) {
 
 @BindingAdapter("card_remaining_visibility_amount", "card_remaining_visibility_paid")
 fun CardView.setRemainingMoneyVisibility(amount: String, paid: String) {
-    visibility =
-        if (amount > "0.0" && paid > "0.0") View.VISIBLE else View.GONE
+    visibility = if (amount > "0.0" && paid > "0.0") View.VISIBLE else View.GONE
 }
 
 
 @BindingAdapter("set_text_color")
 fun TextView.setTextColor(status: String) {
     when (status) {
-        "DEPOSIT" -> setTextColor(resources.getColor(R.color.dark_ocean_blue, null))
-        "WITHDRAW" -> setTextColor(resources.getColor(R.color.black, null))
+        resources.getString(R.string.deposit) -> setTextColor(resources.getColor(R.color.dark_ocean_blue, null))
+        resources.getString(R.string.withdraw)-> setTextColor(resources.getColor(R.color.black, null))
     }
 }
 

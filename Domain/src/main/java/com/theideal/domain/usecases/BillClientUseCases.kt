@@ -1,5 +1,6 @@
 package com.theideal.domain.usecases
 
+import android.app.Application
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Item
@@ -12,7 +13,8 @@ class BillClientUseCases(
     private val billRepository: BillClientRepository,
     private val billSupplierRepository: BillSupplierRepository,
     private val supplierRepository: SupplierRepository,
-    private val transferUseCase: TransferUseCase
+    private val transferUseCase: TransferUseCase,
+    private val itemUseCase: ItemUseCase
 ) {
 
 
@@ -37,7 +39,7 @@ class BillClientUseCases(
 
 
     suspend fun checkIfBillIsOpen(contactId: String): Boolean {
-        val list = billRepository.checkIfBillIsOpen(contactId)
+        val list = billRepository.getBillsContact(contactId)
         var isOpen = false
         for (bill in list) {
             if (bill.status == "open") {
@@ -61,15 +63,21 @@ class BillClientUseCases(
         billRepository.updateBillClient(billId = billId, keyValue = KeyValue)
     }
 
-    suspend fun getBillsByContactId(contactId: String) =
-        billRepository.getBillsContact(contactId)
+    suspend fun getBillsByContactId(contactId: String) = billRepository.getBillsContact(contactId)
 
-    suspend fun getSuppliersNameFromId(): List<Contact> {
+
+    suspend fun getSuppliersNameFromId(): List<Pair<Contact, BillContact>> {
         return try {
-            val list = mutableListOf<Contact>()
+            val listSupplier = mutableListOf<Contact>()
+            val listOfBillContact = mutableListOf<BillContact>()
+            var list = mutableListOf<Pair<Contact, BillContact>>()
             for (i in billSupplierRepository.getSuppliersIdIFBillOpen()) {
-                list.addAll(supplierRepository.getSupplierWithId(i))
+                listOfBillContact.add(i)
+                listSupplier.addAll(supplierRepository.getSupplierWithId(i.contactId)!!)
+                list = returnCombinedData(listSupplier, listOfBillContact)
+
             }
+
             list
         } catch (e: Exception) {
             emptyList()
@@ -77,8 +85,26 @@ class BillClientUseCases(
 
     }
 
+    private fun returnCombinedData(
+        supplier: List<Contact>, bill: List<BillContact>
+    ): MutableList<Pair<Contact, BillContact>> {
+        val list = mutableListOf<Pair<Contact, BillContact>>()
+        for (i in supplier) {
+            val billContact = bill.find { it.contactId == i.contactId }
+            if (billContact != null) {
+                list.add(Pair(i, billContact))
+            }
+        }
+        return list
+
+    }
+
+    suspend fun updateBillSupplier(keyValue: Map<String, Double?>, billId: String) {
+        billSupplierRepository.updateBillSupplier(keyValue, billId)
+    }
+
     suspend fun getItemsFromBillId(billId: String): List<Item> {
-        return billRepository.getItemsByBillId(billId)
+        return itemUseCase.getItemsByBillId(billId)
     }
 
     suspend fun getTotalPaidMoney(billId: String): Double {
@@ -87,15 +113,38 @@ class BillClientUseCases(
         for (i in item) {
             totalPaid += i.amount
         }
-        val updatePaidMoney = mapOf(
-            "paidMoney" to totalPaid,
-        )
+        val updatePaidMoney = mapOf("paidMoney" to totalPaid)
         billRepository.updateBillClient(billId, updatePaidMoney)
+//
         return totalPaid
     }
 
+    suspend fun getTotalMoneyFromItem(billId: String): Double {
+        val item = itemUseCase.getItemsByBillId(billId)
+        var totalMoney = 0.0
+        for (i in item) {
+            totalMoney += i.money
+        }
+        return totalMoney
+    }
+
+    suspend fun setStatus(billId: String): String {
+        val grossMoney = getTotalMoneyFromItem(billId)
+        val totalPaidMoney = getTotalPaidMoney(billId)
+        val otherFess = billRepository.getBillByBillId(billId).theBillOtherFees
+        val totalMoney = grossMoney + otherFess!!
+        val status = when {
+            totalMoney <= totalPaidMoney -> "closed"
+            totalMoney > totalPaidMoney -> "deferred"
+            else -> "open"
+        }
+        val updateStatus = mapOf("status" to status)
+        billRepository.updateBillClient(billId, updateStatus)
+        return status
+    }
+
     suspend fun totalMoneyItems(billId: String): Double {
-        val items = billRepository.getItemsByBillId(billId)
+        val items = itemUseCase.getItemsByBillId(billId)
         var total = 0.0
         for (i in items) {
             total += i.money
@@ -104,7 +153,7 @@ class BillClientUseCases(
     }
 
     suspend fun totalAmountItems(billId: String): Double {
-        val items = billRepository.getItemsByBillId(billId)
+        val items = itemUseCase.getItemsByBillId(billId)
         var total = 0.0
         for (i in items) {
             total += i.amount
@@ -112,28 +161,17 @@ class BillClientUseCases(
         return total
     }
 
-    suspend fun updateItem(billId: String, item: Item) {
-        billRepository.updateItemToBillClientWithBillId(billId, item)
+    suspend fun updateItem(item: Item) {
+        itemUseCase.updateItemToBillClientWithBillId(item)
     }
 
-    suspend fun deleteItemFromBill(billId: String, itemId: String) {
-        billRepository.deleteItemToBillClientWithBillId(billId, itemId)
+    suspend fun deleteItemFromBill(itemId: String) {
+        itemUseCase.deleteItemToBillClientWithItemId(itemId)
     }
 
     suspend fun addItemToBillClientWithBillId(billId: String, item: Item) {
-        billRepository.addItemToBillClientWithBillId(
-            billId = billId,
-            item = item
-        )
-
-        val updateBillInfo = mapOf(
-            "amount" to totalAmountItems(billId),
-            "grossMoney" to totalMoneyItems(billId)
-        )
-
-        billRepository.updateBillClient(
-            billId = billId,
-            keyValue = updateBillInfo
+        itemUseCase.addItemToBillClientWithBillId(
+            billId = billId, item = item
         )
 
     }

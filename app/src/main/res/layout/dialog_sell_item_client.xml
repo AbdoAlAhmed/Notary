@@ -15,6 +15,9 @@
         <variable
             name="clientBillViewModel"
             type="com.theideal.notary.main.client.theclient.bill.ClientBillViewModel" />
+        <variable
+            name="billContact"
+            type="com.theideal.data.model.BillContact" />
 
 
     </data>
@@ -121,7 +124,8 @@
                 android:layout_height="match_parent"
                 android:inputType="text"
                 app:bind_auto_complete_text="@{clientBillViewModel.supperList}"
-                app:bind_contact="@{contact}" />
+                app:bind_contact="@{contact}"
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

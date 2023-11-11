@@ -31,15 +31,26 @@ class FirebaseSupplier {
         return suppliers.toObjects(Contact::class.java)
     }
 
-    suspend fun getSuppliersWithId(contactId: String): List<Contact> {
-        val suppliers = supplierRef.whereEqualTo("userId", userUid)
-            .whereEqualTo("contactId", contactId).get().await()
+    suspend fun getSuppliersWithId(contactId: String): List<Contact>? {
+        val suppliers =
+            supplierRef.whereEqualTo("userId", userUid).whereEqualTo("contactId", contactId).get()
+                .await()
         return suppliers.toObjects(Contact::class.java)
     }
 
 
-    suspend fun updateSupplier(supplier: Contact) {
-        supplierRef.document(supplier.contactId).set(supplier).await()
+    suspend fun updateSupplier(supplier: Contact, keyValue: Map<String, Any>) {
+        for ((key, value) in keyValue) {
+            supplierRef.document(supplier.contactId).update(
+                key, value
+            ).await()
+        }
+    }
+
+    suspend fun supplierPhoneExist(phone: String): Boolean {
+        val supplier =
+            supplierRef.whereEqualTo("userId", userUid).whereEqualTo("phone", phone).get().await()
+        return supplier.documents.isEmpty()
     }
 
     suspend fun deleteSupplier(supplier: Contact) {

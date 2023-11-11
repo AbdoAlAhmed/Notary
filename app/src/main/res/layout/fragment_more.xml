@@ -1,22 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="moreViewModel"
+            type="com.theideal.notary.main.more.MoreViewModel" />
+
+        <variable
+            name="user"
+            type="com.theideal.data.model.User" />
+
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.more.MoreFragment">
+        tools:context=".ui.driver.profile.ProfileDriverFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.cardview.widget.CardView
+            style="@style/CardContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
 
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/card_user_info"
+                    layout="@layout/card_user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:user="@{user}" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_more"
+                    bind_data="@{moreViewModel.moreItems}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card_user_info"
+                    tools:listitem="@layout/item_more" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

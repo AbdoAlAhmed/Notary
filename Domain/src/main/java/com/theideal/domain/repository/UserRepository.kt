@@ -17,4 +17,8 @@ class UserRepository(private val firebaseUser: FirebaseUser) {
     suspend fun updateUserInfo(vararg keyValue: String): Result<String> {
         return firebaseUser.updateUserInfo(*keyValue)
     }
+
+     fun logout() {
+        firebaseUser.logout()
+    }
 }

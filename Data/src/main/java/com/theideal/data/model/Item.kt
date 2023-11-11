@@ -7,6 +7,8 @@ data class Item(
     var itemId: String,
     var supplierId: String,
     var supplierName: String,
+    var billSupplierId: String,
+    var contactId: String,
     var userId: String,
     var status: String, // 0 = pending, 1 = paid, 2 = canceled
     var amount: Double,
@@ -26,6 +28,8 @@ data class Item(
         "",
         "",
         "",
+        "",
+        "",
         0.0,
         "",
         0.0,
@@ -34,6 +38,8 @@ data class Item(
         ""
     )
     constructor(price: Double,weight: Double,amount: Double):this(
+        "",
+        "",
         "",
         "",
         "",
@@ -51,6 +57,8 @@ data class Item(
         itemId: String,
     ) : this(
         itemId,
+        "",
+        "",
         "",
         "",
         "",

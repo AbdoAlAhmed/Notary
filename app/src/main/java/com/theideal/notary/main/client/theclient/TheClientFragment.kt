@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.notary.R
+import com.theideal.notary.databinding.DeleteDialogWithCondiationBinding
+import com.theideal.notary.databinding.DialogEditBinding
 import com.theideal.notary.databinding.FragmentTheClientBinding
 import com.theideal.notary.main.MainActivity
 import com.theideal.notary.main.client.theclient.bill.ClientBillViewModel
@@ -30,6 +32,7 @@ class TheClientFragment : Fragment() {
     private val clientBillViewModel by viewModel<ClientBillViewModel>()
     private var billContact = BillContact()
     private var contact = Contact()
+    private var emptyContact = Contact()
     private lateinit var args: TheClientFragmentArgs
     private lateinit var adapterTransactions: TheClientAdapterTransactions
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +77,7 @@ class TheClientFragment : Fragment() {
             TheClientAdapterTransactions(theClientViewModel, TheClientAdapterTransactions.OnClick {
                 findNavController().navigate(
                     TheClientFragmentDirections.actionTheClientFragmentToClientBillFragment(
-                        it
+                        it, contact
                     )
                 )
             })
@@ -90,7 +93,7 @@ class TheClientFragment : Fragment() {
             if (it) {
                 findNavController().navigate(
                     TheClientFragmentDirections.actionTheClientFragmentToClientBillFragment(
-                        billContact
+                        billContact, contact
                     )
                 )
                 theClientViewModel.navToClientBillComplete()
@@ -109,7 +112,7 @@ class TheClientFragment : Fragment() {
             if (it.status != "") {
                 findNavController().navigate(
                     TheClientFragmentDirections.actionTheClientFragmentToClientBillFragment(
-                        it
+                        it,contact
                     )
                 )
                 theClientViewModel.navToClientBillWithBillContactComplete()
@@ -132,8 +135,7 @@ class TheClientFragment : Fragment() {
         dialogCreate.setTitle(getString(R.string.delete))
         dialogCreate.setMessage(getString(R.string.confirm_delete_item))
         dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            getString(R.string.sure)
+            AlertDialog.BUTTON_POSITIVE, getString(R.string.sure)
         ) { dialog, which ->
             theClientViewModel.deleteBill(billContact)
             adapterTransactions.removeItemAt(billContact)
@@ -144,38 +146,58 @@ class TheClientFragment : Fragment() {
         dialogCreate.show()
     }
 
-    private fun dialogDeleteContact() {
-        val dialogAlert = AlertDialog.Builder(requireContext())
+    private fun dialogDeleteContact(contact2: Contact) {
+        val dialogAlert = AlertDialog.Builder(context)
         val dialogCreate = dialogAlert.create()
-        dialogCreate.setTitle(getString(R.string.delete))
-        dialogCreate.setMessage(getString(R.string.confirm_delete_contact))
-        dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            getString(R.string.sure)
-        ) { dialog, which ->
-            theClientViewModel.deleteContact(contact)
-            startActivity(
-                Intent(requireContext(), MainActivity::class.java)
-            )
-            dialog.dismiss()
+        val view = DeleteDialogWithCondiationBinding.inflate(layoutInflater)
+        view.contact = emptyContact
+        view.lifecycleOwner = this
+        dialogCreate.setView(view.root)
+        view.btnSureToDeleteContact.setOnClickListener {
+            if (emptyContact.name == contact2.name) {
+                theClientViewModel.deleteContact(contact2)
+                startActivity(
+                    Intent(requireContext(), MainActivity::class.java)
+                )
+                dialogCreate.dismiss()
+            }
+            theClientViewModel.snackBarMessage(getString(R.string.in_correct_name))
+            dialogCreate.dismiss()
         }
         dialogCreate.show()
 
     }
 
+    private fun editDialog() {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val dialog = dialogBuilder.create()
+        val view = DialogEditBinding.inflate(layoutInflater)
+        view.contact = contact
+        dialog.setView(view.root)
+        view.btnEditClient.setOnClickListener {
+            val name = mapOf("name" to contact.name)
+            val phone = mapOf("phone" to contact.phone)
+            theClientViewModel.editContactName(contact, name)
+            theClientViewModel.editContactPhone(contact, phone)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_the_contact, menu)
+        inflater.inflate(R.menu.toolbar_the_with_no_share, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_delete -> {
-                dialogDeleteContact()
+                dialogDeleteContact(contact)
             }
 
-            R.id.action_print -> {
-
+            R.id.action_edit -> {
+                editDialog()
             }
         }
         return super.onOptionsItemSelected(item)

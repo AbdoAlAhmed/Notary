@@ -19,7 +19,7 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:navGraph="@navigation/the_supplier"
             app:defaultNavHost="true"
-            android:id="@+id/createSupplierFragment"
+            android:id="@+id/hostSupplierFragment"
             />
     </LinearLayout>
 </layout>

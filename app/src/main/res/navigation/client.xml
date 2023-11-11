@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/deferredSaleFragment"
-        android:name="com.theideal.notary.main.client.Clients.ClientsFragment"
+        android:name="com.theideal.notary.main.client.allclient.ClientsFragment"
         android:label="fragment_deferred_sale"
         tools:layout="@layout/fragment_clients" >
         <action

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    	
+    <dimen name="tv_title_sig_in_margin_top">113.7500dp</dimen>
+    	
+    <dimen name="tv_title_text_size">113.7500sp</dimen>
+    	
+    <dimen name="Im_sig_in_margin_top">113.7500dp</dimen>
+    	
+    <dimen name="card_sig_in_margin_top">113.7500dp</dimen>
+    	
+    <dimen name="ccp_sig_in_width">417.0833dp</dimen>
+    	
+    <dimen name="ccp_sig_in_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="ccp_sig_in_margin_start">18.9583dp</dimen>
+    	
+    <dimen name="ccp_sig_in_text_size">60.6667sp</dimen>
+    	
+    <dimen name="tf_phone_sig_in_margin">18.9583dp</dimen>
+    	
+    <dimen name="btn_send_code_sig_in_margin">37.9167dp</dimen>
+    	
+    <dimen name="btn_sig_in_in_email_margin">37.9167dp</dimen>
+    	
+    <dimen name="tf_email_sign_in_margin">18.9583dp</dimen>
+    	
+    <dimen name="tf_password_sign_in_margin">18.9583dp</dimen>
+    	
+    <dimen name="btn_sign_in_with_email_margin">37.9167dp</dimen>
+    	
+    <dimen name="tv_title_sign_in_information_margin_top">113.7500dp</dimen>
+    	
+    <dimen name="til_sign_in_information_name_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="til_sign_in_information_phone_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="Im_sig_in_height">758.3333dp</dimen>
+    	
+    <dimen name="Im_sig_in_information_height">758.3333dp</dimen>
+    	
+    <dimen name="Im_sig_in__information_margin_top">113.7500dp</dimen>
+    	
+    <dimen name="btn_sign_in_information_margin">37.9167dp</dimen>
+    	
+    <dimen name="progressBar_sign_in_information_margin_top">-56.8750dp</dimen>
+    	
+    <dimen name="progressBar_sign_in_information_margin_bottom">-56.8750dp</dimen>
+    	
+    <dimen name="bottom_nav_client_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="bottom_nav_client_margin_start">75.8333dp</dimen>
+    	
+    <dimen name="bottom_nav_client_margin_end">75.8333dp</dimen>
+    	
+    <dimen name="bottom_nav_client_margin_bottom">18.9583dp</dimen>
+    	
+    <dimen name="card_sale_transactions_height">379.1667dp</dimen>
+    	
+    <dimen name="card_the_client_height">379.1667dp</dimen>
+    	
+    <dimen name="tv_card_text_size">75.8333sp</dimen>
+    	
+    <dimen name="tv_card_number_text_size">75.8333sp</dimen>
+    	
+    <dimen name="btn_preference_width">151.6667dp</dimen>
+    	
+    <dimen name="btn_preference_height">151.6667dp</dimen>
+    	
+    <dimen name="item_tv_total_money_padding_start">18.9583dp</dimen>
+    	
+    <dimen name="item_tv_total_count_padding_start">18.9583dp</dimen>
+    	
+    <dimen name="item_tv_name_padding_end">7.5833dp</dimen>
+    	
+    <dimen name="item_tv_date_padding_end">7.5833dp</dimen>
+    	
+    <dimen name="tv_company_information_margin_top">30.3333dp</dimen>
+    	
+    <dimen name="tv_contact_transactions_fees_margin_top">30.3333dp</dimen>
+    	
+    <dimen name="iv_company_information_margin_top">30.3333dp</dimen>
+    	
+    <dimen name="iv_contact_transactions_fees_margin_top">30.3333dp</dimen>
+    	
+    <dimen name="iv_contact_transactions_fees_height">758.3333dp</dimen>
+    	
+    <dimen name="iv_contact_transactions_fees_margin_bottom">30.3333dp</dimen>
+    	
+    <dimen name="iv_company_information_height">758.3333dp</dimen>
+    	
+    <dimen name="iv_client_transactions_fees_height">758.3333dp</dimen>
+    	
+    <dimen name="iv_company_information_margin_bottom">30.3333dp</dimen>
+    	
+    <dimen name="til_company_all_text_margin">15.1667dp</dimen>
+    	
+    <dimen name="til_contact_transactions_fees_all_text_margin">15.1667dp</dimen>
+    	
+    <dimen name="btn_create_company_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="btn_work_with_company_margin_top">37.9167dp</dimen>
+    	
+    <dimen name="btn_contact_transactions_fees_margin_top">15.1667dp</dimen>
+    	
+    <dimen name="iv_create_contact_height">758.3333dp</dimen>
+    	
+    <dimen name="tv_text_title_margin">30.3333dp</dimen>
+    	
+    <dimen name="til_create_contact_all_text_margin">15.1667dp</dimen>
+    	
+    <dimen name="btn_create_contact_margin">15.1667dp</dimen>
+    	
+    <dimen name="iv_create_contact_margin_top">30.3333dp</dimen>
+    	
+    <dimen name="iv_create_contact_margin_bottom">30.3333dp</dimen>
+    	
+    <dimen name="tv_fragment_client_bill">75.8333sp</dimen>
+    	
+    <dimen name="dialog_text_field_deposit">22.7500dp</dimen>
+    	
+    <dimen name="item_client_bill_text_size">60.6667sp</dimen>
+    	
+    <dimen name="tv_dialog_other_fee_message_margin">15.1667dp</dimen>
+    	
+    <dimen name="btn_add_other_fees">75.8333dp</dimen>
+    	
+    <dimen name="btn_fragment_the_client_margin_start_end">37.9167dp</dimen>
+    	
+    <dimen name="radio_btn_transfer_dialog">15.1667dp</dimen>
+    	
+    <dimen name="tv_text_size">68.2500sp</dimen>
+    	
+    <dimen name="tv_forget_password_margin">37.9167dp</dimen>
+    	
+    <dimen name="_25sp">94.7917sp</dimen>
+    	
+    <dimen name="_18sp">68.2500sp</dimen>
+    	
+    <dimen name="_4dp">15.1667dp</dimen>
+    	
+    <dimen name="weight_height_person_image">151.6667dp</dimen>
+</resources>

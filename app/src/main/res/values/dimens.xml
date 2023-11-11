@@ -69,5 +69,7 @@
     <dimen name="tv_forget_password_margin">10dp</dimen>
     <dimen name="_25sp">25sp</dimen>
     <dimen name="_18sp">18sp</dimen>
+    <dimen name="_4dp">4dp</dimen>
+    <dimen name="weight_height_person_image">40dp</dimen>
 
 </resources>

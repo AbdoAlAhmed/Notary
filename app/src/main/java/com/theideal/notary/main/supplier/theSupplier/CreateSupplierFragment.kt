@@ -28,13 +28,6 @@ class CreateSupplierFragment : Fragment() {
         binding.contact = contact
         binding.createSupplierViewModel = createSupplierViewModel
         binding.lifecycleOwner = this
-        val intent = requireActivity().intent.getStringExtra("fragment")
-        if (intent == "TheSupplier") {
-            findNavController().navigate(
-                CreateSupplierFragmentDirections
-                    .actionCreateSupplierFragment2ToTheSupplierFragment(contact)
-            )
-        }
         createSupplierViewModel.navToTheSupplier.observe(viewLifecycleOwner) {
             if (it) {
                 findNavController().navigate(

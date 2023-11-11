@@ -1,6 +1,5 @@
 package com.theideal.data.remote
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theideal.data.model.Contact
@@ -23,8 +22,9 @@ class FirebaseClient {
     }
 
     suspend fun getClient(contactId: String): Contact? {
-        val contactInfo = clientRef.whereEqualTo("userId", currentUserUid)
-            .whereEqualTo("contactId", contactId).get().await()
+        val contactInfo =
+            clientRef.whereEqualTo("userId", currentUserUid).whereEqualTo("contactId", contactId)
+                .get().await()
         val contacts = contactInfo.toObjects(Contact::class.java)
         return contacts.firstOrNull()
     }
@@ -36,24 +36,18 @@ class FirebaseClient {
     }
 
     suspend fun clientPhoneExists(phone: String): Boolean {
-        val contactInfo = clientRef
-            .whereEqualTo("userId", currentUserUid)
-            .whereEqualTo(
-                "phone", phone
-            ).get().await()
+        val contactInfo = clientRef.whereEqualTo("userId", currentUserUid).whereEqualTo(
+            "phone", phone
+        ).get().await()
         return contactInfo.documents.isEmpty()
     }
 
-    suspend fun updateClient(contact: Contact) {
-        clientRef.whereEqualTo("userId", currentUserUid)
-            .whereEqualTo("contactId", contact.contactId)
-            .get().addOnSuccessListener {
-                if (it.documents.isNotEmpty()) {
-                    clientRef.document(it.documents[0].id).set(contact)
-                }
-            }.addOnFailureListener {
-                it.printStackTrace()
-            }.await()
+    suspend fun updateClient(contact: Contact, keyValue: Map<String, Any>) {
+        for ((key, value) in keyValue) {
+            clientRef.document(contact.contactId).update(
+                key, value
+            ).await()
+        }
     }
 
     suspend fun deleteClient(contact: Contact) {

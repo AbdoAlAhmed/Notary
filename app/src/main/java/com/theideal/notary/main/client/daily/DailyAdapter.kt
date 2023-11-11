@@ -5,37 +5,44 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
-import com.theideal.notary.databinding.ItemContactInfoBinding
+import com.theideal.notary.databinding.ItemContactInfoDailyBinding
+import com.theideal.notary.main.client.DailyAndClientsViewModel
 import com.theideal.notary.utils.SwipeAdapter
 
 class DailyAdapter(
-    private val dailyViewModel: DailyViewModel,
+    private val dailyAndClientsViewModel: DailyAndClientsViewModel,
     private val clickListener: SaleTransactionsListener
-) :
-    ListAdapter<Contact, DailyAdapter.SaleTransactionsViewHolder>(
-        SaleTransactionsDiffCallback
-    ), SwipeAdapter {
+) : ListAdapter<Pair<Contact, BillContact>, DailyAdapter.SaleTransactionsViewHolder>(
+    SaleTransactionsDiffCallback
+), SwipeAdapter {
 
-    object SaleTransactionsDiffCallback : DiffUtil.ItemCallback<Contact>() {
-        override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-            return oldItem.contactId == newItem.contactId
+    object SaleTransactionsDiffCallback : DiffUtil.ItemCallback<Pair<Contact, BillContact>>() {
+        override fun areItemsTheSame(
+            oldItem: Pair<Contact, BillContact>,
+            newItem: Pair<Contact, BillContact>
+        ): Boolean {
+            return oldItem.first.contactId == newItem.first.contactId
         }
 
-        override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+        override fun areContentsTheSame(
+            oldItem: Pair<Contact, BillContact>,
+            newItem: Pair<Contact, BillContact>
+        ): Boolean {
             return oldItem == newItem
         }
 
+
     }
 
-    class SaleTransactionsViewHolder(private val binding: ItemContactInfoBinding) :
+    class SaleTransactionsViewHolder(private val binding: ItemContactInfoDailyBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(contact: Contact) {
-            binding.contact = contact
+        fun bind(contact: Pair<Contact, BillContact>) {
+            binding.contact = contact.first
+            binding.billContact = contact.second
             binding.executePendingBindings()
         }
-
-
     }
 
     override fun onCreateViewHolder(
@@ -43,10 +50,8 @@ class DailyAdapter(
         viewType: Int,
     ): SaleTransactionsViewHolder {
         return SaleTransactionsViewHolder(
-            ItemContactInfoBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+            ItemContactInfoDailyBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }
@@ -63,7 +68,7 @@ class DailyAdapter(
     }
 
     class SaleTransactionsListener(val clickListener: (contact: Contact) -> Unit) {
-        fun onClick(contact: Contact) = clickListener(contact)
+        fun onClick(contact: Pair<Contact, BillContact>) = clickListener(contact.first)
     }
 
 
@@ -82,11 +87,23 @@ class DailyAdapter(
 
 
     private fun deleteItem(position: Int) {
-
+        if (position in 0 until itemCount) {
+            val item = getItem(position)
+            val list = currentList.toMutableList()
+            dailyAndClientsViewModel.deleteDialogOpen(item.first)
+            submitList(list)
+        }
 
     }
 
     private fun editItem(position: Int) {
-
+        if (position in 0 until itemCount) {
+            val item = getItem(position)
+            val list = currentList.toMutableList()
+            dailyAndClientsViewModel.editDialogOpen(item.first)
+            submitList(list)
+        }
     }
+
+
 }

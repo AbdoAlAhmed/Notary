@@ -4,8 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,7 +25,6 @@ import com.theideal.notary.databinding.DialogOtherFeesBinding
 import com.theideal.notary.databinding.DialogPayTheBillBinding
 import com.theideal.notary.databinding.DialogSellItemClientBinding
 import com.theideal.notary.databinding.FragmentClientBillBinding
-import com.theideal.notary.databinding.ProgressDialogBinding
 import com.theideal.notary.utils.SwipeCallBack
 import com.theideal.notary.utils.pdf
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,8 +33,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TheClientBillFragment : Fragment() {
     private lateinit var binding: FragmentClientBillBinding
     private val clientBillViewModel by viewModel<ClientBillViewModel>()
-    private val contact = Contact()
+    private var contact = Contact()
+    private val supplierContact = Contact()
     private var billContact = BillContact()
+    private var billSupplier = BillContact()
+    private var supplierBillsContact = listOf<BillContact>()
     private val item = Item()
     private val payBook = PayBook()
     private var itemId = ""
@@ -51,9 +51,14 @@ class TheClientBillFragment : Fragment() {
         args = TheClientBillFragmentArgs.fromBundle(requireArguments())
         clientBillViewModel.getSuppliersList()
         args.billContact.let {
-            clientBillViewModel.getContact(it.contactId)
             clientBillViewModel.getItemsByBillId(it.billId)
             clientBillViewModel.setTotalToBillContact(it)
+            clientBillViewModel.updateBillContact(it)
+            clientBillViewModel.setBillStatus(it.status)
+        }
+        args.contact.let { it ->
+            contact = it
+
         }
     }
 
@@ -63,20 +68,15 @@ class TheClientBillFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentClientBillBinding.inflate(inflater)
+        binding.lifecycleOwner = this
         binding.contact = contact
         binding.clientBillViewModel = clientBillViewModel
-        clientBillViewModel.updateBillContact(args.billContact)
         clientBillViewModel.billContact.observe(viewLifecycleOwner) {
             billContact = it
-            binding.bill = billContact
+            binding.bill = it
         }
-        clientBillViewModel.setBillStatus(args.billContact.status)
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbarClientBill)
-        adapter = TheClientBillAdapter(
-            clientBillViewModel,
-            TheClientBillAdapter.OnClick {
-            }
-        )
+        adapter = TheClientBillAdapter(clientBillViewModel, TheClientBillAdapter.OnClick {})
         binding.rvClientBill.adapter = adapter
         val itemTouchCallBack = SwipeCallBack(adapter)
         val itemTouchHelper = ItemTouchHelper(itemTouchCallBack)
@@ -85,8 +85,7 @@ class TheClientBillFragment : Fragment() {
 
         // check permissions
         clientBillViewModel.checkPermission(
-            requireContext().applicationContext,
-            Manifest.permission.READ_EXTERNAL_STORAGE
+            requireContext().applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE
         )
         val permissions = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -136,11 +135,14 @@ class TheClientBillFragment : Fragment() {
                 clientBillViewModel.setSnackComplete()
             }
         }
+        clientBillViewModel.supplierBills.observe(viewLifecycleOwner) {
+            supplierBillsContact = it
+        }
 
 
-        binding.lifecycleOwner = this
-
-
+        clientBillViewModel.supplierBills.observe(viewLifecycleOwner) {
+            supplierBillsContact = it
+        }
 
         return binding.root
     }
@@ -209,49 +211,41 @@ class TheClientBillFragment : Fragment() {
     }
 
     private fun transferDialog(billContact: BillContact) {
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-        val dialog = dialogBuilder.create()
-
+        // Inflate the dialog layout
         val dialogBinding = DialogPayTheBillBinding.inflate(layoutInflater)
         dialogBinding.billContact = billContact
         dialogBinding.payBook = payBook
         dialogBinding.lifecycleOwner = this
 
-        dialog.setView(dialogBinding.root)
+        // Create the AlertDialog
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+
         // Set click listener for the "Pay" button
         dialogBinding.btnPayTheBill.setOnClickListener {
             // Perform the necessary actions when the "Pay" button is clicked
+
+            // Add payment to the bill
             clientBillViewModel.addPayBook(billContact.billId, payBook)
-            clientBillViewModel.setTotalToBillContact(billContact)
+
+            // Get the total paid money
             clientBillViewModel.getTotalPaidMoney(billId = billContact.billId)
-            calculateDialog(billContact)
+
+            // Set total to bill contact
+            clientBillViewModel.setTotalToBillContact(billContact)
+
+            clientBillViewModel.setStatus(billContact.billId)
+            billContact.status = billContact.setStatus()
+            clientBillViewModel.setBillStatus(billContact.setStatus())
             dialog.dismiss()
+
         }
 
+        // Show the dialog
         dialog.show()
     }
 
-    private fun calculateDialog(billContact: BillContact) {
-        val progressDialog = AlertDialog.Builder(requireContext())
-        val progress = progressDialog.create()
-        val dialogBinding = ProgressDialogBinding.inflate(layoutInflater)
-        progress.setTitle("Loading...")
-        progress.setView(dialogBinding.root)
-
-        clientBillViewModel.updateBill(
-            billId = billContact.billId,
-            keyValue = mapOf("status" to billContact.setStatus())
-        )
-        billContact.status = billContact.setStatus()
-        clientBillViewModel.setBillStatus(billContact.setStatus())
-        progress.show()
-        val handlerThread = HandlerThread("handler")
-        handlerThread.start()
-        val handler = Handler(handlerThread.looper)
-        handler.postDelayed({
-            progress.dismiss()
-        }, 2000)
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun addItemDialog() {
@@ -259,30 +253,33 @@ class TheClientBillFragment : Fragment() {
         val dialogCreate = dialogAlert.create()
         val view = DialogSellItemClientBinding.inflate(layoutInflater)
         view.clientBillViewModel = clientBillViewModel
-        view.contact = contact
+        view.contact = supplierContact
         view.item = item
         view.btnSellItem.setOnClickListener {
-            item.supplierId = contact.contactId
-            item.supplierName = contact.name
+            item.supplierId = supplierContact.contactId
+            item.supplierName = supplierContact.name
+            item.contactId = contact.contactId
+            item.billSupplierId = billSupplier.billId
             clientBillViewModel.addItemToBillClient(billContact.billId, item)
+            clientBillViewModel.setTotalToBillContact(billContact)
+            clientBillViewModel.getItemsByBillId(billContact.billId)
+            adapter.addItem(item)
             dialogCreate.dismiss()
             clientBillViewModel.transactionDialogComplete()
-            clientBillViewModel.setTotalToBillContact(billContact)
-            adapter.addItem(item)
         }
         dialogCreate.setView(view.root)
         dialogCreate.show()
     }
+
 
     private fun confirmDeleteDialog() {
         val alertDialog = AlertDialog.Builder(requireContext())
         val dialogCreate = alertDialog.create()
         dialogCreate.setMessage(resources.getString(R.string.confirm_delete_item))
         dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            resources.getString(R.string.sure)
+            AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.sure)
         ) { dialog, _ ->
-            clientBillViewModel.deleteItemFromBill(billContact.billId, itemId)
+            clientBillViewModel.deleteItemFromBill(itemId)
             dialog.dismiss()
             clientBillViewModel.confirmDeleteDialogComplete()
             adapter.removeItem(itemId)
@@ -308,7 +305,7 @@ class TheClientBillFragment : Fragment() {
         view.btnSellItem.setOnClickListener {
             item.supplierId = contact.contactId
             item.supplierName = contact.name
-            clientBillViewModel.updateItem(billContact.billId, item)
+            clientBillViewModel.updateItem(item)
             clientBillViewModel.setTotalToBillContact(billContact)
             adapter.updateItem(item)
             dialogCreate.dismiss()
@@ -326,8 +323,7 @@ class TheClientBillFragment : Fragment() {
         dialogCreate.setTitle(resources.getString(R.string.reopen_the_bill))
         dialogCreate.setMessage(resources.getString(R.string.reopen_the_bill_message))
         dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            resources.getString(R.string.sure)
+            AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.sure)
         ) { dialog, _ ->
             clientBillViewModel.updateBill(billContact.billId, keyValue = mapOf("status" to "open"))
             clientBillViewModel.setBillStatus("open")
@@ -342,8 +338,7 @@ class TheClientBillFragment : Fragment() {
         val dialogCreate = alertDialog.create()
         dialogCreate.setMessage(resources.getString(R.string.confirm_delete_bill))
         dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            resources.getString(R.string.sure)
+            AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.sure)
         ) { dialog, _ ->
             clientBillViewModel.deleteBill(billContact.billId)
             dialog.dismiss()
@@ -376,8 +371,6 @@ class TheClientBillFragment : Fragment() {
                 }
             }
 
-            R.id.action_print -> {
-            }
 
         }
         return super.onOptionsItemSelected(item)
@@ -400,8 +393,8 @@ class TheClientBillFragment : Fragment() {
     @SuppressLint("MissingInflatedId")
     private fun customView(): View {
         // How to make a list of views
-        val customView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.pdf_print, null, false)
+        val customView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.pdf_print, null, false)
         customView.findViewById<LinearLayout>(R.id.pdf_print_layout).addView(binding.rvClientBill)
         return customView
     }

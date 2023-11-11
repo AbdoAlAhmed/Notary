@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/delete"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Message -->
+        <TextView
+            android:id="@+id/dialogMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/are_you_sure_you_want_to_delete_this_contact" />
+
+        <TextView
+            android:id="@+id/dialogMessage2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/to_confirm_please_type_the_full_name_of_the_client_you_are_deleting" />
+
+        <!-- Your Condition TextView -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/conditionTextView"
+            style="?attr/textInputOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:hint="@string/client_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={contact.name}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSureToDeleteContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/ride_red"
+                android:text="@string/sure" /> <!-- Replace with your color -->
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

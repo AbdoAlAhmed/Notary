@@ -53,24 +53,13 @@ class TheClientAdapterTransactions(
             onClick.onClick(billContact)
         }
         holder.bind(billContact)
-        sortList()
     }
 
     class OnClick(val clickListener: (billContact: BillContact) -> Unit) {
         fun onClick(billContact: BillContact) = clickListener(billContact)
     }
 
-    private fun sortList() {
-        val sortedList = currentList.sortedWith(compareBy({ item ->
-            when (item.status) {
-                "open" -> 0
-                "deferred" -> 1
-                "closed" -> 2
-                else -> 3
-            }
-        }, { it.createAt }))
-        submitList(sortedList)
-    }
+
 
     override fun onItemDelete(position: Int) {
         deleteItem(position)

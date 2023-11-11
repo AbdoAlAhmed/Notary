@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theideal.data.model.Contact
 import com.theideal.domain.usecases.ContactUseCases
-import com.theideal.domain.usecases.SupplierUseCase
+import com.theideal.domain.usecases.SuppliersUseCase
 import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
 class SupplierViewModel(
     private val contactUseCases: ContactUseCases,
-    private val supplierUseCase: SupplierUseCase,
+    private val suppliersUseCase: SuppliersUseCase,
     private val app: Application
 ) : ViewModel() {
 
@@ -32,6 +32,10 @@ class SupplierViewModel(
     private val _suppliers = MutableLiveData<List<Contact>>()
     val suppliers: LiveData<List<Contact>>
         get() = _suppliers
+
+    private val _moveToTheClientFromSearch = MutableLiveData<Contact>()
+    val moveToTheClientFromSearch: LiveData<Contact>
+        get() = _moveToTheClientFromSearch
 
     init {
         getSuppliersList()
@@ -68,11 +72,19 @@ class SupplierViewModel(
     fun getSuppliersList() {
         viewModelScope.launch {
             try {
-                _suppliers.postValue(supplierUseCase.getSuppliers())
+                _suppliers.value = suppliersUseCase.getSuppliers()
             } catch (e: Exception) {
                 _snackBar.value = e.message
             }
         }
+    }
+
+    fun moveToTheSupplierFromSearch(contact: Contact){
+        _moveToTheClientFromSearch.value = contact
+    }
+
+    fun moveToTheClientFromSearchDailyCompleted() {
+        _moveToTheClientFromSearch.value!!.contactId = ""
     }
 
 }

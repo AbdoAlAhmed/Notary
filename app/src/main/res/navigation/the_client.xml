@@ -38,5 +38,8 @@
         <argument
             android:name="billContact"
             app:argType="com.theideal.data.model.BillContact" />
+        <argument
+            android:name="contact"
+            app:argType="com.theideal.data.model.Contact" />
     </fragment>
 </navigation>

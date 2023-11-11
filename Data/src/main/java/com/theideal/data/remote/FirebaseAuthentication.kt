@@ -69,4 +69,8 @@ class FirebaseAuthentication() {
     fun signOut() {
         mAuth.signOut()
     }
+
+    suspend fun forgotPassword(email: String) {
+        mAuth.sendPasswordResetEmail(email)
+    }
 }

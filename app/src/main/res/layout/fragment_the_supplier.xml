@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             app:menu="@menu/toolbar_the_contact"
-            app:title="@{theSupplierViewModel.contact.name}" />
+            app:title="@{contact.name}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_total_the_supplier"
@@ -68,7 +68,7 @@
                             android:id="@+id/tv_card_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_0"
+                            android:text="@{`` + theSupplierViewModel.totalMoney}"
                             android:textSize="@dimen/tv_card_number_text_size" />
 
                     </LinearLayout>
@@ -169,7 +169,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/btn_fragment_the_client_margin_start_end"
-                android:onClick="@{() -> theSupplierViewModel.createBillSupplier(theSupplierViewModel.contact)}"
+                android:onClick="@{() -> theSupplierViewModel.checkBillOpen(contact.contactId)}"
+                android:onLongClick="@{() -> theSupplierViewModel.createBillWithLongClickIfThereIsBillOpened(contact.contactId)}"
                 android:text="@string/transactions" />
         </LinearLayout>
 

@@ -23,7 +23,9 @@
         tools:layout="@layout/fragment_the_supplier">
         <argument
             android:name="contact"
-            app:argType="com.theideal.data.model.Contact" />
+            app:argType="com.theideal.data.model.Contact"
+            app:nullable="true"
+            android:defaultValue="@null" />
         <action
             android:id="@+id/action_theSupplierFragment_to_theSupplierBillFragment"
             app:destination="@id/theSupplierBillFragment" />

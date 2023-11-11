@@ -104,7 +104,7 @@ class TheSupplierAdapterTransfer(
         if (position in 0 until itemCount) {
             val item = getItem(position)
             val list = currentList.toMutableList()
-            theSupplierViewModel.deleteDialog(item)
+            theSupplierViewModel.deleteDialogTransfer(item)
             submitList(list)
         }
     }

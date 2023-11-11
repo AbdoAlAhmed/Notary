@@ -3,8 +3,12 @@ package com.theideal.notary.main.supplier.theSupplier
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,6 +17,8 @@ import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Transfer
 import com.theideal.notary.R
+import com.theideal.notary.databinding.DeleteDialogWithCondiationBinding
+import com.theideal.notary.databinding.DialogEditBinding
 import com.theideal.notary.databinding.DialogTransferTheClientBinding
 import com.theideal.notary.databinding.FragmentTheSupplierBinding
 import com.theideal.notary.utils.SwipeCallBack
@@ -20,17 +26,31 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TheSupplierFragment : Fragment() {
     private val theSupplierViewModel by viewModel<TheSupplierViewModel>()
+    private val supplierAndTheSupplierViewModel by viewModel<SupplierAndTheSupplierViewModel>()
     private lateinit var binding: FragmentTheSupplierBinding
     private lateinit var args: TheSupplierFragmentArgs
     private var billContact = BillContact()
     private var contact = Contact()
     private var transfer = Transfer()
     private lateinit var theSupplierAdapterTransfer: TheSupplierAdapterTransfer
+    private lateinit var theSupplierAdapter: TheSupplierAdapter
+    private var emptyContact = Contact()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         args = TheSupplierFragmentArgs.fromBundle(requireArguments())
-        theSupplierViewModel.getTransfersWithContactId(args.contact.contactId)
+        val intent = requireActivity().intent.getStringExtra("contactId")
+        intent?.let {
+            theSupplierViewModel.getSupplier(it)
+            theSupplierViewModel.getTotalMoney(it)
+            contact.contactId = it
+        }
+        args.contact?.let {
+            theSupplierViewModel.setSupplier(it)
+            theSupplierViewModel.getTotalMoney(it.contactId)
+            contact = it
+        }
     }
 
     override fun onCreateView(
@@ -39,6 +59,7 @@ class TheSupplierFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTheSupplierBinding.inflate(inflater, container, false)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbarTheSupplier)
         binding.theSupplierViewModel = theSupplierViewModel
         theSupplierViewModel.billContact.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -53,42 +74,37 @@ class TheSupplierFragment : Fragment() {
             }
         }
         binding.lifecycleOwner = this
-        binding.rvBillsTheSupplier.adapter = BillsSupplierAdapter(BillsSupplierAdapter.OnClick {
-            findNavController().navigate(
-                TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillFragment(
-                    it,theSupplierViewModel.returnContact()
+        theSupplierAdapter =
+            TheSupplierAdapter(theSupplierViewModel, TheSupplierAdapter.OnClick {
+                findNavController().navigate(
+                    TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillFragment(
+                        it, contact
+                    )
                 )
-            )
-        })
+            })
+        binding.rvBillsTheSupplier.adapter = theSupplierAdapter
+        val swipeCallBackBill = SwipeCallBack(theSupplierAdapter)
+        val itemTouchHelperBill = ItemTouchHelper(swipeCallBackBill)
+        itemTouchHelperBill.attachToRecyclerView(binding.rvBillsTheSupplier)
         theSupplierAdapterTransfer =
             TheSupplierAdapterTransfer(theSupplierViewModel, TheSupplierAdapterTransfer.OnClick {
-
+                dialogTransferEdit(it)
             })
         binding.rvTheClientTransfer.adapter = theSupplierAdapterTransfer
         val swipeCallBack = SwipeCallBack(theSupplierAdapterTransfer)
         val itemTouchHelper = ItemTouchHelper(swipeCallBack)
         itemTouchHelper.attachToRecyclerView(binding.rvTheClientTransfer)
-        val intent = requireActivity().intent.getStringExtra("contactId")
-        if (intent != null) {
-            theSupplierViewModel.getSupplier(intent)
-            theSupplierViewModel.getBillBySupplierId(intent)
-            theSupplierViewModel.getTransfersWithContactId(intent)
-        } else {
-            theSupplierViewModel.setSupplier(args.contact)
-            theSupplierViewModel.getBillBySupplierId(args.contact.contactId)
-        }
 
-        theSupplierViewModel.navToSupplierBill.observe(viewLifecycleOwner) {
-            if (it) {
+        theSupplierViewModel.navToTheBillSupplier.observe(viewLifecycleOwner) {
+            if (it.status != "") {
                 findNavController().navigate(
                     TheSupplierFragmentDirections.actionTheSupplierFragmentToTheSupplierBillFragment(
-                        billContact, theSupplierViewModel.returnContact()
+                        billContact, contact
                     )
                 )
-                theSupplierViewModel.navToSupplierBillComplete()
+                theSupplierViewModel.navToTheSupplierBillComplete()
             }
         }
-
         theSupplierViewModel.startTransferDialog.observe(viewLifecycleOwner) {
             if (it) {
                 dialogTransfer()
@@ -113,12 +129,75 @@ class TheSupplierFragment : Fragment() {
                 confirmDeleteItemTransfer(it)
             }
         }
+        theSupplierViewModel.billContact.observe(viewLifecycleOwner) {
+            if (it.billId != "") {
+                billContact = it
+            }
+        }
 
-
+        theSupplierViewModel.dialogDeleteBill.observe(viewLifecycleOwner) {
+            if (it.status != "") {
+                confirmDeleteBill(it)
+            }
+        }
 
 
         return binding.root
     }
+
+    private fun confirmDeleteBill(billContact: BillContact?) {
+        val dialogAlert = AlertDialog.Builder(requireContext())
+        val dialogCreate = dialogAlert.create()
+        dialogCreate.setTitle(getString(R.string.delete))
+        dialogCreate.setMessage(getString(R.string.confirm_delete_item))
+        dialogCreate.setButton(
+            AlertDialog.BUTTON_POSITIVE, getString(R.string.sure)
+        ) { dialog, which ->
+            theSupplierViewModel.deleteBill(billContact!!)
+            theSupplierAdapter.removeItem(billContact.billId)
+            theSupplierViewModel.deleteDialogTransferComplete()
+            dialog.dismiss()
+        }
+        dialogCreate.show()
+    }
+
+
+    private fun editContactDialog(contact: Contact) {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val dialog = dialogBuilder.create()
+        val view = DialogEditBinding.inflate(layoutInflater)
+        view.contact = contact
+        dialog.setView(view.root)
+        view.btnEditClient.setOnClickListener {
+            val name = mapOf("name" to contact.name)
+            val phone = mapOf("phone" to contact.phone)
+            supplierAndTheSupplierViewModel.updateContactName(contact, name)
+            supplierAndTheSupplierViewModel.updateContactPhone(contact, phone)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun deleteContactDialog(contact2: Contact) {
+        val dialogAlert = AlertDialog.Builder(context)
+        val dialogCreate = dialogAlert.create()
+        val view = DeleteDialogWithCondiationBinding.inflate(layoutInflater)
+        view.contact = emptyContact
+        view.lifecycleOwner = this
+        dialogCreate.setView(view.root)
+        view.btnSureToDeleteContact.setOnClickListener {
+            if (emptyContact.name == contact2.name) {
+                supplierAndTheSupplierViewModel.deleteSupplier(contact2)
+                supplierAndTheSupplierViewModel.startSnackBar(getString(R.string.supplier_deleted))
+                dialogCreate.dismiss()
+            } else {
+                dialogCreate.dismiss()
+                supplierAndTheSupplierViewModel.startSnackBar(getString(R.string.contact_didnt_deleted))
+            }
+        }
+        dialogCreate.show()
+    }
+
 
     private fun dialogTransfer() {
         val dialogAlert = AlertDialog.Builder(requireContext())
@@ -127,11 +206,11 @@ class TheSupplierFragment : Fragment() {
         view.radioGroupTransfer.setOnCheckedChangeListener { radioGroup, i ->
             when (i) {
                 view.radioBtnDeposit.id -> {
-                    theSupplierViewModel.setTypeOfFinancialTransfer("DEPOSIT")
+                    theSupplierViewModel.setTypeOfFinancialTransfer(resources.getString(R.string.deposit))
                 }
 
                 view.radioBtnWithdraw.id -> {
-                    theSupplierViewModel.setTypeOfFinancialTransfer("WITHDRAW")
+                    theSupplierViewModel.setTypeOfFinancialTransfer(resources.getString(R.string.withdraw))
                 }
             }
         }
@@ -142,6 +221,7 @@ class TheSupplierFragment : Fragment() {
             transfer.contactId = contact.contactId
             theSupplierViewModel.addTransfer(transfer = transfer)
             theSupplierAdapterTransfer.addItem(transfer)
+            theSupplierViewModel.getTotalMoney(contact.contactId)
             dialogCreate.dismiss()
             theSupplierViewModel.startTransferDialogComplete()
         }
@@ -159,11 +239,11 @@ class TheSupplierFragment : Fragment() {
         view.radioGroupTransfer.setOnCheckedChangeListener { radioGroup, i ->
             when (i) {
                 view.radioBtnDeposit.id -> {
-                    theSupplierViewModel.setTypeOfFinancialTransfer("DEPOSIT")
+                    theSupplierViewModel.setTypeOfFinancialTransfer(resources.getString(R.string.deposit))
                 }
 
                 view.radioBtnWithdraw.id -> {
-                    theSupplierViewModel.setTypeOfFinancialTransfer("WITHDRAW")
+                    theSupplierViewModel.setTypeOfFinancialTransfer(resources.getString(R.string.withdraw))
                 }
             }
         }
@@ -189,16 +269,38 @@ class TheSupplierFragment : Fragment() {
         dialogCreate.setTitle(getString(R.string.delete))
         dialogCreate.setMessage(getString(R.string.confirm_delete_item))
         dialogCreate.setButton(
-            AlertDialog.BUTTON_POSITIVE,
-            getString(R.string.sure)
+            AlertDialog.BUTTON_POSITIVE, getString(R.string.sure)
         ) { dialog, which ->
             theSupplierViewModel.deleteTransfer(transfer)
             theSupplierAdapterTransfer.removeItemAt(transfer)
             dialog.dismiss()
         }
-        theSupplierViewModel.deleteDialogComplete()
+        theSupplierViewModel.deleteDialogTransferComplete()
         dialogCreate.show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.toolbar_the_with_no_share, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_edit -> {
+                editContactDialog(contact)
+            }
+
+            R.id.action_delete -> {
+                deleteContactDialog(contact)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
+    override fun onStart() {
+        theSupplierViewModel.getBillBySupplierId(contact.contactId)
+        theSupplierViewModel.getTransfersWithContactId(contact.contactId)
+        super.onStart()
+    }
 }

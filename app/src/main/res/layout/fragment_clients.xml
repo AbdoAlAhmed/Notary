@@ -4,13 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="clientsViewModel"
+            type="com.theideal.notary.main.client.allclient.ClientsFragmentViewModel" />
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.client.Clients.ClientsFragment">
+        tools:context=".main.client.allclient.ClientsFragment">
         <androidx.cardview.widget.CardView
             android:id="@+id/card_deferred_sale"
             style="@style/CardContainer"
@@ -48,7 +53,7 @@
                             android:id="@+id/tv_card_number"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_0"
+                            android:text="@{`` + clientsViewModel.totalDept}"
                             android:textSize="@dimen/tv_card_number_text_size" />
 
                     </LinearLayout>
@@ -63,22 +68,23 @@
             android:layout_below="@+id/card_deferred_sale"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btn_preference"
-                android:layout_width="@dimen/btn_preference_width"
-                android:layout_height="@dimen/btn_preference_height"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_preference" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputOutlinedStyle"
+                style="?attr/textInputOutlinedExposedDropdownMenuStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
+                    android:id="@+id/tv_search_clients"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_4dp"
+                    app:bind_auto_complete_text="@{clientsViewModel.clients}"
+                    app:bind_contact="@{contact}"
+                    app:bind_on_item_selected="@{() -> clientsViewModel.moveToTheClientFromSearch(contact)}"
+
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
         <androidx.cardview.widget.CardView
@@ -90,12 +96,15 @@
             >
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_deferred_sale"
+                android:id="@+id/rv_clients"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                bind_data="@{clientsViewModel.clients}"
                 tools:itemCount="20"
-                tools:listitem="@layout/item_contact_info" />
+                tools:listitem="@layout/item_contact_info"
+
+                />
         </androidx.cardview.widget.CardView>
 
     </RelativeLayout>

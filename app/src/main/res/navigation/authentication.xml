@@ -52,5 +52,9 @@
         android:id="@+id/forgetPasswordFragment"
         android:name="com.theideal.notary.auth.ForgetPasswordFragment"
         android:label="fragment_forget_password"
-        tools:layout="@layout/fragment_forget_password" />
+        tools:layout="@layout/fragment_forget_password" >
+        <action
+            android:id="@+id/action_forgetPasswordFragment_to_signInMailFragment"
+            app:destination="@id/signInMailFragment" />
+    </fragment>
 </navigation>

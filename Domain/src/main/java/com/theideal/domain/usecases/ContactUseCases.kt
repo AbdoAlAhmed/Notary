@@ -33,4 +33,8 @@ class ContactUseCases(
     suspend fun checkTheNumberToCreateContact(phone: String): Boolean {
         return clientRepo.clientPhoneExists(phone)
     }
+
+     fun logout() {
+        userRepo.logout()
+    }
 }

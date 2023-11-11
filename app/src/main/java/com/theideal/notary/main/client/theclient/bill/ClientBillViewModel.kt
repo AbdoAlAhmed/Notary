@@ -46,9 +46,13 @@ class ClientBillViewModel(
         get() = _confirmDeleteBillDialog
 
 
-    private val _suppliersList = MutableLiveData<List<Contact>>()
-    val supperList: LiveData<List<Contact>>
+    private val _suppliersList = MutableLiveData<List<Contact>?>()
+    val supperList: LiveData<List<Contact>?>
         get() = _suppliersList
+
+    private val _supplierBills = MutableLiveData<List<BillContact>>()
+    val supplierBills: LiveData<List<BillContact>>
+        get() = _supplierBills
 
     private val _contact = MutableLiveData<Contact>()
     val contact: LiveData<Contact>
@@ -87,11 +91,12 @@ class ClientBillViewModel(
 
     fun getSuppliersList() {
         viewModelScope.launch {
-            _suppliersList.postValue(
-                billClientUseCases.getSuppliersNameFromId()
-            )
+            val list = billClientUseCases.getSuppliersNameFromId()
+            _suppliersList.value = list.map { it.first }
+            _supplierBills.value = list.map { it.second }
         }
     }
+
 
     fun getTotalPaidMoney(billId: String): Double {
         var totalPaidMoney = 0.0
@@ -101,11 +106,19 @@ class ClientBillViewModel(
         return totalPaidMoney
     }
 
+    fun setStatus(billId: String) {
+        viewModelScope.launch {
+            billClientUseCases.setStatus(billId)
+        }
+    }
+
     fun setTotalToBillContact(billContact: BillContact) {
         viewModelScope.launch {
             if (billContact.billId.isNotEmpty()) {
                 val grossMoney = billClientUseCases.totalMoneyItems(billContact.billId)
                 val amount = billClientUseCases.totalAmountItems(billContact.billId)
+                val paidMoney = billClientUseCases.getTotalPaidMoney(billId = billContact.billId)
+                billContact.paidMoney = paidMoney
                 billContact.grossMoney = grossMoney
                 billContact.amount = amount
                 _billContact.value = billContact
@@ -125,6 +138,7 @@ class ClientBillViewModel(
         }
     }
 
+
     fun getItemsByBillId(billId: String) {
         viewModelScope.launch {
             try {
@@ -137,9 +151,9 @@ class ClientBillViewModel(
         }
     }
 
-    fun updateItem(billId: String, item: Item) {
+    fun updateItem(item: Item) {
         viewModelScope.launch {
-            billClientUseCases.updateItem(billId, item)
+            billClientUseCases.updateItem(item)
         }
     }
 
@@ -149,9 +163,9 @@ class ClientBillViewModel(
         }
     }
 
-    fun deleteItemFromBill(billId: String, itemId: String) {
+    fun deleteItemFromBill(itemId: String) {
         viewModelScope.launch {
-            billClientUseCases.deleteItemFromBill(billId, itemId)
+            billClientUseCases.deleteItemFromBill(itemId)
         }
     }
 

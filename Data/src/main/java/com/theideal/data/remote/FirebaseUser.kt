@@ -55,4 +55,7 @@ class FirebaseUser {
         }
     }
 
+     fun logout() {
+        FirebaseAuth.getInstance().signOut()
+    }
 }

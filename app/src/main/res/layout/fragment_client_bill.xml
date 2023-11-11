@@ -22,7 +22,6 @@
         android:id="@+id/rl_client_bill"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".main.client.theclient.bill.TheClientBillFragment">
 
         <androidx.appcompat.widget.Toolbar
@@ -34,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/toolbar_the_contact"
-            app:title="@{clientBillViewModel.contact.name}" />
+            app:title="@{contact.name}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view_client_bill_example"

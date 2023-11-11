@@ -131,13 +131,13 @@
             android:onClick="@{() -> companyViewModel.createCompany(company)}"
             android:text="@string/btn_create_company" />
 
-        <Button
-            android:id="@+id/btn_work_with_company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/btn_work_with_company_margin_top"
-            android:onClick="@{() -> companyViewModel.workWithCompany()}"
-            android:text="@string/work_with_company" />
+<!--        <Button-->
+<!--            android:id="@+id/btn_work_with_company"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="@dimen/btn_work_with_company_margin_top"-->
+<!--            android:onClick="@{() -> companyViewModel.workWithCompany()}"-->
+<!--            android:text="@string/work_with_company" />-->
     </LinearLayout>
 </layout>

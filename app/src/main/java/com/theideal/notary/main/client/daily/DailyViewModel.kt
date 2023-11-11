@@ -1,12 +1,13 @@
 package com.theideal.notary.main.client.daily
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
-import com.theideal.domain.repository.ClientRepository
 import com.theideal.domain.usecases.ClientsUseCases
 import com.theideal.domain.usecases.ContactUseCases
 import com.theideal.notary.R
@@ -15,7 +16,6 @@ import kotlinx.coroutines.launch
 class DailyViewModel(
     private val useCase: ContactUseCases,
     private val app: Application,
-    private val clientRepo: ClientRepository,
     private val clientUseCases: ClientsUseCases
 ) : ViewModel() {
 
@@ -30,15 +30,27 @@ class DailyViewModel(
     val snackBar: LiveData<String>
         get() = _snackBar
 
-    private val _clients = MutableLiveData<List<Contact>?>()
-    val clients: LiveData<List<Contact>?>
-        get() = _clients
+    private val _clientsToday = MutableLiveData<List<Pair<Contact,BillContact>>?>()
+    val clientsToday: LiveData<List<Pair<Contact,BillContact>>?>
+        get() = _clientsToday
+
+    private val _allClient = MutableLiveData<List<Contact>?>()
+    val allClient: LiveData<List<Contact>?>
+        get() = _allClient
+
+    private val _moveToTheClientFromSearch = MutableLiveData<Contact>()
+    val moveToTheClientFromSearch: LiveData<Contact>
+        get() = _moveToTheClientFromSearch
+
+    private val _totalPaidMoney = MutableLiveData<Double>()
+    val totalPaidMoney: LiveData<Double>
+        get() = _totalPaidMoney
 
 
 
 
     init {
-
+        getTotalMoney()
     }
 
     fun checkUserInfo() {
@@ -49,8 +61,6 @@ class DailyViewModel(
                     "NoCompany" -> {
                         _startCompanyActivity.value = true
                         _snackBar.value = app.getString(R.string.create_company_error)
-                        // _startCompanyActivity.value = false it's not working
-
                     }
 
                     "NoUser" -> {
@@ -71,32 +81,48 @@ class DailyViewModel(
         }
     }
 
+    fun getTotalMoney() {
+        viewModelScope.launch {
+            _totalPaidMoney.value = clientUseCases.getAllPayBookToday()
+        }
+    }
 
-    fun getAllClients() {
+    fun getAllClientsToday() {
         viewModelScope.launch {
             try {
-                _clients.value = clientRepo.getClientByUserId()
+                Log.d("getAllClientsToday", "getAllClientsToday: ${clientUseCases.getClientsToday()}")
+                _clientsToday.value = clientUseCases.getClientsToday()
+                _allClient.value = clientUseCases.getClientsByUserId()
 
             } catch (e: Exception) {
-                _snackBar.value = app.getString(R.string.error_getting_the_data)
+                _snackBar.value = e.message
+
+
             }
         }
+
+    }
+
+
+    fun moveToTheClientFromSearchDaily(contact: Contact) {
+        _moveToTheClientFromSearch.value = contact
+    }
+
+    fun moveToTheClientFromSearchDailyCompleted() {
+        _moveToTheClientFromSearch.value!!.contactId = ""
     }
 
     fun createClientStarting() {
         _createClient.value = false
     }
 
-    fun snackBarShown() {
+    fun snackBarComplete() {
         _snackBar.value = ""
     }
 
-    fun startCompanyActivityComplete() {
-        _startCompanyActivity.value = false
+    fun snackBar(message: String) {
+        _snackBar.value = message
     }
 
-    private fun startCompanyActivity() {
-        _startCompanyActivity.value = true
-    }
 
 }

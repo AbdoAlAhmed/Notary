@@ -35,4 +35,8 @@ class AuthenticationRepository(private val firebaseAuthentication: FirebaseAuthe
     fun signOut() {
         firebaseAuthentication.signOut()
     }
+
+    suspend fun forgetPassword(email: String) {
+        firebaseAuthentication.forgotPassword(email)
+    }
 }

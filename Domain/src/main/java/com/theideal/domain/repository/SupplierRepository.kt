@@ -14,15 +14,12 @@ class SupplierRepository(private val db: FirebaseSupplier) {
 
     suspend fun getSupplierWithId(supplierId: String) = db.getSuppliersWithId(supplierId)
 
-
     suspend fun supplierExists(supplierId: String) = db.supplierExists(supplierId)
 
+    suspend fun updateSupplier(supplier: Contact, keyValue: Map<String, Any>) =
+        db.updateSupplier(supplier, keyValue)
 
-
-
-    suspend fun updateSupplier(supplier: Contact) {
-        db.updateSupplier(supplier)
-    }
+    suspend fun supplierPhoneExist(phone: String) = db.supplierPhoneExist(phone)
 
     suspend fun deleteSupplier(supplier: Contact) {
         db.deleteSupplier(supplier)

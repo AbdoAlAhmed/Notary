@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.client.ClientFragment">
+        tools:context=".main.client.ClientFragmentHost">
 
         <LinearLayout
             android:id="@+id/linear_layout_client"

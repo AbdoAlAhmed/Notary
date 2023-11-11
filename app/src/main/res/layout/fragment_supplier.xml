@@ -8,6 +8,9 @@
         <variable
             name="supplierViewModel"
             type="com.theideal.notary.main.supplier.SupplierViewModel" />
+        <variable
+            name="contact"
+            type="com.theideal.data.model.Contact" />
 
     </data>
 
@@ -23,22 +26,20 @@
             android:layout_alignParentTop="true"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/btn_preference"
-                android:layout_width="@dimen/btn_preference_width"
-                android:layout_height="@dimen/btn_preference_height"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_preference" />
-
             <com.google.android.material.textfield.TextInputLayout
-                style="?attr/textInputOutlinedStyle"
+                style="?attr/textInputOutlinedExposedDropdownMenuStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
+                    android:id="@+id/actv_search"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:bind_contact="@{contact}"
+                    app:bind_auto_complete_text="@{supplierViewModel.suppliers}"
+                    app:bind_on_item_selected="@{() -> supplierViewModel.moveToTheSupplierFromSearch(contact)}"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -119,8 +120,6 @@
             android:layout_centerHorizontal="true"
             android:onClick="@{() -> supplierViewModel.checkInfoToAddSupplier()}"
             android:text="@string/add_supplier"
-            android:textColor="@color/black"
-
             />
     </RelativeLayout>
 </layout>

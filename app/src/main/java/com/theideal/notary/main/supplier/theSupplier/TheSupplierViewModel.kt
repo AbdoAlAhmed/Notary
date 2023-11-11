@@ -1,5 +1,6 @@
 package com.theideal.notary.main.supplier.theSupplier
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,14 +9,16 @@ import com.theideal.data.model.BillContact
 import com.theideal.data.model.Contact
 import com.theideal.data.model.Transfer
 import com.theideal.domain.usecases.BillSupplierUseCases
-import com.theideal.domain.usecases.SupplierUseCase
+import com.theideal.domain.usecases.SuppliersUseCase
 import com.theideal.domain.usecases.TransferUseCase
+import com.theideal.notary.R
 import kotlinx.coroutines.launch
 
 class TheSupplierViewModel(
-    private val supplierUseCase: SupplierUseCase,
-    private val createBillUseCase: BillSupplierUseCases,
-    private val transferUseCase: TransferUseCase
+    private val suppliersUseCase: SuppliersUseCase,
+    private val billSupplierUseCase: BillSupplierUseCases,
+    private val transferUseCase: TransferUseCase,
+    private val app: Application
 
 ) : ViewModel() {
 
@@ -28,9 +31,6 @@ class TheSupplierViewModel(
     val billContact: LiveData<BillContact>
         get() = _billContact
 
-    private val _navToSupplierBill = MutableLiveData<Boolean>()
-    val navToSupplierBill: LiveData<Boolean>
-        get() = _navToSupplierBill
 
     private val _billList = MutableLiveData<List<BillContact>>()
     val billList: LiveData<List<BillContact>>
@@ -60,45 +60,105 @@ class TheSupplierViewModel(
     val startTransferDialog: LiveData<Boolean>
         get() = _startTransferDialog
 
+    private val _navToTheBillSupplier = MutableLiveData<BillContact>()
+    val navToTheBillSupplier: LiveData<BillContact>
+        get() = _navToTheBillSupplier
+
+    private val _dialogDeleteBill = MutableLiveData<BillContact>()
+    val dialogDeleteBill: LiveData<BillContact>
+        get() = _dialogDeleteBill
+
+    private val _totalMoney = MutableLiveData<Double>()
+    val totalMoney: LiveData<Double>
+        get() = _totalMoney
+
+
+
+    fun getTotalMoney(contactId: String)  {
+
+        viewModelScope.launch {
+            val transferTotal = transferUseCase.calculateTransfer(contactId)
+            val itemTotal = billSupplierUseCase.getTotalMoney(contactId)
+           _totalMoney.value = transferTotal + itemTotal
+        }
+
+    }
+
     fun getBillBySupplierId(contactId: String) {
         viewModelScope.launch {
-            _billList.value = createBillUseCase.getBills(contactId)
+            _billList.value = billSupplierUseCase.getBills(contactId)
         }
     }
 
     fun getSupplier(contactId: String) {
         viewModelScope.launch {
-            try {
-                _contact.value = supplierUseCase.getSupplierWithId(contactId).firstOrNull()
-            } catch (e: Exception) {
-                _contact.value = Contact()
-            }
+            _contact.value = suppliersUseCase.getSupplierWithId(contactId)!!.first()
         }
     }
 
-    fun returnContact(): Contact {
-        return _contact.value!!
-    }
 
     fun setSupplier(contact: Contact) {
         _contact.value = contact
     }
 
-    // TODO: 2021-08-17  make it like the client
-    fun createBillSupplier(contact: Contact) {
+
+    fun checkBillOpen(contactId: String) {
         viewModelScope.launch {
-            createBillUseCase.createBill(BillContact(), contact)
-            _navToSupplierBill.value = true
+            if (!checkIsOpen(contactId)) {
+                createBill(contactId)
+            } else {
+                _snackBar.value = app.getString(R.string.open_transactions_message)
+            }
         }
     }
 
-    fun navToSupplierBillComplete() {
-        _navToSupplierBill.value = false
+    private fun createBill(contactId: String) {
+        viewModelScope.launch {
+            _billContact.value = billSupplierUseCase.createBill(contactId)
+            navToTheSupplierBill(_billContact.value!!)
+        }
+    }
+
+    private suspend fun checkIsOpen(contactId: String): Boolean {
+        val list = billSupplierUseCase.checkIfBillIsOpen(contactId)
+        var isOpen = false
+        for (bill in list) {
+            if (bill.status == app.getString(R.string.open)) {
+                isOpen = true
+                break
+            }
+        }
+        return isOpen
+    }
+
+    fun createBillWithLongClickIfThereIsBillOpened(contactId: String): Boolean {
+        createBill(contactId)
+        return true
     }
 
 
+    private fun navToTheSupplierBill(billContact: BillContact) {
+        _navToTheBillSupplier.value = billContact
+    }
+
+    fun navToTheSupplierBillComplete() {
+        _navToTheBillSupplier.value = BillContact("")
+    }
+
+    fun snackBarMessage(message: String) {
+        _snackBar.value = message
+    }
+
     fun snackBarComplete() {
         _snackBar.value = ""
+    }
+
+    fun dialogDeleteBill(billContact: BillContact) {
+        _dialogDeleteBill.value = billContact
+    }
+
+    fun dialogDeleteBillComplete() {
+        _dialogDeleteBill.value = BillContact("")
     }
 
     fun getTransfersWithContactId(contactId: String) {
@@ -109,11 +169,11 @@ class TheSupplierViewModel(
 
     fun addTransfer(transfer: Transfer) {
         viewModelScope.launch {
-            if (_typeOfFinancialTransfer.value == "WITHDRAW") {
-                transfer.typeOfFinancialTransfer = "WITHDRAW"
+            if (_typeOfFinancialTransfer.value == app.getString(R.string.withdraw)) {
+                transfer.typeOfFinancialTransfer = app.getString(R.string.withdraw)
                 transferUseCase.addWithdraw(transfer)
             } else {
-                transfer.typeOfFinancialTransfer = "DEPOSIT"
+                transfer.typeOfFinancialTransfer = app.getString(R.string.deposit)
                 transferUseCase.addDeposit(transfer)
             }
         }
@@ -126,20 +186,20 @@ class TheSupplierViewModel(
     fun updateTransfer(transfer: Transfer) {
         viewModelScope.launch {
             if (checkTransfer(transfer)) {
-                if (_typeOfFinancialTransfer.value == "WITHDRAW") {
-                    transfer.typeOfFinancialTransfer = "WITHDRAW"
+                if (_typeOfFinancialTransfer.value == app.getString(R.string.withdraw)) {
+                    transfer.typeOfFinancialTransfer = app.getString(R.string.withdraw)
                     transferUseCase.updateWithdraw(transfer)
                 } else {
-                    transfer.typeOfFinancialTransfer = "DEPOSIT"
+                    transfer.typeOfFinancialTransfer = app.getString(R.string.deposit)
                     transferUseCase.updateDeposit(transfer)
                 }
             } else {
-                if (_typeOfFinancialTransfer.value == "WITHDRAW") {
-                    transfer.typeOfFinancialTransfer = "WITHDRAW"
+                if (_typeOfFinancialTransfer.value == app.getString(R.string.withdraw)) {
+                    transfer.typeOfFinancialTransfer = app.getString(R.string.withdraw)
                     transferUseCase.deleteDeposit(transfer)
                     transferUseCase.updateWithdraw(transfer)
                 } else {
-                    transfer.typeOfFinancialTransfer = "DEPOSIT"
+                    transfer.typeOfFinancialTransfer = app.getString(R.string.deposit)
                     transferUseCase.deleteWithdraw(transfer)
                     transferUseCase.updateDeposit(transfer)
                 }
@@ -149,7 +209,7 @@ class TheSupplierViewModel(
 
     fun deleteTransfer(transfer: Transfer) {
         viewModelScope.launch {
-            if (transfer.typeOfFinancialTransfer == "WITHDRAW") {
+            if (transfer.typeOfFinancialTransfer == app.getString(R.string.withdraw)) {
                 transferUseCase.deleteWithdraw(transfer)
             } else {
                 transferUseCase.deleteDeposit(transfer)
@@ -169,11 +229,11 @@ class TheSupplierViewModel(
         _dialogEditTransferItem.value = Transfer("")
     }
 
-    fun deleteDialog(transfer: Transfer) {
+    fun deleteDialogTransfer(transfer: Transfer) {
         _dialogDeleteTransferItem.value = transfer
     }
 
-    fun deleteDialogComplete() {
+    fun deleteDialogTransferComplete() {
         _dialogDeleteTransferItem.value = Transfer("")
     }
 
@@ -183,6 +243,17 @@ class TheSupplierViewModel(
 
     fun startTransferDialogComplete() {
         _startTransferDialog.value = false
+    }
+
+    fun navToTheBillSupplier(item: BillContact?) {
+        _navToTheBillSupplier.value = item!!
+
+    }
+
+    fun deleteBill(billContact: BillContact) {
+        viewModelScope.launch {
+            billSupplierUseCase.deleteBill(billContact)
+        }
     }
 
 

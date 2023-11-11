@@ -11,7 +11,7 @@ import com.theideal.notary.R
 import com.theideal.notary.databinding.FragmentClientBinding
 
 
-class ClientFragment : Fragment() {
+class ClientFragmentHost : Fragment() {
     private lateinit var binding: FragmentClientBinding
 
 

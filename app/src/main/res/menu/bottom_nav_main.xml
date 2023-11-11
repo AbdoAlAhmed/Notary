@@ -15,7 +15,7 @@
         android:title="@string/client" />
 <!--    <item-->
 <!--        android:id="@+id/homeFragment"-->
-<!--        android:icon="@drawable/ic_home"-->
+<!--        android:id="@drawable/ic_home"-->
 <!--        android:title="@string/home" />-->
 
 </menu>

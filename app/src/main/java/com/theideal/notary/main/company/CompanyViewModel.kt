@@ -21,6 +21,10 @@ open class CompanyViewModel(
     val navToWithCompany: MutableLiveData<Boolean>
         get() = _navToWorkWithCompany
 
+    private val _companyComplete = MutableLiveData<Boolean>()
+    val companyComplete: MutableLiveData<Boolean>
+        get() = _companyComplete
+
 
     fun createCompany(company: Company) {
         viewModelScope.launch {
@@ -29,11 +33,17 @@ open class CompanyViewModel(
         }
     }
 
+    fun companyCompleteComplete() {
+        _companyComplete.value = false
+    }
+
+
     private fun updateUserInfo() {
         viewModelScope.launch {
             val company = companyRepo.getCompany()
             userRepo.updateUserInfo("companyId", company!!.companyId)
-            _navToClientTransactionsFees.postValue(true)
+//            _navToClientTransactionsFees.postValue(true)
+            _companyComplete.value = true
         }
     }
     // todo after create company update the company userId in user info

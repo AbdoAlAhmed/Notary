@@ -21,7 +21,7 @@ val auth = module {
         AuthenticationRepository(get())
     }
     viewModel {
-        AuthenticationViewModel(get())
+        AuthenticationViewModel(get(),get())
     }
     viewModel {
         SignInPhoneViewModel(get())
